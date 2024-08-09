@@ -1,0 +1,1109 @@
+﻿Question Name,Question Description,Question Examples
+Print the pattern | Set-1,"You are given a number n. You need to print the pattern for the given value of n.
+
+For n = 2 the pattern will be 
+2 2 1 1
+2 1
+
+For n = 3 the pattern will be 
+3 3 3 2 2 2 1 1 1
+3 3 2 2 1 1
+3 2 1
+Note: Instead of printing a new line print a ""$"" without quotes. After printing the total output, end of the line(""$"") is expected.
+
+Examples :
+Constraints:
+1 <= n <= 40",['Input: 2\nOutput: 2 2 1 1 $2 1 $\nInput: 3\nOutput: 3 3 3 2 2 2 1 1 1 $3 3 2 2 1 1 $3 2 1 $']
+Multiplication Table,"Create the multiplication table of a given number N and return the table as an array.
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input. Your task is to complete the function getTable() which takes an integer N as input parameter and returns a list of integers denoting the multiplication of table of N from 1 to 10. 
+
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+Constraints: 
+1 <= N <= 106","['Input:\nN = 9\n\nOutput:\n9 18 27 36 45 54 63 72 81 90\n\nExplanation:\nThe table of 9 is the output whose 1st \nterm is 9 and the 10th term is 90.', 'Input:\nN = 2\n\nOutput:\n2 4 6 8 10 12 14 16 18 20']"
+Series AP,"Given the first 2 terms a1 and a2 of an Arithmetic Series.Find the nth term of the series. 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything.Your Task is to complete the function nthTermOfAP() which takes three integers a1, a2 and n as input parameters and returns the nth term of the AP that has a1 and a2 as the first and second terms respectively.
+Expected Time Complexity:O(1)
+Expected Auxillary Space:O(1)
+Constraints:
+-104 <= a1 , a2 <= 104
+1 <= n <= 104
+ ","['Input:\na1 = 2\na2 = 3\nn = 4\nOutput: 5\nExplanation:\nThe series is: 2,3,4,5,6....\nThus,4th term is 5.', 'Input:\na1 = 1\na2 = 3\nn = 10\nOutput: 19\nExplanation:\nThe series is: 1,3,5,7,9,11,13,15,17,19,21..\nThus,10th term is 19.']"
+Series GP,"Given the A and R i,e first term and common ratio of a GP series. Find the Nth term of the series.
+Note: As the answer can be rather large print its modulo 1000000007 (109 + 7).
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read or print anything. Your task is to complete the function Nth_term() which takes A, R and N as input parameter ans returns Nth term of the GP series modulo 109 + 7.
+ 
+Expected Time Complexity: O(log2(N))
+Expected Space Complexity: O(1)
+
+Constraints:
+1 <= A, R, N <= 1000000","['Input: A = 2, R = 2, N = 4\nOutput: 16\nExplanation: The GP series is \n2, 4, 8, 16, 32,... in which 16 \nis th 4th term.', 'Input: A = 4, R = 3, N = 3\nOutput: 36\nExplanation: The GP series is\n4, 12, 36, 108,.. in which 36 is\nthe 3rd term.']"
+Closest Number,"Given  two integers N and M. The problem is to find the number closest to N and divisible by M. If there are more than one such number, then output the one having maximum absolute value.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function closestNumber() which takes an Integer n as input and returns the answer.
+ 
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+-105 <= N <= 105","['Input:\nN = 13 , M = 4\nOutput:\n12\nExplanation:\n12 is the Closest Number to\n13 which is divisible by 4.', 'Input:\nN = -15 , M = 6\nOutput:\n-18\nExplanation:\n-12 and -18 are both similarly close to\n-15 and divisible by 6. but -18 has\nthe maximum absolute value.\nSo, Output is -18']"
+Armstrong Numbers,"You are given a 3-digit number n, Find whether it is an Armstrong number or not.
+Note: Return ""true"" if it is an Armstrong number else return ""false"".
+Examples
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1) 
+Constraints:
+100 ≤ n <1000 ","['Input: n = 153\nOutput: true\nExplanation: 153 is an Armstrong number since 13 + 53 + 33 = 153. Hence answer is ""true"".\nInput: n = 372\nOutput: false\nExplanation: 372 is not an Armstrong number since 33 + 73 + 23 = 378. Hence answer is ""false"".']"
+Sum of Digit is Pallindrome or not,"Given a number n.Find if the digit sum(or sum of digits) of n is a Palindrome number or not.
+Note: A Palindrome number is a number that stays the same when reversed. Example- 121 , 131 , 7 etc.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything.Your Task is to complete the function isDigitSumPalindrome() which takes a number n as input parameter and returns 1 if the Digit sum of n is a palindrome. Otherwise, it returns 0.
+Expected Time Complexity: O(log(n))
+Expected Auxillary Space: O(1)
+Constraints:
+1 <= n <= 109","['Input:\nn = 56\nOutput: 1\nExplanation:\nThe digit sum of 56 is 5+6=11.Since, 11 is a palindrome number.Thus, answer is 1.', 'Input:\nn = 98\nOutput: 0\nExplanation:\nThe digit sum of 98 is 9+8=17. Since 17 is not a palindrome,thus, answer is 0.']"
+Reverse digits,"You are given an integer N, reverse the digits of given number N, ensuring that the reversed number has no leading zeroes. Return the resulting reversed number.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read or print anything. Your task is to complete the function reverse_digit() which takes N as input parameter and returns the reversed number.
+ 
+Expected Time Complexity: O(Log(N))
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= N <= 1015","['Input: 200\nOutput: 2\nExplanation: By reversing the digits of \nnumber, number will change into 2.', 'Input : 122\nOutput: 221\nExplanation: By reversing the digits of \nnumber, number will change into 221.']"
+Print the Kth Digit,"Given two numbers A and B, find Kth digit from right of AB.
+ 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function kthDigit() which takes integers A, B, K as input parameters and returns Kth Digit of AB from right side.
+ 
+Expected Time Complexity: O(log AB)
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= A,B <= 15
+1 <=K<= digits in AB
+ ","['Input:\nA = 3\nB = 3\nK = 1\nOutput:\n7\nExplanation:\n33 = 27 and 1st\ndigit from right is \n7', 'Input:\nA = 5\nB = 2\nK = 2\nOutput:\n2\nExplanation:\n52 = 25 and second\ndigit from right is\n2.']"
+Binary number to decimal number,"Given a Binary Number B, find its decimal equivalent.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read or print anything. Your task is to complete the function binary_to_decimal() which takes the binary number as string input parameter and returns its decimal equivalent.
+ 
+Expected Time Complexity: O(K * Log(K)) where K is number of bits in binary number.
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= number of bits in binary number  <= 16","['Input: B = 10001000\nOutput: 136', 'Input: B = 101100\nOutput: 44']"
+Jumping Numbers,"Given a positive number X. Find the largest Jumping Number which is smaller than or equal to X. 
+Jumping Number: A number is called Jumping Number if all adjacent digits in it differ by only 1. All single-digit numbers are considered as Jumping Numbers. For example 7, 8987 and 4343456 are Jumping numbers but 796, 677 and 89098 are not.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function jumpingNums() which takes an Integer X as input and returns the largest Jumping Number less than or equal to X.
+ 
+Expected Time Complexity: O(k), where k is no of jumping numbers
+Expected Auxiliary Space: O(k), where k is no of jumping numbers
+ 
+Constraints:
+1 <= X <= 109","['Input:\nX = 10\nOutput:\n10\nExplanation:\n10 is the largest Jumping Number\npossible for X = 10.', 'Input:\nX = 50\nOutput:\n45\nExplanation:\n45 is the largest Jumping Number\npossible for X = 50.']"
+GCD of two numbers,"Given two positive integers a and b, find GCD of a and b.
+Note: Don't use the inbuilt gcd function
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input or print anything. Complete the function gcd() which takes two positive integers as input parameters and returns gcd of a and b as an integer.
+Expected Time Complexity: O(log(min(a, b)))
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ a, b ≤ 109","['Input:\na = 3\nb = 6\nOutput: 3\nExplanation: GCD of 3 and 6 is 3', 'Input:\na = 1\nb = 1\nOutput: 1\nExplanation: GCD of 1 and 1 is 1']"
+LCM And GCD,"Given two integers a and b, write a function lcmAndGcd() to compute their LCM and GCD. The function takes two integers a and b as input and returns a list containing their LCM and GCD.
+Example 1:
+Expected Time Complexity: O(log(min(a, b))
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= a, b <= 109","['Input: a = 5 , b = 10\nOutput: 10 5\nExplanation: LCM of 5 and 10 is 10, while thier GCD is 5.\nInput: a = 14 , b = 8\nOutput: 56 2\nExplanation: LCM of 14 and 8 is 56, while thier GCD is 2.']"
+Add two fractions,"You are given four numbers num1, den1, num2, and den2. You need to find (num1/den1)+(num2/den2) and output the result in the form of (numx/denx).
+Input Format:
+The first line of input contains an integer T denoting the number of test cases . Then T test cases follow . Each test case contains four integers num1, den1, num2, den2 respectively .
+Output Format:
+For each test case, in a new line,  output will be the fraction in the form a/b where the fraction denotes the sum of the two given fractions in reduced form.
+Your Task:
+Since this is a function problem, you don't need to worry about the testcases. Your task is to complete the function addFraction  which adds the two fractions and prints the resulting fraction. The function takes four arguments num1, den1, num2, den2 where num1, num2 denotes the numerators of two fractions and den1, den2 denotes their denominators.
+Constraints:
+1 <= T <= 100
+1 <= den1,den2,num1,num2 <= 1000
+Example:
+Input
+1
+1 500 2 500
+Output
+3/500
+Explanation:
+In above test case 1/500+2/500=3/500
+ 
+Note:The Input/Ouput format and Example given are used for system's internal purpose, and should be used by a user for Expected Output only. As it is a function problem, hence a user should not read any input from stdin/console. The task is to complete the function specified, and not to write the full code.",[]
+GCD of Array,"Given an array of N positive integers, find GCD of all the array elements.
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input or print anything. Complete the function gcd()which takes N and array as input parameters and returns the gcd.
+Expected Time Complexity: O(N logN)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ N, arr[i] ≤ 105","['Input: N = 3, arr[] = {2, 4, 6}\nOutput: 2\nExplanation: GCD of 2,4,6 is 2.', 'Input: N = 1, arr[] = {1}\nOutput: 1\nExplanation: Greatest common divisor of\nall the numbers is 1.']"
+Factorial,"Given a positive integer, N. Find the factorial of N.
+ 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function factorial() which takes an integer N as input parameters and returns an integer, the factorial of N.
+ 
+Expected Time Complexity: O(N)
+Expected Space Complexity: O(1)
+ 
+Constraints:
+0 <= N <= 18","['Input:\nN = 5\nOutput:\n120\nExplanation:\n5*4*3*2*1 = 120', 'Input:\nN = 4\nOutput:\n24\nExplanation:\n4*3*2*1 = 24']"
+nPr,"Write a program to calculate nPr. nPr represents n permutation r and value of nPr is (n!) / (n-r)!.
+Example 1:
+Example 2:
+Your Task:
+You do not need to read input or print anything. Your task is to complete the function nPr() which takes n and r as input parameters and returns nPr .
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ n, r ≤ 20","['Input: n = 2, r = 1\nOutput: 2\nExplaination: 2!/(2-1)! = 2!/1! = (2*1)/1 = 2.', 'Input: n = 3, r = 3\nOutput: 6\nExplaination: 3!/(3-3)! = 3!/0! = 6/1 = 6.']"
+nCr,"Given two integers n and r, find nCr. Since the answer may be very large, calculate the answer modulo 109+7.
+Note : If r is greater than n, return 0.
+Example 1:
+Example 2:
+Your Task:
+You do not need to take input or print anything. Your task is to complete the function nCr() which takes n and r as input parameters and returns nCr modulo 109+7..
+Expected Time Complexity: O(n*r)
+Expected Auxiliary Space: O(r)
+Constraints:
+1 ≤ n ≤ 1000
+1 ≤ r ≤ 800","['Input: n = 3, r = 2\nOutput: 3\nExplaination: 3C2 = 3.', 'Input: n = 2, r = 4\nOutput: 0\nExplaination: r is greater than n.']"
+Largest prime factor,"Given a number N, the task is to find the largest prime factor of that number.
+ Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function largestPrimeFactor() which takes an integer N as input parameters and returns an integer, largest prime factor of N.
+Expected Time Complexity: O(sqrt(N))
+Expected Space Complexity: O(1)
+Constraints:
+2 <= N <= 109","['Input:\nN = 5\nOutput:\n5\nExplanation:\n5 has 1 prime factor i.e 5 only.', 'Input:\nN = 24\nOutput:\n3\nExplanation:\n24 has 2 prime factors 2 and 3 in which 3 is greater.']"
+Perfect Numbers,"Given a number N, check if a number is perfect or not. A number is said to be perfect if sum of all its factors excluding the number itself is equal to the number. Return 1 if the number is Perfect otherwise return 0.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isPerfectNumber() which takes an Integer N as input and returns 1 if N is a Perfect number else returns 0.
+Expected Time Complexity: O(sqrt(N))
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= N <= 1012","[""Input:\nN = 6\nOutput:\n1 \nExplanation:\nFactors of 6 are 1, 2, 3 and 6.\nExcluding 6 their sum is 6 which\nis equal to N itself. So, it's a\nPerfect Number."", ""Input:\nN = 10\nOutput:\n0\nExplanation:\nFactors of 10 are 1, 2, 5 and 10.\nExcluding 10 their sum is 8 which\nis not equal to N itself. So, it's\nnot a Perfect Number.""]"
+Pair cube count,"Given N, count all ‘a’(>=1) and ‘b’(>=0) that satisfy the condition a3 + b3 = N.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function pairCubeCount() which takes an Integer N as input and returns the answer.
+ 
+Expected Time Complexity: O(cbrt(N))
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+1 <= N <= 105","['Input:\nN = 9 \nOutput:\n2\nExplanation:\nThere are two solutions: (a=1, b=2)\nand (a=2, b=1).', 'Input:\nN = 27\nOutput:\n1\nExplanation:\nThereis only one solution: (a=3, b=0)']"
+Find Nth root of M,"You are given 2 numbers (n , m); the task is to find n√m (nth root of m).
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read or print anyhting. Your task is to complete the function NthRoot() which takes n and m as input parameter and returns the nth root of m. If the root is not integer then returns -1.
+ 
+Expected Time Complexity: O(n* log(m))
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= n <= 30
+1 <= m <= 109","['Input: n = 2, m = 9\nOutput: 3\nExplanation: 32 = 9', 'Input: n = 3, m = 9\nOutput: -1\nExplanation: 3rd root of 9 is not\ninteger.']"
+Prime Number,"For a given number N check if it is prime or not. A prime number is a number which is only divisible by 1 and itself.
+ 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isPrime() which takes an integer N as input parameters and returns an integer, 1 if N is a prime number or 0 otherwise.
+ 
+Expected Time Complexity: O(sqrt(N))
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= N <= 109","['Input:\nN = 5\nOutput:\n1\nExplanation:\n5 has 2 factors 1 and 5 only.', 'Input:\nN = 25\nOutput:\n0\nExplanation:\n25 has 3 factors 1, 5, 25']"
+Sieve of Eratosthenes,"Given a number N, calculate the prime numbers up to N using Sieve of Eratosthenes.  
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function sieveOfEratosthenes() which takes an integer N as an input parameter and return the list of prime numbers less than equal to N.
+Expected Time Complexity: O(NloglogN)
+Expected Auxiliary Space: O(N)
+Constraints:
+1<= N <= 104","['Input:\nN = 10\n\nOutput:\n2 3 5 7\n\nExplanation:\nPrime numbers less than equal to N \nare 2 3 5 and 7.', 'Input:\nN = 35\n\nOutput:\n2 3 5 7 11 13 17 19 23 29 31\n\nExplanation:\nPrime numbers less than equal to 35 are\n2 3 5 7 11 13 17 19 23 29 and 31.']"
+Sum of all prime numbers between 1 and N.,"You are given a positive integer N, return the sum of all prime numbers between 1 and N(inclusive).
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read or print anything. Your task is to complete the function prime_Sum() which takes integer N as an input parameter and returns the sum of all primes between 1 and N(inclusive).
+ 
+Expected Time Complexity: O(N*log(log(N)))
+Expected Space Complexity: O(N)
+
+Constraints:
+1 <= N <= 1000000","['Input: N = 5\nOutput: 10\nExplanation: 2, 3, and 5 are prime\nnumbers between 1 and 5(inclusive), and their sum is 2 + 3 + 5 = 10.', 'Input: N = 10\nOutput: 17\nExplanation: 2, 3, 5 and 7 are prime\nnumbers between 1 and 10(inclusive), and their sum is 2 + 3 + 5 + 7 = 17.']"
+Pairs of prime number,"Find all pairs (sets) of prime numbers (p,q) such that p*q <= n, where n is given number.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read or print anything. Your task is to complete the function prime_pairs() which takes n as input parameter and returns a list of pairs in ascending order.
+ 
+Expected Time Complexity: O(n2* sqrt(n))
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= n <= 400","['Input: n = 4\nOutput: 2 2\nExplanation: Pair (2, 2) which has both prime \nnumbers as well as satisfying the condition \n2*2 <= 4.', 'Input: n = 8\nOutput: 2 2 2 3 3 2\nExplanation: Pairs(2, 2), (2, 3) and (3, 2)\nwhich has both prime numbers and satisfying\nthe given condition.']"
+Count Squares,"Consider a sample space S consisting of all perfect squares starting from 1, 4, 9 and so on. You are given a number N, you have to output the number of integers less than N in the sample space S.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function countSquares() which takes an Integer N as input and returns the answer.
+ 
+Expected Time Complexity: O(sqrt(N))
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+1 <= N <= 108","['Input :\nN = 9\nOutput:\n2\nExplanation:\n1 and 4 are the only Perfect Squares\nless than 9. So, the Output is 2.', 'Input :\nN = 3\nOutput:\n1\nExplanation:\n1 is the only Perfect Square\nless than 3. So, the Output is 1.']"
+3 Divisors,"You are given a list of q queries and for every query, you are given an integer N.  The task is to find how many numbers(less than or equal to N) have number of divisors exactly equal to 3.
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function threeDivisors() which takes an integer q and a list of integer of size q as input parameter and returns the list containing the count of the numbers having exactly 3 divisors for each query.
+
+Expected Time Complexity: O(q*N*log(log(N)))
+Expected Auxiliary Space: O(N), where N is min(10^6,N)
+Constraints : 
+1 <= q <= 10^3
+1 <= query[i] <= 10^12","['Input:\nq = 1\nquery[0] = 6\nOutput:\n1\nExplanation:\nThere is only one number 4 which has\nexactly three divisors 1, 2 and 4 and\nless than equal to 6.', 'Input:\nq = 2\nquery[0] = 6\nquery[1] = 10\nOutput:\n1\n2\nExplanation:\nFor query 1 it is covered in the\nexample 1.\nquery 2: There are two numbers 4 and 9\nhaving exactly 3 divisors and less than\nequal to 10.']"
+Is Square,"Given four different points in space. Find whether these points can form a square or not.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isSquare() which takes 8 Integers x1, y1, x2, y2, x3, y3, x4, and y4 as input and returns whether these points form a square.
+ 
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+-103 ≤ x1, y1, x2, y2, x3, y3, x4, y4 ≤ 103","['Input:\nx1 = 20, y1 = 10, x2 = 10, y2 = 20, \nx3 = 20, y3 = 20, x4 = 10, y4 = 10 \nOutput:\nYes\nExplanation:\nThe points (20,10), (10,20), (20,20),\n(10,10) forms a square.', ""Input:\nx1 = 2, y1 = 1, x2 = 10, y2 = 20, \nx3 = 5, y3 = 6, x4 = 10, y4 = 10 \nOutput:\nNo\nExplanation:\nThe points (2,1), (10,20), (5,6),\n(10,10) doesn't form a square.""]"
+Check for Power,"Given two positive numbers X and Y, check if Y is a power of X or not.
+ 
+Example 1:
+ 
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isPowerOfAnother() which takes an integer and returns 1 if y is the power of x, else return 0.
+ 
+Expected Time Complexity: O(logx?(y))
+Expected Auxiliary Space: O(1)
+ 
+Constraints: 
+1 <= x <= 103
+1 <= y <= 108
+ ","['Input:\nX = 2, Y = 8\nOutput:\n1\nExplanation:\n23 is equal to 8.', 'Input:\nX = 1, Y = 8\nOutput:\n0\nExplanation:\nAny power of 1 is not \nequal to 8.']"
+Overlapping rectangles,"Given two rectangles, find if the given two rectangles overlap or not. A rectangle is denoted by providing the x and y coordinates of two points: the left top corner and the right bottom corner of the rectangle. Two rectangles sharing a side are considered overlapping. (L1 and R1 are the extreme points of the first rectangle and L2 and R2 are the extreme points of the second rectangle).
+Note: It may be assumed that the rectangles are parallel to the coordinate axis.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function doOverlap() which takes the points L1, R1, L2, and R2 as input parameters and returns 1 if the rectangles overlap. Otherwise, it returns 0.
+Expected Time Complexity:O(1)
+Expected Auxillary Space:O(1)
+Constraints:
+-109<=x-coordinate,y-coordinate<=109","['Input:\nL1=(0,10)\nR1=(10,0)\nL2=(5,5)\nR2=(15,0)\nOutput:\n1\nExplanation:\nThe rectangles overlap.', 'Input:\nL1=(0,2)\nR1=(1,1)\nL2=(-2,0)\nR2=(0,-3)\nOutput:\n0\nExplanation:\nThe rectangles do not overlap.']"
+Trailing zeroes in factorial,"For an integer N find the number of trailing zeroes in N!.
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function trailingZeroes() which take an integer N as an input parameter and returns the count of trailing zeroes in the N!.
+Expected Time Complexity: O(logN)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= N <= 109","['Input:\nN = 5\nOutput:\n1\nExplanation:\n5! = 120 so the number of trailing zero is 1.', 'Input:\nN = 4\nOutput:\n0\nExplanation:\n4! = 24 so the number of trailing zero is 0.']"
+Angle between hour and minute hand,"Calculate the angle between the hour hand and minute hand.
+Note: There can be two angles between hands; we need to print a minimum of two. Also, we need to print the floor of the final result angle. For example, if the final angle is 10.61, we need to print 10.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read, input, or print anything. Your task is to complete the function getAngle(), which takes 2 Integers H and M as input and returns the answer.
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ H ≤ 12
+0 ≤ M < 60
+H and M are Integers","['Input:\nH = 9 , M = 0\nOutput:\n90\nExplanation:\nThe minimum angle between hour and minute\nhand when the time is 9 is 90 degress.', 'Input:\nH = 3 , M = 30\nOutput:\n75\nExplanation:\nThe minimum angle between hour and minute\nhand when the time is 3:30 is 75 degress.']"
+Number Of Open Doors,"Consider a long alley with a N number of doors on one side. All the doors are closed initially. You move to and fro in the alley changing the states of the doors as follows: you open a door that is already closed and you close a door that is already opened. You start at one end go on altering the state of the doors till you reach the other end and then you come back and start altering the states of the doors again.
+In the first go, you alter the states of doors numbered 1, 2, 3, , n.
+In the second go, you alter the states of doors numbered 2, 4, 6
+In the third go, you alter the states of doors numbered 3, 6, 9
+You continue this till the Nth go in which you alter the state of the door numbered N.
+You have to find the number of open doors at the end of the procedure.
+ 
+Example 1:
+Example 2:
+ 
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function noOfOpenDoors() which takes an Integer N as input and returns the answer.
+ 
+Expected Time Complexity: O(√N)
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+1 <= N <= 1012","['Input:\nN = 2\nOutput:\n1\nExplanation:\nInitially all doors are closed.\nAfter 1st go, all doors will be opened.\nAfter 2nd go second door will be closed.\nSo, Only 1st door will remain Open.', 'Input:\nN = 4\nOutput:\n2\nExplanation:\nFollowing the sequence 4 times, we can\nsee that only 1st and 4th doors will\nremain open.']"
+Triangular Number,"Given a number N.Check whether it is a triangular number or not.
+Note: A number is termed as a triangular number if we can represent it in the form of a triangular grid of points such that the points form an equilateral triangle and each row contains as many points as the row number, i.e., the first row has one point, the second row has two points, the third row has three points and so on.
+The starting triangular numbers are 1, 3 (1+2), 6 (1+2+3), 10 (1+2+3+4).
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isTriangular() that takes a number N as input parameter and returns 1 if it is a triangular number. Otherwise, it returns 0.
+Expected Time complexity:O(LogN)
+Expected Auxillary Space:O(1)
+ 
+Constraints:
+1<=N<=106","['Input:\nN=55\nOutput:\n1\nExplanation:\n55 is a triangular number.\nIt can be represented in 10 rows.', 'Input:\nN=56\nOutput:\n0\nExplanation:\n56 is not a triangular number.']"
+Nth Even Fibonacci Number,"Given a positive integer N, find the Nth Even Fibonacci number. Since the answer can be very large, return the answer modulo 1000000007.
+
+Example 1:
+Example 2:
+Your Task:  
+You dont need to read input or print anything. Complete the function nthEvenFibonacci() which takes S as input parameter and returns the Nth even fibonacci number.
+
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(n)
+
+Constraints:
+1<= n <=1000","['Input: n = 1\nOutput: 2 \nExplanation: 2 is the first even\nnumber in the fibonacci series.', 'Input: n = 2\nOutput: 8\nExplanation: 8 is the second even\nnumber in the fibonacci series.']"
+Last two digit Fibonacci,"Given a number N. Find the last two digits of the Nth fibonacci number.
+Note: If the last two digits are 02, return 2.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything.Your task is to complete the function fibonacciDigits() which takes a number N as input parameter and returns the last two digits of the Nth fibonacci number.
+Expected Time Complexity:O(K)
+Expected Auxillary Space:O(K)
+K is of the order 102.
+Constraints:
+1<=N<=1018","['Input:\nN = 13\nOutput:\n33\nExplanation:\nThe 13th Fibonacci number is 233.\nSo last two digits are 3 and 3.', 'Input:\nN = 255\nOutput:\n70\nExplanation:\nThe 255th fibonacci number is 875715953430-\n18854458033386304178158174356588264390370.\nThus, last two digits are 7 and 0.']"
+Squares in a Matrix,"Given a mxn matrix, count the number of squares in the matrix.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function squaresInMatrix() which takes 2 Integers m and n as input and returns the number of total squares in a m*n matrix.
+ 
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+1 <= m,n <= 104","['Input:\nm = 2, n = 2\nOutput:\n5\nExplanation:\nThere are a total of 5 squares in a 2*2\nmatrix. Four 1*1 squares and one 2*2 square.', 'Input:\nm = 4, n = 3\nOutput:\n20\nExplanation:\nThere are a total of 20 squares in a 4*3\nmatrix.']"
+Day of the week,"Write a program that calculates the day of the week for any particular date in the past or future.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function getDayOfWeek() which takes 3 Integers d, m and y denoting day, month and year as input and return a String denoting the answer.
+Expected Time Complexity: O(1)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= d <= 31
+1 <= m <= 12
+1 <= y <= 2100","['Input:\nd = 28, m = 12, y = 1995\nOutput:\nThursday\nExplanation:\n28 December 1995 was a Thursday.', 'Input:\nd = 30, m = 8, y = 2010\nOutput:\nMonday\nExplanation:\n30 August 2010 was a Monday.']"
+Operating an array,"Given an array arr, complete the following three functions:
+searchEle: This function searches for an element x in the array arr. It should return a boolean value - true if the element is found, and false otherwise.
+insertEle: This function inserts an element y at index yi in the array.1 will be printed if the insertion is done correctly, and 0 otherwise.
+deleteEle: This function deletes the first occurrence of an element z in the array. 1 will be printed if the deletion is done correctly, and 0 otherwise.
+ Note: 0-based indexing is followed.
+Example:
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= arr.size() <= 1500
+1 <= x, y, z<= 103
+0 <= yi< arr.size()
+0 <= arri <= 105","['Input: arr[] = [2, 4, 1, 0, 2], x=1, y=2, yi=2, z=0\nOuput: true true true\nExplanation: As x=1 is present in the array, so return 1. After inserting y=2 at yi=2th index, the array becomes 2,4,2,1,0,2. After deleting z=2, the array becomes 4,2,1,0,2.\nInput: arr[] = [17, 15, 8, 9, 12], x=10, y=6, yi=2, z=5\nOuput: false true true\nExplanation: As x=10 is not present in the array, so return 0. After inserting y=6 at yi=2th index, the array becomes 17,15,6,8,9,12. After deleting z=5, the array becomes 17,15,6,8,9.']"
+Alternates in an Array,"You are given an array arr. You need to print elements of arr in alternate order (starting from index 0).
+Examples:
+Expected Time Complexity: O(n)
+Expected Space Complexity: O(1)
+Constraints:
+1 <=  arr.size <= 105
+1 <= arr[i] <= 105","['Input: arr[] = [1, 2, 3, 4]\nOutput: 1 3\nInput: arr[] = [1, 2, 3, 4, 5]\nOutput: 1 3 5']"
+Min and Max in Array,"Given an array arr. Your task is to find the minimum and maximum elements in the array.
+Note: Return an array that contains two elements the first one will be a minimum element and the second will be a maximum of an array.
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= arr.size() <= 105
+1 <= arr[i] <=1012","['Input: arr = [3, 2, 1, 56, 10000, 167]\nOutput: 1 10000\nExplanation: minimum and maximum elements of array are 1 and 10000.\nInput: arr = [1, 345, 234, 21, 56789]\nOutput: 1 56789\nExplanation: minimum and maximum element of array are 1 and 56789.\nInput: arr = [56789]\nOutput: 56789 56789\nExplanation: Since the array contains only one element so both min & max are same.']"
+Second Largest,"Given an array arr, return the second largest distinct element from an array. If the second largest element doesn't exist then return -1.
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+2 ≤ arr.size() ≤ 105
+1 ≤ arri ≤ 105","['Input: arr = [12, 35, 1, 10, 34, 1]\nOutput: 34\nExplanation: The largest element of the array is 35 and the second largest element is 34.\nInput: arr = [10, 10]\nOutput: -1\nExplanation: The largest element of the array is 10 and the second largest element does not exist so answer is -1.']"
+Rotate Array,"Given an unsorted array arr[] of size n. Rotate the array to the left (counter-clockwise direction) by d steps, where d is a positive integer. 
+Examples :
+Example 2:
+Your Task:
+You need not print or read anything. You need to complete the function rotateArr() which takes the array, d and n as input parameters and rotates the array by d elements. The array must be modified in-place without using extra space.
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= n <= 106
+1 <= d <= 106
+0 <= arr[i] <= 105","['Input: n = 5, d = 2 arr[] = {1,2,3,4,5}\nOutput: 3 4 5 1 2\nExplanation: 1 2 3 4 5  when rotated by 2 elements, it becomes 3 4 5 1 2.', 'Input: n = 10, d = 3 arr[] = {2,4,6,8,10,12,14,16,18,20}\nOutput: 8 10 12 14 16 18 20 2 4 6\nExplanation: 2 4 6 8 10 12 14 16 18 20 when rotated by 3 elements, it becomes 8 10 12 14 16 18 20 2 4 6.']"
+Count of smaller elements,"Given an unsorted array arr. Find the count of elements less than or equal to the given element x.
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= arr.size() <= 105
+1 <= ai <= 105
+0 <= x <= 105","['Input: x = 9, arr = [10, 1, 2, 8, 4, 5] \nOutput: 5\nExplanation: The 5 elements are 1, 2, 8, 4 and 5.\nInput: x = 2, arr = [1, 2, 2, 5, 7, 2, 9] \nOutput: 4\nExplanation: The 4 elements are 1, 2, 2 and 2.']"
+Remove duplicate elements from sorted Array,"Given a sorted array arr. Return the size of the modified array which contains only distinct elements.
+Note:
+1. Don't use set or HashMap to solve the problem.
+2. You must return the modified array size only where distinct elements are present and modify the original array such that all the distinct elements come at the beginning of the original array.
+Examples :
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ arr.size() ≤ 105
+1 ≤ ai ≤ 106","['Input: arr = [2, 2, 2, 2, 2]\nOutput: [2]\nExplanation: After removing all the duplicates only one instance of 2 will remain i.e. [2] so modified array will contains 2 at first position and you should return 1 after modifying the array, the driver code will print the modified array elements.\nInput: arr = [1, 2, 4]\nOutput: [1, 2, 4]\nExplation: As the array does not contain any duplicates so you should return 3.']"
+Count the number of possible triangles,"Given an unsorted array arr[] of n positive integers. Find the number of triangles that can be formed with three different array elements as lengths of three sides of triangles. 
+Example 1:
+Example 2:
+ 
+Your Task: 
+This is a function problem. You only need to complete the function findNumberOfTriangles() that takes arr[] and n as input parameters and returns the count of total possible triangles.
+
+Expected Time Complexity: O(n2).
+Expected Space Complexity: O(1).
+
+Constraints:
+3 <= n <= 103
+1 <= arr[i] <= 103","['Input: \nn = 3\narr[] = {3, 5, 4}\nOutput: \n1\nExplanation: \nA triangle is possible \nwith all the elements 5, 3 and 4.', 'Input: \nn = 5\narr[] = {6, 4, 9, 7, 8}\nOutput: \n10\nExplanation: \nThere are 10 triangles\npossible with the given elements like\n(6,4,9), (6,7,8),...']"
+Array Leaders,"Given an array arr of n positive integers, your task is to find all the leaders in the array. An element of the array is considered a leader if it is greater than all the elements on its right side or if it is equal to the maximum element on its right side. The rightmost element is always a leader.
+Examples
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(n)
+Constraints:
+1 <= n <= 107
+0 <= arr[i] <= 107","['Input: n = 6, arr[] = {16,17,4,3,5,2}\nOutput: 17 5 2\nExplanation: Note that there is nothing greater on the right side of 17, 5 and, 2.\nInput: n = 5, arr[] = {10,4,2,4,1}\nOutput: 10 4 4 1\nExplanation: Note that both of the 4s are in output, as to be a leader an equal element is also allowed on the right. side\nInput: n = 4, arr[] = {5, 10, 20, 40}\nOutput: 40\nExplanation: When an array is sorted in increasing order, only the rightmost element is leader.\nInput: n = 4, arr[] = {30, 10, 10, 5}\nOutput: 30 10 10 5\nExplanation: When an array is sorted in non-increasing order, all elements are leaders.']"
+Minimum distance in an Array,"You are given an array a, of n elements. Find the minimum index based distance between two distinct elements of the array, x and y. Return -1, if either x or y does not exist in the array.
+Example 1:
+Example 2:
+Your Task:
+Complete the function minDist() which takes the array a, and 3 integers n, x and y as input parameters and returns the minimum distance between x and y in the array. Return -1, if either x or y does not exist in the array.
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= n <= 105
+0 <= a[i], x, y <= 105
+x != y","['Input:\nN = 4\nA[] = {1,2,3,2}\nx = 1, y = 2\nOutput: 1\nExplanation: x = 1 and y = 2. There are\ntwo distances between x and y, which are\n1 and 3 out of which the least is 1.', ""Input:\nN = 7\nA[] = {86,39,90,67,84,66,62}\nx = 42, y = 12\nOutput: -1\nExplanation: x = 42 and y = 12. We return\n-1 as x and y don't exist in the array.""]"
+Sorted subsequence of size 3,"Given an array arr, find any 3 elements in it such that arr[i] < arr[j] < arr[k] and i < j < k.
+Note: The output will be 1 if the subsequence returned by the function is present in the array arr or else 0. If the subsequence returned by the function is not in the format as mentioned then the output will be -1.
+Examples :
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(n)
+Constraints:
+1 <= arr.size() <= 105
+1 <= arr[i] <= 106, for each valid i","['Input: arr = [1, 2, 1, 1, 3]\nOutput: 1\nExplanation: A Subsequence 1 2 3 exist.\nInput: arr = [1, 1, 3]\nOutput: 0\nExplanation: No such Subsequence exist.']"
+Maximum Sub Array,"Find out the maximum sub-array of non negative numbers from an array.
+The sub-array should be contiguous i.e., a sub-array created by choosing the second and fourth element and skipping the third element is invalid.
+Maximum sub-array is defined in terms of the sum of the elements in the sub-array. Sub-array A is greater than sub-array B if sum(A) > sum(B).
+Example:
+a = [1, 2, 5, -7, 2, 3]
+The two sub-arrays are [1, 2, 5] [2, 3].
+The answer is [1, 2, 5] as its sum is larger than [2, 3]
+NOTE: If there is a tie, then compare with segment's length and return segment which has maximum length.
+If there is still a tie, then return the segment with minimum starting index.
+If no such subarray is present return ""-1""
+Examples:
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ N ≤ 105
+-105 ≤ A[i] ≤ 105","['Input:\nn = 3\na[] = {1, 2, 3}\nOutput: 1 2 3\nExplanation: In the given array every\nelement is non-negative.\nInput:\nn = 2\na[] = {-1, 2}\nOutput: 2\nExplanation: The only subarray [2] is\nthe answer.']"
+Majority Element,"Given an array A of N elements. Find the majority element in the array. A majority element in an array A of size N is an element that appears strictly more than N/2 times in the array.
+ 
+Example 1:
+Example 2:
+Your Task:
+The task is to complete the function majorityElement() which returns the majority element in the array. If no majority exists, return -1.
+ 
+Expected Time Complexity: O(N).
+Expected Auxiliary Space: O(1).
+ 
+Constraints:
+1 ≤ N ≤ 107
+0 ≤ Ai ≤ 106","['Input:\nN = 3 \nA[] = {1,2,3} \nOutput:\n-1\nExplanation:\nSince, each element in \n{1,2,3} appears only once so there \nis no majority element.', 'Input:\nN = 5 \nA[] = {3,1,3,3,2} \nOutput:\n3\nExplanation:\nSince, 3 is present more\nthan N/2 times, so it is \nthe majority element.']"
+Wave Array,"Given a sorted array arr[] of distinct integers. Sort the array into a wave-like array(In Place). In other words, arrange the elements into a sequence such that arr[1] >= arr[2] <= arr[3] >= arr[4] <= arr[5].....
+If there are multiple solutions, find the lexicographically smallest one.
+Note: The given array is sorted in ascending order, and you don't need to return anything to change the original array.
+Examples:
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(1).
+Constraints:
+1 ≤ n ≤ 106
+0 ≤ arr[i] ≤107","['Input: n = 5, arr[] = {1,2,3,4,5}\nOutput: 2 1 4 3 5\nExplanation: Array elements after sorting it in the waveform are 2 1 4 3 5.\nInput: n = 6, arr[] = {2,4,7,8,9,10}\nOutput: 4 2 8 7 10 9\nExplanation: Array elements after sorting it in the waveform are 4 2 8 7 10 9.']"
+Maximum Index,"Given an array arr of positive integers. The task is to return the maximum of j - i subjected to the constraint of arr[i] < arr[j] and i < j.
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(n)
+Constraints:
+1 ≤ arr.size ≤ 106
+0 ≤ arr[i] ≤ 109","['Input: arr[] = [1, 10]\nOutput: 1\nExplanation: arr[0] < arr[1] so (j-i) is 1-0 = 1.\nInput: arr[] = [34, 8, 10, 3, 2, 80, 30, 33, 1]\nOutput: 6\nExplanation: In the given array arr[1] < arr[7] satisfying the required condition(arr[i] < arr[j]) thus giving the maximum difference of j - i which is 6(7-1).']"
+Max sum path in two arrays,"Given two sorted arrays of distinct integers arr1 and arr2. Each array may have some elements in common with the other array. Find the maximum sum of a path from the beginning of any array to the end of any of the two arrays. We can switch from one array to another array only at the common elements. Both the arrays are sorted.
+
+Note: Only one repeated value is considered in the valid path sum.
+Examples : 
+Constraints:
+1 <= arr1.size(),arr2.size() <= 104
+1 <= arr1[i], arr2[i] <= 104","['Input: arr1 = [2, 3, 7, 10, 12] , arr2 = [1, 5, 7, 8]\nOutput: 35\nExplanation: The path will be 1+5+7+10+12= 35 , where 1 , 5 comes from arr2 and then 7 is common so we can switch to another array arr1 and add\n10 , 12 to it too .\nInput: arr1 = [1, 2, 3] , arr2[] = [3, 4, 5]\nOutput: 15\nExplanation: The path will be 1+2+3+4+5=15.\nExpected Time Complexity: O(m + n)\nExpected Auxiliary Space: O(1)']"
+Product array puzzle,"Given an array nums[] of size n, construct a Product Array P (of same size n) such that P[i] is equal to the product of all the elements of nums except nums[i].
+ 
+Example 1:
+Example 2:
+Your Task:
+You do not have to read input. Your task is to complete the function productExceptSelf() that takes array nums[] and n as input parameters and returns a list of n integers denoting the product array P. If the array has only one element the returned list should should contains one value i.e {1}
+Note: Try to solve this problem without using the division operation.
+ 
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(n)
+ 
+Constraints:
+1 <= n <= 1000
+0 <= numsi <= 200
+Array may contain duplicates.","['Input:\nn = 5\nnums[] = {10, 3, 5, 6, 2}\nOutput:\n180 600 360 300 900\nExplanation: \nFor i=0, P[i] = 3*5*6*2 = 180.\nFor i=1, P[i] = 10*5*6*2 = 600.\nFor i=2, P[i] = 10*3*6*2 = 360.\nFor i=3, P[i] = 10*3*5*2 = 300.\nFor i=4, P[i] = 10*3*5*6 = 900.', 'Input:\nn = 2\nnums[] = {12,0}\nOutput:\n0 12']"
+Array Duplicates,"Given an array arr of size n which contains elements in range from 0 to n-1, you need to find all the elements occurring more than once in the given array. Return the answer in ascending order. If no such element is found, return list containing [-1]. 
+Note: Try and perform all operations within the provided array. The extra (non-constant) ) space needs to be used only for the array to be returned.
+Examples:
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(n).
+Constraints:
+0 <= arr[i] <= n-1, for each valid i
+1 <= n <= 105","['Input: arr[] = {0,3,1,2}, n = 4\nOutput: -1\nExplanation: There is no repeating element in the array. Therefore output is -1.\nInput: arr[] = {2,3,1,2,3}, n = 5\nOutput: 2 3 \nExplanation: 2 and 3 occur more than once in the given array.']"
+Missing And Repeating,"Given an unsorted array arr of size n of positive integers. One number 'A' from set {1, 2,....,N} is missing and one number 'B' occurs twice in array. Find these two numbers.
+Your task is to complete the function findTwoElement() which takes the array of integers arr and n as parameters and returns an array of integers of size 2 denoting the answer (The first index contains B and second index contains A)
+Examples
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+2 ≤ n ≤ 105
+1 ≤ arr[i] ≤ n","['Input: n = 2 arr[] = {2, 2}\nOutput: 2 1\nExplanation: Repeating number is 2 and smallest positive missing number is 1.\nInput: n = 3 arr[] = {1, 3, 3} \nOutput: 3 2\nExplanation: Repeating number is 3 and smallest positive missing number is 2.']"
+Stock buy and sell,"The cost of stock on each day is given in an array A[] of size N. Find all the segments of days on which you buy and sell the stock such that the sum of difference between sell and buy prices is maximized. Each segment consists of indexes of two elements, first is index of day on which you buy stock and second is index of day on which you sell stock.
+Note: Since there can be multiple solutions, the driver code will print 1 if your answer is correct, otherwise, it will return 0. In case there's no profit the driver code will print the string ""No Profit"" for a correct solution.
+
+Example 1:
+Example 2:
+Your Task:
+The task is to complete the function stockBuySell() which takes an array of A[] and N as input parameters and finds the days of buying and selling stock. The function must return a 2D list of integers containing all the buy-sell pairs i.e. the first value of the pair will represent the day on which you buy the stock and the second value represent the day on which you sell that stock. If there is No Profit, return an empty list.
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+Constraints:
+2 ≤ N ≤ 106
+0 ≤ A[i] ≤ 106","['Input:\nN = 7\nA[] = {100,180,260,310,40,535,695}\nOutput:\n1\nExplanation:\nOne possible solution is (0 3) (4 6)\nWe can buy stock on day 0,\nand sell it on 3rd day, which will \ngive us maximum profit. Now, we buy \nstock on day 4 and sell it on day 6.', 'Input:\nN = 5\nA[] = {4,2,2,2,4}\nOutput:\n1\nExplanation:\nThere are multiple possible solutions.\none of them is (3 4)\nWe can buy stock on day 3,\nand sell it on 4th day, which will \ngive us maximum profit.']"
+Trapping Rain Water,"Given an array arr[] of N non-negative integers representing the height of blocks. If width of each block is 1, compute how much water can be trapped between the blocks during the rainy season. 
+ 
+Example 1:
+Example 2:
+Example 3:
+Your Task:
+You don't need to read input or print anything. The task is to complete the function trappingWater() which takes arr[] and N as input parameters and returns the total amount of water that can be trapped.
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+Constraints:
+3 < N < 106
+0 < Ai < 108","['Input:\nN = 6\narr[] = {3,0,0,2,0,4}\nOutput:\n10\nExplanation:', 'Input:\nN = 4\narr[] = {7,4,0,9}\nOutput:\n10\nExplanation:\nWater trapped by above \nblock of height 4 is 3 units and above \nblock of height 0 is 7 units. So, the \ntotal unit of water trapped is 10 units.', 'Input:\nN = 3\narr[] = {6,9,9}\nOutput:\n0\nExplanation:\nNo water will be trapped.']"
+Pair with given sum in a sorted array,"You are given an integer k and an array arr[]. You have to find numbers of pairs in array arr[] which sums up to k. It is given that the elements of the array arr[] are distinct and in sorted order.
+Note: pair {a, b} and pair {b, a} are considered the same. Also, an element cannot pair with itself, i.e., pair {a, a} is invalid.
+Examples :
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(1).
+Constraints:
+0 <= k <=107
+2 <= arr.size() <= 104
+0 <= arr[i] <= 107","['Input: k = 8, arr[] = [1, 2, 3, 4, 5, 6, 7]\nOutput: 3\nExplanation: There are 3 pairs which sum up to 8 : {1, 7}, {2, 6}, {3, 5}\nInput: k = 98, arr[] = [1, 2, 3, 4, 5, 6, 7]\nOutput: 0\nExplanation: There are no pairs which sum up to 98.']"
+Chocolate Distribution Problem,"Given an array A[ ] of positive integers of size N, where each value represents the number of chocolates in a packet. Each packet can have a variable number of chocolates. There are M students, the task is to distribute chocolate packets among M students such that :
+1. Each student gets exactly one packet.
+2. The difference between maximum number of chocolates given to a student and minimum number of chocolates given to a student is minimum.
+Example 1:
+Example 2:
+Your Task:
+You don't need to take any input or print anything. Your task is to complete the function findMinDiff() which takes array A[ ], N and M as input parameters and returns the minimum possible difference between maximum number of chocolates given to a student and minimum number of chocolates given to a student.
+Expected Time Complexity: O(N*Log(N))
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ T ≤ 100
+1 ≤ N ≤ 105
+1 ≤ Ai ≤ 109
+1 ≤ M ≤ N","['Input:\nN = 8, M = 5\nA = {3, 4, 1, 9, 56, 7, 9, 12}\nOutput: 6\nExplanation: The minimum difference between maximum chocolates and minimum chocolates is 9 - 3 = 6 by choosing following M packets :{3, 4, 9, 7, 9}.', 'Input:\nN = 7, M = 3\nA = {7, 3, 2, 4, 9, 12, 56}\nOutput: 2\nExplanation: The minimum difference between maximum chocolates and minimum chocolates is 4 - 2 = 2 by choosing following M packets :{3, 2, 4}.']"
+Longest consecutive subsequence,"Given an array of non-negative integers. Find the length of the longest sub-sequence such that elements in the subsequence are consecutive integers, the consecutive numbers can be in any order.
+ 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function findLongestConseqSubseq() which takes the array arr[] and the size of the array as inputs and returns the length of the longest subsequence of consecutive integers. 
+Expected Time Complexity: O(R), where R is the maximum integer in the array.
+Expected Auxiliary Space: O(N).
+Constraints:
+1 <= N <= 105
+0 <= a[i] <= 105","['Input:\nN = 7\na[] = {2,6,1,9,4,5,3}\nOutput:\n6\nExplanation:\nThe consecutive numbers here\nare 1, 2, 3, 4, 5, 6. These 6 \nnumbers form the longest consecutive\nsubsquence.', 'Input:\nN = 7\na[] = {1,9,3,10,4,20,2}\nOutput:\n4\nExplanation:\n1, 2, 3, 4 is the longest\nconsecutive subsequence.']"
+Three way partitioning,"Given an array of size n and a range [a, b]. The task is to partition the array around the range such that the array is divided into three parts.
+1) All elements smaller than a come first.
+2) All elements in range a to b come next.
+3) All elements greater than b appear in the end.
+The individual elements of three sets can appear in any order. You are required to return the modified array.
+
+Note: The generated output is 1 if you modify the given array successfully.
+Geeky Challenge: Solve this problem in O(n) time complexity.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. The task is to complete the function threeWayPartition() which takes the array array, a, and b as input parameters and modifies the array in place according to the given conditions.
+
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 <= n <= 106
+1 <= array[i], a, b <= 109","['Input: \nn = 5\narray[] = {1, 2, 3, 3, 4}\n[a, b] = [1, 2]\nOutput:\n1\nExplanation:\nOne possible arrangement is: {1, 2, 3, 3, 4}. If you return a valid arrangement, output will be 1.', 'Input: \nn = 6 \narray[] = {1, 4, 3, 6, 2, 1}\n[a, b] = [1, 3]\nOutput:\n1\nExplanation:\nOne possible arrangement is: {1, 3, 2, 1, 4, 6}. If you return a valid arrangement, output will be 1.']"
+Palindrome String,"Given a string S, check if it is palindrome or not.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Complete the function isPalindrome()which accepts string S and returns an integer value 1 or 0.
+
+Expected Time Complexity: O(Length of S)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= Length of S<= 2*105","['Input: S = ""abba""\nOutput: 1\nExplanation: S is a palindrome', 'Input: S = ""abc"" \nOutput: 0\nExplanation: S is not a palindrome']"
+Anagram,"Given two strings a and b consisting of lowercase characters. The task is to check whether two given strings are an anagram of each other or not. An anagram of a string is another string that contains the same characters, only the order of characters can be different. For example, act and tac are an anagram of each other. Strings a and b can only contain lower case alphabets.
+Note:-
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isAnagram() which takes the string a and string b as input parameter and check if the two strings are an anagram of each other. The function returns true if the strings are anagram else it returns false.
+Expected Time Complexity:O(|a|+|b|).
+Expected Auxiliary Space: O(Number of distinct characters).
+Constraints:
+1 ≤ |a|,|b| ≤ 105","['Input:a = geeksforgeeks, b = forgeeksgeeks\nOutput: YES\nExplanation: Both the string have same characters with\n same frequency. So, both are anagrams.', 'Input:a = allergy, b = allergic\nOutput: NO\nExplanation: Characters in both the strings are \n  not same, so they are not anagrams.']"
+Anagram Palindrome,"Given a string S, Check if characters of the given string can be rearranged to form a palindrome.
+Note: You have to return 1 if it is possible to convert the given string into palindrome else return 0. 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isPossible() which takes the string S as input and returns 1 if the string can be converted into a palindrome. Else, it returns 0.
+Expected Time Complexity: O(|S|).
+Expected Auxiliary Space: O(Distinct Characters).
+Constraints:
+1 <= |S| <= 106","['Input:\nS = ""geeksogeeks""\nOutput: Yes\nExplanation: The string can be converted\ninto a palindrome: geeksoskeeg', 'Input: \nS = ""geeksforgeeks""\nOutput: No\nExplanation: The given string can\'t be\nconverted into a palindrome.']"
+Upper case conversion,"Given a string str, convert the first letter of each word in the string to uppercase. 
+Example 1:
+Your Task:  
+You dont need to read input or print anything. Complete the function transform() which takes s as input parameter and returns the transformed string.
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N) to store resultant string  
+Constraints:
+1 <= N <= 104
+The original string str only consists of lowercase alphabets and spaces to separate words.
+ ","['Input:\nstr = ""i love programming""\nOutput: ""I Love Programming""\nExplanation:\n\'I\', \'L\', \'P\' are the first letters of \nthe three words.']"
+Sort the string in descending order,"Given a string str containing only lower case alphabets, the task is to sort it in lexicographically-descending order.
+Example 1:
+Example 2:
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function ReverseSort() which takes the string str as inputs and returns the modified string.
+
+Expected Time Complexity: O(|str|)
+Expected Auxiliary Space: O(1)
+
+Constraints:
+1 ≤ |str| ≤ 105","['Input: str = ""geeks""\nOutput: ""skgee""\nExplanation: It\'s the lexicographically-\ndescending order.', 'Input: str = ""for""\nOutput: ""rof""\nExplanation: ""rof"" is in\nlexicographically-descending order.']"
+Merge two strings,"Given two strings S1 and S2 as input, the task is to merge them alternatively i.e. the first character of S1 then the first character of S2 and so on till the strings end.
+NOTE: Add the whole string if other string is empty.
+Example 1:
+â€‹Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function merge() which takes the strings S1 and S2 as input and returns the resultant string by merging both S1 and S2 alternatively starting from S1.
+Expected Time Complexity: O(|S1| + |S2|).
+Expected Auxiliary Space: O(1).
+Constraints:
+1<=|S1|, |S2| <=103","['Input:\nS1 = ""Hello"" S2 = ""Bye""\nOutput: HBeylelo\nExplanation: The characters of both the \ngiven strings are arranged alternatlively.', 'Input: \nS1 = ""abc"", S2 = ""def""\nOutput: adbecf\nExplanation: The characters of both the\ngiven strings are arranged alternatlively.']"
+Good or Bad string,"In this problem, a String S is composed of lowercase alphabets and wildcard characters i.e. '?'. Here, '?' can be replaced by any of the lowercase alphabets. Now you have to classify the given String on the basis of following rules:
+If there are more than 3 consonants together or more than 5 vowels together, the String is considered to be ""BAD"". A String is considered ""GOOD"" only if it is not “BAD”.
+NOTE: String is considered as ""BAD"" if the above condition is satisfied even once. Else it is ""GOOD"" and the task is to make the string ""BAD"".
+ 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isGoodorBad() which takes the String S as input and returns 0 or 1.
+ 
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+1 <= |S| <= 100000","[""Input:\nS = aeioup??\nOutput:\n1\nExplanation: The String doesn't contain more\nthan 3 consonants or more than 5 vowels together.\nSo, it's a GOOD string."", 'Input:\nS = bcdaeiou??\nOutput:\n0\nExplanation: The String contains the\nSubstring ""aeiou??"" which counts as 7\nvowels together. So, it\'s a BAD string.']"
+Extract Maximum,"Given a alphanumeric string S, extract maximum numeric value from S.
+Example 1:
+Example 2:
+Your Task:  
+You dont need to read input or print anything. Complete the function extractMaximum() which takes the string S as input parameters and returns the maximum numeric value. If it is not present in S, return -1.
+ 
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+1 ≤ |S| ≤ 104
+-1 ≤ output value ≤ 106","['Input:\nS = 100klh564abc365bg\nOutput: 564\nExplanation: Maximum numeric value \namong 100, 564 and 365 is 564.', 'Input:\nS = abcdefg\nOutput: -1\nExplanation: Return -1 if no numeric \nvalue is present.']"
+Reverse Words,"Given a String S, reverse the string without reversing its individual words. Words are separated by dots.
+Example 1:
+Example 2:
+Your Task:
+You dont need to read input or print anything. Complete the function reverseWords() which takes string S as input parameter and returns a string containing the words in reversed order. Each word in the returning string should also be separated by '.' 
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(|S|)
+Constraints:
+1 <= |S| <= 105
+ ","['Input:\nS = i.like.this.program.very.much\nOutput: much.very.program.this.like.i\nExplanation: After reversing the whole\nstring(not individual words), the input\nstring becomes\nmuch.very.program.this.like.i', 'Input:\nS = pqr.mno\nOutput: mno.pqr\nExplanation: After reversing the whole\nstring , the input string becomes\nmno.pqr']"
+Implement strstr,"Your task is to implement the function strstr. The function takes two strings as arguments (s,x) and  locates the occurrence of the string x in the string s. The function returns an integer denoting the first occurrence of the string x in s (0 based indexing).
+Note: You are not allowed to use inbuilt function.
+ 
+Example 1:
+ 
+Example 2:
+ 
+Your Task:
+You don't have to take any input. Just complete the strstr() function which takes two strings str, target as an input parameter. The function returns -1 if no match if found else it returns an integer denoting the first occurrence of the x in the string s.
+ 
+Expected Time Complexity: O(|s|*|x|)
+Expected Auxiliary Space: O(1)
+Note : Try to solve the question in constant space complexity.
+ 
+Constraints:
+1 <= |s|,|x| <= 100","['Input:\ns = GeeksForGeeks, x = Fr\nOutput: -1\nExplanation: Fr is not present in the\nstring GeeksForGeeks as substring.', 'Input:\ns = GeeksForGeeks, x = For\nOutput: 5\nExplanation: For is present as substring\nin GeeksForGeeks from index 5 (0 based\nindexing).']"
+Check for subsequence,"Given two strings A and B, find if A is a subsequence of B.
+Example 1:
+ 
+Example 2:
+ 
+Your Task:  
+You dont need to read input or print anything. Complete the function isSubSequence() which takes A and B as input parameters and returns a boolean value denoting if A is a subsequence of B or not. 
+ 
+Expected Time Complexity: O(N) where N is length of string B.
+Expected Auxiliary Space: O(1)
+Constraints:
+1<= |A|,|B| <=104
+ ","[""Input:\nA = AXY \nB = YADXCP\nOutput: 0 \nExplanation: A is not a subsequence of B\nas 'Y' appears before 'A'."", 'Input:\nA = gksrek\nB = geeksforgeeks\nOutput: 1\nExplanation: A is a subsequence of B.']"
+Strings Rotations of Each Other,"You are given two strings of equal lengths, s1 and s2. The task is to check if s2 is a rotated version of the string s1.
+Note: The characters in the strings are in lowercase.
+Example 1:
+Example 2:
+Your Task:
+You don't have to read or print anything. The task is to complete the function areRotations() which takes two strings, s1 and s2 as inputs and checks if the two strings are rotations of each other. The function returns true if s1 can be obtained by rotating s2, else it returns false.
+Expected Time Complexity: O( |s1| ).
+Expected Space Complexity: O( |s1| ).
+Constraints:
+1 <= |s1|, |s2| <= 105","['Input:\ngeeksforgeeks\nforgeeksgeeks\nOutput: \n1\nExplanation: s1 is geeksforgeeks, s2 is\nforgeeksgeeks. Clearly, s2 is a rotated\nversion of s1 as s2 can be obtained by\nleft-rotating s1 by 5 units.', ""Input:\nmightandmagic\nandmagicmigth\nOutput: \n0\nExplanation: Here with any amount of\nrotation s2 can't be obtained by s1.""]"
+Check if two strings are k-anagrams or not,"Given two strings of lowercase alphabets and a value K, your task is to complete the given function which tells if  two strings are K-anagrams of each other or not.
+Two strings are called K-anagrams if both of the below conditions are true.
+1. Both have same number of characters.
+2. Two strings can become anagram by changing at most K characters in a string.
+Example:
+Your Task:
+Since this is a function problem, you don't need to take any input. Just complete the given function areKAnagrams that returns true if the strings can be turned into K-anagrams, else return false.
+Constraints:
+1 ≤ length of String ≤ 105
+1 ≤ K ≤ length of String","['Input:\nstr1 = ""fodr"", str2=""gork""\nk = 2\nOutput:\n1\nExplanation: Can change fd to gk']"
+Uncommon characters,"Given two strings A and B consisting of lowercase english characters. Find the characters that are not common in the two strings. 
+Note :- Return the string in sorted order.
+Example 1:
+Example 2:
+Your Task:  
+You dont need to read input or print anything. Complete the function UncommonChars() which takes strings A and B as input parameters and returns a string that contains all the uncommon characters in sorted order. If no such character exists return ""-1"".
+Expected Time Complexity: O(M+N) where M and N are the sizes of A and B respectively.
+Expected Auxiliary Space: O(M+N)  
+Constraints:
+1<= M,N <= 104
+String may contain duplicate characters.
+ ","[""Input:\nA = geeksforgeeks\nB = geeksquiz\nOutput: fioqruz\nExplanation: \nThe characters 'f', 'i', 'o', 'q', 'r', 'u','z' \nare either present in A or B, but not in both."", ""Input:\nA = characters\nB = alphabets\nOutput: bclpr\nExplanation: The characters 'b','c','l','p','r' \nare either present in A or B, but not in both.""]"
+Anagram of String,"Given two strings S1 and S2 in lowercase, the task is to make them anagram. The only allowed operation is to remove a character from any string. Find the minimum number of characters to be deleted to make both the strings anagram. Two strings are called anagram of each other if one of them can be converted into another by rearranging its letters.
+Example 1:
+Example 2:
+Your Task:
+Complete the function remAnagram() which takes two strings S1, S2 as input parameter, and returns minimum characters needs to be deleted.
+Expected Time Complexity: O(max(|S1|, |S2|)), where |S| = length of string S.
+Expected Auxiliary Space: O(26)
+Constraints:
+1 <= |S1|, |S2| <= 105","['Input:\nS1 = bcadeh\nS2 = hea\nOutput: 3\nExplanation: We need to remove b, c\nand d from S1.', 'Input:\nS1 = cddgk\nS2 = gcd\nOutput: 2\nExplanation: We need to remove d and\nk from S1.']"
+Non Repeating Character,"Given a string s consisting of lowercase Latin Letters. Return the first non-repeating character in s. If there is no non-repeating character, return '$'.
+Note : When you return '$' driver code will output -1.
+Examples:
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(Number of distinct characters).
+Note: n = |S|
+Constraints:
+1 <= n <= 105
+ ","[""Input:\ns = hello\nOutput: h\nExplanation: In the given string, the first character which is non-repeating is h, as it appears first and there is no other 'h' in the string.\nInput:\ns = zxvczbtxyzvy\nOutput: c\nExplanation: In the given string, 'c' is the character which is non-repeating.""]"
+Longest Distinct characters in string,"Given a string S, find the length of the longest substring with all distinct characters. 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function longestSubstrDitinctChars() which takes the string S as input and returns the length of the longest substring with all distinct characters.
+Expected Time Complexity: O(|S|).
+Expected Auxiliary Space: O(K), where K is Constant.
+Constraints:
+1<=|S|<=105
+ ","['Input:\nS = ""geeksforgeeks""\nOutput: 7\nExplanation: ""eksforg"" is the longest \nsubstring with all distinct characters.', 'Input: \nS = ""aaa""\nOutput: 1\nExplanation: ""a"" is the longest substring \nwith all distinct characters.']"
+Longest Palindromic Substring in Linear Time,"Given a string, find the longest substring which is palindrome in Linear time O(N).
+Input:
+The first line of input contains an integer T denoting the no of test cases . Then T test cases follow. The only line of each test case contains a string.
+Output:
+For each test case print the Longest Palindromic Substring. If there are multiple such substrings of same length, print the one which appears first in the input string.
+Constraints:
+1 <= T <= 100
+1 <= N <= 50
+Example:
+Input:
+2
+babcbabcbaccba
+forgeeksskeegfor
+Output:
+abcbabcba
+geeksskeeg
+ 
+ 
+ 
+Note:The Input/Ouput format and Example given are used for system's internal purpose, and should be used by a user for Expected Output only. As it is a function problem, hence a user should not read any input from stdin/console. The task is to complete the function specified, and not to write the full code.",[]
+Find k-th character in string,"Given a decimal number m. Convert it into a binary string and apply n iterations.
+In each iteration, replace the character 0 with the string 01, and 1 with 10. Find the kth (1-based indexing) character in the string after the nth iteration.
+Example 1:
+Example 1:
+Your task:
+You do not need to read any input or print anything. The task is to complete the function kthCharacter(), which takes 3 integers m, n, and k as input and returns a character.
+Expected Time Complexity: O(2n)
+Expected Auxiliary Space: O(2n)
+Constraints:
+0 ≤ m ≤ 50
+0 ≤ n ≤ 10
+k is a valid index","['Input: m = 5, n = 2, k = 5\noutput: 0\nExplanation: Binary representation of m \nis ""101"", after one iteration binary \nrepresentation will be ""100110"", and after \nsecond iteration binary representation \nwill be ""100101101001"".', 'Input: m = 5, n = 2, k = 1\noutput: 1\nExplanation: Binary representation of m \nis ""101"", after one iteration binary \nrepresentation will be ""100110"", and after \nsecond iteration binary representation\nwill be ""100101101001"".']"
+Smallest window in a string containing all the characters of another string,"Given two strings S and P. Find the smallest window in the string S consisting of all the characters(including duplicates) of the string P.  Return ""-1"" in case there is no such window present. In case there are multiple such windows of same length, return the one with the least starting index.
+Note : All characters are in Lowercase alphabets. 
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function smallestWindow() which takes two string S and P as input paramters and returns the smallest window in string S having all the characters of the string P. In case there are multiple such windows of same length, return the one with the least starting index. 
+Expected Time Complexity: O(|S|)
+Expected Auxiliary Space: O(n) n = len(p)
+ 
+Constraints: 
+1 ≤ |S|, |P| ≤ 105","['Input:\nS = ""timetopractice""\nP = ""toc""\nOutput: \ntoprac\nExplanation: ""toprac"" is the smallest\nsubstring in which ""toc"" can be found.', 'Input:\nS = ""zoomlazapzo""\nP = ""oza""\nOutput: \napzo\nExplanation: ""apzo"" is the smallest \nsubstring in which ""oza"" can be found.']"
+Add Binary Strings,"Given two binary strings A and B consisting of only 0s and 1s. Find the resultant string after adding the two Binary Strings.
+Note: The input strings may contain leading zeros but the output string should not have any leading zeros.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function addBinary() which takes 2 binary string A and B and returns a binary string denoting the addition of both the strings.
+Expected Time Complexity: O(max(|A|, |B|)).
+Expected Auxiliary Space: O(max(|A|, |B|)) (for output string).
+Constraints:
+1 ≤ |A|, |B| ≤ 106","['Input:\nA = ""1101"", B = ""111""\nOutput: 10100\nExplanation:\n 1101\n+ 111\n10100', 'Input: \nA = ""10"", B = ""01""\nOutput: 11\nExplanation: \n 10\n+ 01\n  11']"
+Multiply two strings,"Given two numbers as strings s1 and s2. Calculate their Product.
+
+Note: The numbers can be negative and You are not allowed to use any built-in function or convert the strings to integers. There can be zeros in the begining of the numbers. You don't need to specify '+' sign in the begining of positive numbers.
+Example 1:
+Example 2:
+Your Task: You don't need to read input or print anything. Your task is to complete the function multiplyStrings() which takes two strings s1 and s2 as input and returns their product as a string.
+
+Expected Time Complexity: O(n1* n2)
+Expected Auxiliary Space: O(n1 + n2); where n1 and n2 are sizes of strings s1 and s2 respectively.
+Constraints:
+1 ≤ length of s1 and s2 ≤ 103","['Input:\ns1 = ""0033""\ns2 = ""2""\nOutput:\n66', 'Input:\ns1 = ""11""\ns2 = ""23""\nOutput:\n253']"
+Nearest multiple of 10,"A string str is given to represent a positive number. The task is to round str to the nearest multiple of 10.
+Note: If you have two multiples equally apart from str, we will choose the smallest element among them.
+Examples:
+Expected Time Complexity: O(n).
+Expected Auxiliary Space: O(1).
+Constraints:
+1 <= str.size()<= 105","['Input: str = 29\nOutput: 30\nExplanation: Here,str is 29. So, the numbers which are multiples of 10 are 10, 20, 30, 40. So, 30 is nearest to 29.\nInput: str = 15\nOutput: 10\nExplanation: Here,str is 15. So,the numbers which are multiples of 10 are 10, 20, 30. We can see 10 and 20 are equally distant from 20. So, we will choose the smallest element among them i.e,10.']"
+Searching a number,"Given an integer k and array arr. Your task is to return the position of the first occurrence of k in the given array and if element k is not present in the array then return -1.
+Note: 1-based indexing is followed here.
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= arr.size <= 106
+1 <= arr[i] <= 109
+1 <= k <= 106","[""Input: k = 16 , arr = [9, 7, 16, 16, 4]\nOutput: 3\nExplanation: The value 16 is found in the given array at positions 3 and 4, with position 3 being the first occurrence.\nInput: k=98 , arr = [1, 22, 57, 47, 34, 18, 66]\nOutput: -1\nExplanation: k = 98 isn't found in the given array.""]"
+Magnet Array Problem,"Given N Magnets which are placed linearly, with each magnet to be considered as of point object. Each magnet suffers force from its left sided magnets such that they repel it to the right and vice versa. All forces are repulsive. The force being equal to the inverse of the distance (1/d , d being the distance). Now given the positions of the magnets, the task to find all the points along the linear line where net force is ZERO. 
+More Formally, Magnets are placed on X axis, the coordinates of which are given, you are asked to find out the X-co-ordinates of all the equilibrium points (i.e. the point where net force is zero). You notice the point each magnet repels each other, it means the polarity of the magnet is such that exerts +ve force in its right side and -ve force in left side, (here +ve is considered in +ve direction of x-axis). And that forces are inversely proportional to the distance, thus there lies an equilibrium point between every two magnetic points. Thus there will be total of N-1 equllibrium points. You have to find those N-1 points.
+Note: Array M[] is sorted and distance have to be calculated with precision of 2 decimal places.
+ 
+Example 1:
+ 
+Example 2:
+ 
+Your Task:  
+You don't need to read input or print anything. Your task is to complete the function nullPoints() which takes the array M[], its size N as inputs and an answer array getAnswer[] to store the points having net force zero till precised two decimal places.
+Expected Time Complexity: O(N2 * Log(N))
+Expected Auxiliary Space: O(1)
+ 
+Constraints:
+2 ≤ N ≤ 105
+0 ≤  M[1] < ....M[i] < M[i+1] < ....M[N] ≤ 106
+ 
+ 
+ 
+ ","['Input:\nN = 2\nM[] = {1, 2}\nOutput:\n1.50\nExplanation:\nThe mid point of two points will have \nnet force zero, thus answer = 1.50', 'Input:\nN = 4\nM[] = {0, 10, 20, 30}\nOutput:\n3.82, 15.00, 26.18']"
+Binary Search,"Given a sorted array arr and an integer k, find the position(0-based indexing) at which k is present in the array using binary search.
+Examples:
+Expected Time Complexity: O(logn)
+Expected Space Complexity: O(logn) 
+Note: Try to solve this problem in constant space i.e O(1)
+Constraints:
+1 <= arr.size() <= 105
+1 <= arr[i] <= 106
+1 <= k <= 106","['Input: k = 4, arr= [1, 2, 3, 4, 5] \nOutput: 3\nExplanation: 4 appears at index 3.\nInput: k = 445, arr= [11, 22, 33, 44, 55] \nOutput: -1\nExplanation: 445 is not present.']"
+Floor in a Sorted Array,"Given a sorted array arr[] of size n without duplicates, and given a value x. Floor of x is defined as the largest element k in arr[] such that k is smaller than or equal to x. Find the index of k(0-based indexing).
+Examples
+Your Task:
+The task is to complete the function findFloor() which returns an integer denoting the index value of K or return -1 if there isn't any such number.
+Expected Time Complexity: O(log N).
+Expected Auxiliary Space: O(1).
+Constraints:
+1 ≤ n ≤ 107
+1 ≤ arr[i] ≤ 1018
+0 ≤ x ≤ arr[n-1]","['Input: n = 7, x = 0 arr[] = {1,2,8,10,11,12,19}\nOutput: -1\nExplanation: No element less than 0 is found. So output is ""-1"".\nInput: n = 7, x = 5 arr[] = {1,2,8,10,11,12,19}\nOutput: 1\nExplanation: Largest Number less than 5 is 2 (i.e k = 2), whose index is 1(0-based indexing).']"
+Number of occurrence,"Given a sorted array Arr of size N and a number X, you need to find the number of occurrences of X in Arr.
+Example 1:
+Example 2:
+Your Task:
+You don't need to read input or print anything.
+Your task is to complete the function count() which takes the array of integers arr, n, and x as parameters and returns an integer denoting the answer.
+If x is not present in the array (arr) then return 0.
+Expected Time Complexity: O(logN)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ N ≤ 105
+1 ≤ Arr[i] ≤ 106
+1 ≤ X ≤ 106","['Input:\nN = 7, X = 2\nArr[] = {1, 1, 2, 2, 2, 2, 3}\nOutput: 4\nExplanation: 2 occurs 4 times in the\ngiven array.', 'Input:\nN = 7, X = 4\nArr[] = {1, 1, 2, 2, 2, 2, 3}\nOutput: 0\nExplanation: 4 is not present in the\ngiven array.']"
+Search in Rotated Sorted Array,"Given a sorted (in ascending order) and rotated array arr of distinct elements which may be rotated at some point and given an element key, the task is to find the index of the given element key in the array arr. The whole array arr is given as the range to search.
+Note:- 0-based indexing is followed & returns -1 if the key is not present.
+Examples :
+Expected Time Complexity: O(log n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ arr.size() ≤ 106
+0 ≤ arr[i] ≤ 106
+1 ≤ key ≤ 105","['Input: arr[] = [5, 6, 7, 8, 9, 10, 1, 2, 3], key = 10\nOutput: 5\nExplanation: 10 is found at index 5.\nInput: arr[] = [3, 5, 1, 2], key = 6\nOutput: -1\nExplanation: There is no element that has value 6.\nInput: arr[] = [33, 42, 72, 99], key = 42\nOutput: 1\nExplanation: 42 is found at index 1.']"
+Missing number,"Ritu has all numbers from 2 to n in an array, arr of length n-1 except one number. You have to return the missing number, Ritu doesn't have from 1 to n.
+Note: Don't use Sorting
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxillary Space: O(1)
+Constraints:
+2 ≤ n ≤ 104
+1 ≤ arr[i] ≤ n
+arr.szie = n-1 ","[""Input: n = 4, arr = [1, 4, 3]\nOutput: 2 \nExplanation: Ritu doesn't have the number 2\nInput: n = 5, arr = [2, 5, 3, 1]\nOutput: 4\nExplanation: Ritu doesn't have number 4 in her collection""]"
+Missing element of AP,"Find the missing element from an ordered array arr[], elements of array arr representing an Arithmetic Progression(AP).
+Note: An element will always exist that, upon inserting into a sequence forms Arithmetic progression. Boundary elements (first and last elements) are not missing.
+Examples:
+Expected Time Complexity: O(logn)
+Expected Auxiliary Space: O(1)
+Constraints:
+2 <= arr.size() <= 105
+0 <=arr[i] <= 2*107","['Input: arr[] = [2, 4, 8, 10, 12, 14]\nOutput: 6\nExplanation: Actual AP should be 2, 4, 6, 8, 10, 12, 14.\nInput: arr[] = [1, 6, 11, 16, 21, 31]\nOutput: 26\nExplanation: Actual AP should be \n1, 6, 11, 16, 21, 26, 31. ']"
+Square root of a number,"Given an integer x, find the square root of x. If x is not a perfect square, then return floor(√x).
+ 
+Examples:
+ 
+Expected Time Complexity: O(log N)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ x ≤ 107","['Input:\nx = 5\nOutput: 2\nExplanation: Since, 5 is not a perfect \nsquare, floor of square_root of 5 is 2.\nInput:\nx = 4\nOutput: 2\nExplanation: Since, 4 is a perfect \nsquare, so its square root is 2.']"
+Last index of One,"Given a string s consisting of only '0's and '1's,  find the last index of the '1' present.
+Note: If '1' is not present, return ""-1""
+Examples:
+Expected Time Complexity: O(n)
+Expected Auxillary Space: O(1)
+Constraints:
+1 <= |s| <= 106
+s = {0,1}","['Input: s = 00001\nOutput: 4\nExplanation: Last index of  1 in given string is 4.\nInput: s = 0\nOutput: -1\nExplanation: Since, 1 is not present, so output is -1.']"
+Peak element,"Given an 0-indexed array of integers arr[] of size n, find its peak element and return it's index. An element is considered to be peak if it's value is greater than or equal to the values of its adjacent elements (if they exist).
+Note: The output will be 1 if the index returned by your function is correct; otherwise, it will be 0.
+Examples :
+Your Task:
+You don't have to read input or print anything. Complete the function peakElement() which takes the array arr[] and its size n as input parameters and returns the index of the peak element.
+Expected Time Complexity: O( log(n) ).
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ n ≤ 105
+1 ≤ arr[i] ≤ 106","['Input: n = 3, arr[] = {1, 2, 3} \nOutput: 1\nExplanation: If the index returned is 2, then the output printed will be 1. Since arr[2] = 3 is greater than its adjacent elements, and there is no element after it, we can consider it as a peak element. No other index satisfies the same property, so answer will be printed as 0.\nInput: n = 7, arr[] = {1, 1, 1, 2, 1, 1, 1}\nOutput: 1\nExplanation: In this case there are 5 peak elements with indices as {0,1,3,5,6}. Returning any of them will give you correct answer.']"
+Allocate Minimum Pages,"You have n books, each with arr[i] a number of pages. m students need to be allocated contiguous books, with each student getting at least one book.
+Out of all the permutations, the goal is to find the permutation where the sum of the maximum number of pages in a book allotted to a student should be the minimum, out of all possible permutations.
+Note: Return -1 if a valid assignment is not possible, and allotment should be in contiguous order (see the explanation for better understanding).
+Examples:
+Expected Time Complexity: O(n logn)
+Expected Auxilliary Space: O(1)
+Constraints:
+1 <=  n, m <= 105
+1 <= arr[i] <= 106                                 ","['Input: n = 4, arr[] = [12, 34, 67, 90], m = 2\nOutput: 113\nExplanation: Allocation can be done in following ways:\n{12} and {34, 67, 90} Maximum Pages = 191\n{12, 34} and {67, 90} Maximum Pages = 157\n{12, 34, 67} and {90} Maximum Pages =113.\nTherefore, the minimum of these cases is 113, which is selected as the output.\nInput: n = 3, arr[] = [15, 17, 20], m = 5\nOutput: -1\nExplanation: Allocation can not be done.']"
+Common Elements,"Given two lists V1 and V2 of sizes n and m respectively. Return the list of elements common to both the lists and return the list in sorted order. Duplicates may be there in the output list.
+Example:
+Your Task:
+This is a function problem. You need to complete the function common_element that takes both the lists as parameters and returns a list of common elements.
+Constraints:
+1 ≤ n, m ≤ 105
+1 ≤ Vi ≤ 105","['Input:\nn = 5\nv1[] = {3, 4, 2, 2, 4}\nm = 4\nv2[] = {3, 2, 2, 7}\nOutput:\n2 2 3\nExplanation:\nThe common elements in sorted order are {2 2 3}']"
