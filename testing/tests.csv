@@ -1,0 +1,2 @@
+﻿Question,Tests
+def fuc(n):\n\tif n == 1 or n == 0:\n\t\treturn 1\n\treturn n * fuc(n-1)\n,"import math\n\ttests = [i for i in range(0, 10)]\n\tfor t in tests:\n\t\tassert fuc(t) == math.factorial(t)\n"
