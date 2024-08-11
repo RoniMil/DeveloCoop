@@ -1,0 +1,312 @@
+﻿Question Name,Question Description,Question Declaration,Question Solution,Question Tests
+Factorial,"Given a positive integer, N. Find the factorial of N.
+ 
+Example 1:
+Input:
+N = 5
+Output:
+120
+Explanation:
+5*4*3*2*1 = 120
+Example 2:
+Input:
+N = 4
+Output:
+24
+Explanation:
+4*3*2*1 = 24
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function factorial() which takes an integer N as input parameters and returns an integer, the factorial of N.
+ 
+Expected Time Complexity: O(N)
+Expected Space Complexity: O(1)
+ 
+Constraints:
+0 <= N <= 18
+","def factorial(N):
+		""""""
+		type N: int
+		type return: int
+		""""""
+		pass
+","def factorial_answer(N):
+    """"""
+    type N: int
+    type return: int
+    """"""
+    pass
+    ans = 1
+    # Calculating the factorial
+    for i in range(2, N + 1):
+        ans = ans * i
+    return ans
+","test_cases = [(i, ) for i in range(10)]
+user_solution = factorial
+solution = factorial_answer
+
+"
+Palindrome String,"Given a string S, check if it is palindrome or not.
+Example 1:
+Input: S = ""abba""
+Output: 1
+Explanation: S is a palindrome
+Example 2:
+Input: S = ""abc"" 
+Output: 0
+Explanation: S is not a palindrome
+Your Task:
+You don't need to read input or print anything. Complete the function isPalindrome()which accepts string S and returns an integer value 1 or 0.
+
+Expected Time Complexity: O(Length of S)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= Length of S<= 2*105
+","def isPalindrome(S):
+	""
+	type S: str
+	type return: int
+	""
+	pass
+","def isPalindrome_answer(S):
+		""""""
+		type S: str
+		type return: int
+		""""""
+		for i in range(len(S) // 2):
+			if S[i] != S[len(S) - i - 1]:
+				return 0
+		return 1
+","test_cases = [
+	(""racecar"", ),
+	(""A man a plan a canal Panama"", ),
+	(""12321"", ),
+	(""Was it a car or a cat I saw"", ),
+	(""level"", ),
+	(""palindrome"", ),
+	(""No lemon, no melon"", ),
+	(""deified"", ),
+	(""Hello"", ),
+	(""madam"", )
+]
+
+user_solution = isPalindrome
+solution = isPalindrome_answer"
+GCD of two numbers,"Given two positive integers a and b, find GCD of a and b.
+Note: Don't use the inbuilt gcd function
+Example 1:
+Input:
+a = 3
+b = 6
+Output: 3
+Explanation: GCD of 3 and 6 is 3
+Example 2:
+Input:
+a = 1
+b = 1
+Output: 1
+Explanation: GCD of 1 and 1 is 1
+Your Task:  
+You don't need to read input or print anything. Complete the function gcd() which takes two positive integers as input parameters and returns gcd of a and b as an integer.
+Expected Time Complexity: O(log(min(a, b)))
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ a, b ≤ 109
+","def gcd(a, b):
+		""""""
+		type a: int
+		type b: int
+		type return: int
+		""""""
+		pass
+","def gcd_answer(a, b):
+		""""""
+		type a: int
+		type b: int
+		type return: int
+		""""""
+		# base case: if b is 0, return a as gcd.
+		if b == 0:
+			return a
+		
+		# recursively calling gcd function with b and a % b.
+		return self.gcd(b, a % b)
+","test_cases = [
+	(48, 18),
+	(56, 98),
+	(101, 10),
+	(0, 5),
+	(0, 0),
+	(-25, 10),
+	(-25, -10),
+	(25, 10),
+	(1, 1),
+	(12, 36)
+]
+
+user_solution = gcd
+solution = gcd_answer"
+Binary Search,"Given a sorted array arr and an integer k, find the position(0-based indexing) at which k is present in the array using binary search.
+Examples:
+Input: k = 4, arr= [1, 2, 3, 4, 5] 
+Output: 3
+Explanation: 4 appears at index 3.
+Input: k = 445, arr= [11, 22, 33, 44, 55] 
+Output: -1
+Explanation: 445 is not present.
+Expected Time Complexity: O(logn)
+Expected Space Complexity: O(logn) 
+Note: Try to solve this problem in constant space i.e O(1)
+Constraints:
+1 <= arr.size() <= 105
+1 <= arr[i] <= 106
+1 <= k <= 106
+","def binarysearch(arr, k):
+	""
+	type k: int
+	type arr: List[int]
+	type return: int
+	""
+	pass
+","# Function to perform binary search recursively
+	def bin_search(arr, left, right, k):
+		if left > right:
+			return -1  # If left pointer exceeds right pointer, element not found
+		mid = (left + right) // 2  # Calculate mid index
+		if arr[mid] == k:
+			return mid  # If element is found at mid index, return index
+		if arr[mid] > k:
+			return self.bin_search(
+				arr, left, mid - 1, k
+			)  # If element is less than mid, perform binary search on left subarray
+		else:
+			return self.bin_search(
+				arr, mid + 1, right, k
+			)  # If element is greater than mid, perform binary search on right subarray
+
+	def binarysearch_answer(arr, k):
+		""""""
+		type k: int
+		type arr: List[int]
+		type return: int
+		""""""
+		n = len(arr)
+		return self.bin_search(arr, 0, n - 1, k)  # Perform binary search on the entire array
+","test_cases = [
+	([1, 2, 3, 4, 5], 3),
+	([10, 20, 30, 40, 50], 25),
+	([7, 14, 21, 28, 35], 35),
+	([1, 1, 1, 1, 1], 1),
+	([2, 4, 6, 8, 10], 11),
+	([5, 10, 15, 20, 25, 30], 15),
+	([0, 2, 4, 6, 8, 10], 0),
+	([100, 200, 300, 400], 150),
+	([3, 6, 9, 12, 15, 18], 9),
+	([1, 3, 5, 7, 9], 8)
+]
+
+user_solution = binarysearch
+solution = binarysearch_answer
+"
+Stock buy and sell,"The cost of stock on each day is given in an array A[] of size N. Find all the segments of days on which you buy and sell the stock such that the sum of difference between sell and buy prices is maximized. Each segment consists of indexes of two elements, first is index of day on which you buy stock and second is index of day on which you sell stock.
+Note: Since there can be multiple solutions, the driver code will print 1 if your answer is correct, otherwise, it will return 0. In case there's no profit the driver code will print the string ""No Profit"" for a correct solution.
+
+Example 1:
+Input:
+N = 7
+A[] = {100,180,260,310,40,535,695}
+Output:
+1
+Explanation:
+One possible solution is (0 3) (4 6)
+We can buy stock on day 0,
+and sell it on 3rd day, which will 
+give us maximum profit. Now, we buy 
+stock on day 4 and sell it on day 6.
+Example 2:
+Input:
+N = 5
+A[] = {4,2,2,2,4}
+Output:
+1
+Explanation:
+There are multiple possible solutions.
+one of them is (3 4)
+We can buy stock on day 3,
+and sell it on 4th day, which will 
+give us maximum profit.
+Your Task:
+The task is to complete the function stockBuySell() which takes an array of A[] and N as input parameters and finds the days of buying and selling stock. The function must return a 2D list of integers containing all the buy-sell pairs i.e. the first value of the pair will represent the day on which you buy the stock and the second value represent the day on which you sell that stock. If there is No Profit, return an empty list.
+Expected Time Complexity: O(N)
+Expected Auxiliary Space: O(N)
+Constraints:
+2 ≤ N ≤ 106
+0 ≤ A[i] ≤ 106
+","def stockBuySell(A, N ):
+	""
+	type N: int
+	type A: List[int]
+	type return: List[int]
+	""
+	pass
+","def stockBuySell_answer(A, N):
+		""""""
+		type N: int
+		type A: List[int]
+		type return: List[int]
+		""""""
+		result = []
+		# Prices must be given for at least two days else return the empty result.
+		if N == 1:
+			return result
+		i = 0
+		cnt = 0
+		# Traversing through given price array.
+		while i < N - 1:
+			# Finding Local Minima. Note that the limit of loop is (N-2)
+			# as we are comparing present element to the next element.
+			while i < N - 1 and A[i + 1] <= A[i]:
+				i += 1
+
+			# If we reach the end, we break the loop as no further
+			# solution is possible.
+			if i == N - 1:
+				break
+
+			# e[0] denotes buy , e[1] denotes sell	
+			e = [0, 0]
+			# Storing the index of minima which gives the day of buying stock.
+			e[0] = i
+			i += 1
+
+			# Finding Local Maxima. Note that the limit of loop is (N-1)
+			# as we are comparing present element to previous element.
+			while i < N and A[i] >= A[i - 1]:
+				i += 1
+			# Storing the index of maxima which gives the day of selling stock.
+			e[1] = i - 1
+
+			# Storing the buy/sell pairs in a list.
+			result.append([e[0], e[1]])
+
+			# Incrementing count of buy/sell pairs.
+			cnt += 1
+		if cnt == 0:
+			return []
+		else:
+			# returning the result.
+			return result
+","test_cases = [
+	([1, 2, 3, 4, 5], 3),
+	([10, 20, 30, 40, 50], 25),
+	([7, 14, 21, 28, 35], 35),
+	([1, 1, 1, 1, 1], 1),
+	([2, 4, 6, 8, 10], 11),
+	([5, 10, 15, 20, 25, 30], 15),
+	([0, 2, 4, 6, 8, 10], 0),
+	([100, 200, 300, 400], 150),
+	([3, 6, 9, 12, 15, 18], 9),
+	([1, 3, 5, 7, 9], 8)
+]
+
+user_solution = stockBuySell
+solution = stockBuySell_answer"
