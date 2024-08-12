@@ -129,7 +129,7 @@ Constraints:
 			return a
 		
 		# recursively calling gcd function with b and a % b.
-		return self.gcd(b, a % b)
+		return gcd_answer(b, a % b)
 ","test_cases = [
 	(48, 18),
 	(56, 98),
@@ -168,29 +168,29 @@ Constraints:
 	""
 	pass
 ","# Function to perform binary search recursively
-	def bin_search(arr, left, right, k):
-		if left > right:
-			return -1  # If left pointer exceeds right pointer, element not found
-		mid = (left + right) // 2  # Calculate mid index
-		if arr[mid] == k:
-			return mid  # If element is found at mid index, return index
-		if arr[mid] > k:
-			return self.bin_search(
-				arr, left, mid - 1, k
-			)  # If element is less than mid, perform binary search on left subarray
-		else:
-			return self.bin_search(
-				arr, mid + 1, right, k
-			)  # If element is greater than mid, perform binary search on right subarray
+def bin_search(arr, left, right, k):
+    if left > right:
+        return -1  # If left pointer exceeds right pointer, element not found
+    mid = (left + right) // 2  # Calculate mid index
+    if arr[mid] == k:
+        return mid  # If element is found at mid index, return index
+    if arr[mid] > k:
+        return bin_search(
+            arr, left, mid - 1, k
+        )  # If element is less than mid, perform binary search on left subarray
+    else:
+        return bin_search(
+            arr, mid + 1, right, k
+        )  # If element is greater than mid, perform binary search on right subarray
 
-	def binarysearch_answer(arr, k):
-		""""""
-		type k: int
-		type arr: List[int]
-		type return: int
-		""""""
-		n = len(arr)
-		return self.bin_search(arr, 0, n - 1, k)  # Perform binary search on the entire array
+def binarysearch_answer(arr, k):
+    """"""
+    type k: int
+    type arr: List[int]
+    type return: int
+    """"""
+    n = len(arr)
+    return bin_search(arr, 0, n - 1, k)  # Perform binary search on the entire array
 ","test_cases = [
 	([1, 2, 3, 4, 5], 3),
 	([10, 20, 30, 40, 50], 25),
@@ -296,16 +296,16 @@ Constraints:
 			# returning the result.
 			return result
 ","test_cases = [
-	([1, 2, 3, 4, 5], 3),
-	([10, 20, 30, 40, 50], 25),
-	([7, 14, 21, 28, 35], 35),
-	([1, 1, 1, 1, 1], 1),
-	([2, 4, 6, 8, 10], 11),
-	([5, 10, 15, 20, 25, 30], 15),
-	([0, 2, 4, 6, 8, 10], 0),
-	([100, 200, 300, 400], 150),
-	([3, 6, 9, 12, 15, 18], 9),
-	([1, 3, 5, 7, 9], 8)
+    ([100, 180, 260, 310, 40, 535, 695], 7),
+    ([100, 180, 260, 310, 40, 535, 695, 200, 300, 250], 10),
+    ([7, 1, 5, 3, 6, 4], 6),
+    ([1, 2, 3, 4, 5], 5),
+    ([7, 6, 4, 3, 1], 5),
+    ([100, 90, 80, 70, 60, 50, 40], 7),
+    ([1, 2, 1, 2, 1, 2, 1, 2], 8),
+    ([10, 20, 30, 40, 50, 60, 70, 80], 8),
+    ([80, 70, 60, 50, 40, 30, 20, 10], 8),
+    ([100, 200, 300, 400, 500, 600, 700, 800, 900, 1000], 10)
 ]
 
 user_solution = stockBuySell
