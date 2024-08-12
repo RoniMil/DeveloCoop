@@ -1,0 +1,38 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+button {
+    display: block;
+    margin: 10px auto;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+}
+
+.CodeMirror {
+    height: 750px;
+    width: 65%; 
+    font-size: medium;
+}
+
+#result {
+    white-space: pre-wrap;
+    margin-top: 20px;
+}
+
+#problem {
+    font-size: x-large;
+    white-space: pre-wrap;
+    margin-left: 20px;
+    width: 35%; 
+    word-wrap: break-word;
+    
+}

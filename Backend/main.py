@@ -42,14 +42,13 @@ def get_question():
     print("run get_question")
     # !!!change DB to questions when actual DB exists!!!
     question = test_db.aggregate([{"$sample": {"size": 1}}]).next()
-    return question["Question Name"]
+    return question
 
 @app.post("/questions/submit")
 def get_results(submission : Submission):
     # from the user POSSIBLE TRANSFORMATION INTO \n\t FORMAT NEEDED
     user_answer = submission.user_answer
     test_db = client.DeveloCoop.test
-    # question = "def fuc(n):\n\tif n == 1 or n == 0:\n\t\treturn 1\n\treturn n * fuc(n-1)\n"
     # predefined from the excel sheet given a question id
     #tests = "import math\n\ttests = [i for i in range(0, 10)]\n\tfor t in tests:\n\t\tassert fuc(t) == math.factorial(t)\n"
     db_entry = test_db.find_one({"_id" : ObjectId(submission.question_id)})

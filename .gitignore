@@ -12,3 +12,31 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Node modules
+node_modules/
+
+# Logs
+logs
+*.log
+
+# Environment variables
+.env
+
+# Build output
+build/
+dist/
+
+# Dependency directories
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Coverage directory
+coverage/
+
+# Cache directories
+.cache/
+.parcel-cache/
+.next/
+out/
