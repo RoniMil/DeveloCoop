@@ -4,6 +4,7 @@ import './styles.css';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
+import frogImage from './images/develocoop_logo.png';
 
 
 
@@ -17,6 +18,8 @@ function App() {
   const [submissionResult, setSubmissionResult] = useState('');
   const [loading, setLoading] = useState(false);
   const [gameMode, setGameMode] = useState(null);
+  
+
 
 
   const fetchQuestion = async () => {
@@ -75,15 +78,17 @@ function App() {
 
   return (
     <div style={{ padding: '20px' }}>
+      <img src={frogImage} alt="Frog Coding" className="header-image" />
       <h1>DeveloCoop</h1>
       {!gameMode ? (
         <div className="main-menu">
-          <button onClick={() => startGame('one-player')}>One Player</button>
-          <button onClick={() => startGame('two-players')}>Two Players</button>
+          <button className="button" onClick={() => startGame('one-player')}>One Player</button>
+          <button className="button" onClick={() => startGame('two-players')}>Two Players</button>
         </div>
       ) : (
         questionName && (
           <div className="main-container">
+            <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
             <h3>{questionName}</h3>
             <div className="content-container">
               <div className="CodeMirror">
@@ -108,11 +113,10 @@ function App() {
                 <pre>{submissionResult}</pre>
               </div>
             )}
-            <button onClick={handleSubmit} disabled={loading}>
+            <button onClick={handleSubmit} disabled={loading} className="button">
               {loading ? 'Submitting...' : 'Submit Answer'}
             </button>
             {loading && <div className="loading-spinner"></div>}
-            <button onClick={backToMainMenu} className="back-button">Back to Main Menu</button>
           </div>
         )
       )}
