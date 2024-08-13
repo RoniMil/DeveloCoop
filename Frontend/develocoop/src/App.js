@@ -16,6 +16,7 @@ function App() {
   const [questionId, setQuestionId] = useState(null);
   const [submissionResult, setSubmissionResult] = useState('');
   const [loading, setLoading] = useState(false);
+  const [gameMode, setGameMode] = useState(null);
 
 
   const fetchQuestion = async () => {
@@ -56,42 +57,64 @@ function App() {
     }
   };
 
+  const startGame = (mode) => {
+    setGameMode(mode);
+    fetchQuestion();
+  };
+
+  const backToMainMenu = () => {
+    setGameMode(null);
+    setQuestionDeclaration('');
+    setQuestionDescription('');
+    setQuestionName('');
+    setUserAnswer('');
+    setQuestionId(null);
+    setSubmissionResult('');
+    setLoading(false);
+  };
+
   return (
     <div style={{ padding: '20px' }}>
       <h1>DeveloCoop</h1>
-      <button onClick={fetchQuestion}>Start Session</button>
-      {questionName && (
-        <div className="main-container">
-          <h3>Question:</h3>
-          <p>{questionName}</p>
-          <div className="content-container">
-            <div className="CodeMirror">
-              <CodeMirror
-                value={questionDeclaration}
-                extensions={[python(), autocompletion()]}
-                onChange={(value) => {
-                  setUserAnswer(value);
-                }}
-                basicSetup={{
-                  tabSize: 4
-                }}
-              />
-            </div>
-            <div id="problem">
-              {questionDescription}
-            </div>
-          </div>
-          {submissionResult && (
-            <div className="result-container">
-              <h3>Results:</h3>
-              <pre>{submissionResult}</pre>
-            </div>
-          )}
-          <button onClick={handleSubmit} disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit Answer'}
-          </button>
-          {loading && <div className="loading-spinner"></div>}
+      {!gameMode ? (
+        <div className="main-menu">
+          <button onClick={() => startGame('one-player')}>One Player</button>
+          <button onClick={() => startGame('two-players')}>Two Players</button>
         </div>
+      ) : (
+        questionName && (
+          <div className="main-container">
+            <h3>{questionName}</h3>
+            <div className="content-container">
+              <div className="CodeMirror">
+                <CodeMirror
+                  value={questionDeclaration}
+                  extensions={[python(), autocompletion()]}
+                  onChange={(value) => {
+                    setUserAnswer(value);
+                  }}
+                  basicSetup={{
+                    tabSize: 4
+                  }}
+                />
+              </div>
+              <div id="problem">
+                {questionDescription}
+              </div>
+            </div>
+            {submissionResult && (
+              <div className="result-container">
+                <h3>Results:</h3>
+                <pre>{submissionResult}</pre>
+              </div>
+            )}
+            <button onClick={handleSubmit} disabled={loading}>
+              {loading ? 'Submitting...' : 'Submit Answer'}
+            </button>
+            {loading && <div className="loading-spinner"></div>}
+            <button onClick={backToMainMenu} className="back-button">Back to Main Menu</button>
+          </div>
+        )
       )}
     </div>
   );

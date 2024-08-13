@@ -98,3 +98,9 @@ button {
         transform: rotate(360deg);
     }
 }
+
+.back-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
