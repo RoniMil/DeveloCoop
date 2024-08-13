@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import CodeMirror, { lineNumbers } from '@uiw/react-codemirror';
+import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
 import { python } from "@codemirror/lang-python"
 import { oneDark } from '@codemirror/theme-one-dark'; // Import a valid theme

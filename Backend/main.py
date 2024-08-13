@@ -6,11 +6,24 @@ from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import requests
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 load_dotenv(find_dotenv())
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",  # The origin of your Next.js frontend
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 mongodb_pwd = os.environ.get("MONGODB_PWD")
 mongodb_user = os.environ.get("MONGODB_USER")
@@ -37,11 +50,11 @@ class Submission(BaseModel):
     question_id: str
     user_answer: str
 
-@app.get("/questions/")
+@app.get("/questions")
 def get_question():
-    print("run get_question")
     # !!!change DB to questions when actual DB exists!!!
     question = test_db.aggregate([{"$sample": {"size": 1}}]).next()
+    question["_id"] = str(question["_id"])
     return question
 
 @app.post("/questions/submit")
