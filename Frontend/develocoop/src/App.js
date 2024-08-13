@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
-import { python } from "@codemirror/lang-python"
+import { python } from "@codemirror/lang-python";
+import { autocompletion } from '@codemirror/autocomplete';
 import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+
+
 
 function App() {
   const [questionDeclaration, setQuestionDeclaration] = useState('');
@@ -52,14 +55,13 @@ function App() {
             <div className="CodeMirror">
               <CodeMirror
                 value={questionDeclaration}
-                // options={{
-                //   lineNumbers: true,
-                //   mode: 'python'
-                // }}
-                extensions={[python()]}
+                extensions={[python(), autocompletion()]}
                 theme={vscodeDark}
                 onChange={(value) => {
                   setUserAnswer(value);
+                }}
+                basicSetup={{
+                  tabSize: 4
                 }}
               />
               </div>
