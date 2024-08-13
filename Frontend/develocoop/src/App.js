@@ -44,7 +44,7 @@ function App() {
     <div style={{ padding: '20px' }}>
       <h1>DeveloCoop</h1>
       <button onClick={fetchQuestion}>Start Session</button>
-      {(
+      {questionName && (
         <>
           <h3>Question:</h3>
           <p>{questionName}</p>
@@ -61,7 +61,7 @@ function App() {
               }}
             />
             <div style={{ marginLeft: '20px' }}>
-              <p>{questionDescription}</p>
+              <pre>{questionDescription}</pre>
             </div>
           </div>
           <button onClick={handleSubmit}>Submit Answer</button>
