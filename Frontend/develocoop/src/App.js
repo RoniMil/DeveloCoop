@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
 import { python } from "@codemirror/lang-python";
@@ -16,6 +15,7 @@ function App() {
   const [userAnswer, setUserAnswer] = useState('');
   const [questionId, setQuestionId] = useState(null);
   const [submissionResult, setSubmissionResult] = useState('');
+  const [loading, setLoading] = useState(false);
 
 
   const fetchQuestion = async () => {
@@ -34,6 +34,7 @@ function App() {
   };
 
   const handleSubmit = async () => {
+    setLoading(true); 
     try {
       const data = {
         question_id: questionId,
@@ -50,6 +51,8 @@ function App() {
       setSubmissionResult(result.output);
     } catch (error) {
       setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nYou may want to check for infinite loops.`)
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -66,7 +69,6 @@ function App() {
               <CodeMirror
                 value={questionDeclaration}
                 extensions={[python(), autocompletion()]}
-                // theme={vscodeLight}
                 onChange={(value) => {
                   setUserAnswer(value);
                 }}
@@ -85,7 +87,10 @@ function App() {
               <pre>{submissionResult}</pre>
             </div>
           )}
-          <button onClick={handleSubmit}>Submit Answer</button>
+          <button onClick={handleSubmit} disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit Answer'}
+          </button>
+          {loading && <div className="loading-spinner"></div>}
         </div>
       )}
     </div>
