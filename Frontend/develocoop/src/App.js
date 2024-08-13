@@ -49,7 +49,7 @@ function App() {
       const result = await response.json();
       setSubmissionResult(result.output);
     } catch (error) {
-      console.error('Error submitting the answer:', error);
+      console.log("dalit is hot");
     }
   };
 
@@ -66,7 +66,7 @@ function App() {
               <CodeMirror
                 value={questionDeclaration}
                 extensions={[python(), autocompletion()]}
-                theme={vscodeLight}
+                // theme={vscodeLight}
                 onChange={(value) => {
                   setUserAnswer(value);
                 }}
