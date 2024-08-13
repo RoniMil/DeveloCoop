@@ -42,7 +42,7 @@ if not wrong_answers:
 else:
     print('Failed on the following tests:')
     for test_case, your_answer, answer in wrong_answers:
-        print("On input: " + list(test_case) + ", your result: " + str(your_answer) + ", expected answer: " + str(answer))"""
+        print("On input: " + str(list(test_case)) + ", your result: " + str(your_answer) + ", expected answer: " + str(answer))"""
 
 
 # class for submit answer post request framework

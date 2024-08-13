@@ -12,9 +12,11 @@ function App() {
   const [questionDeclaration, setQuestionDeclaration] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
   const [questionName, setQuestionName] = useState('');
-  const [questionSolution, setQuestionSolution] = useState('');
+  // const [questionSolution, setQuestionSolution] = useState('');
   const [userAnswer, setUserAnswer] = useState('');
   const [questionId, setQuestionId] = useState(null);
+  const [submissionResult, setSubmissionResult] = useState('');
+
 
   const fetchQuestion = async () => {
     try {
@@ -23,9 +25,9 @@ function App() {
       setQuestionDeclaration(data["Question Declaration"]);
       setQuestionDescription(data["Question Description"]);
       setQuestionName(data["Question Name"]);
-      setQuestionSolution(data["Question Solution"]);
+      // setQuestionSolution(data["Question Solution"]);
       setQuestionId(data["_id"]);
-      setUserAnswer('');
+      setUserAnswer(data["Question Declaration"]);
     } catch (error) {
       console.error('Error fetching the question:', error);
     }
@@ -33,11 +35,19 @@ function App() {
 
   const handleSubmit = async () => {
     try {
-      await axios.post('http://127.0.0.1:8000/question/submit', {
+      const data = {
         question_id: questionId,
-        user_answer: userAnswer,
+        user_answer: userAnswer
+      }
+      const response = await fetch('http://127.0.0.1:8000/questions/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
       });
-      alert('Answer submitted!');
+      const result = await response.json();
+      setSubmissionResult(result.output);
     } catch (error) {
       console.error('Error submitting the answer:', error);
     }
@@ -64,11 +74,17 @@ function App() {
                   tabSize: 4
                 }}
               />
-              </div>
-              <div id="problem">
-                {questionDescription}
-              </div>
+            </div>
+            <div id="problem">
+              {questionDescription}
+            </div>
           </div>
+          {submissionResult && (
+            <div className="result-container">
+              <h3>Results:</h3>
+              <pre>{submissionResult}</pre>
+            </div>
+          )}
           <button onClick={handleSubmit}>Submit Answer</button>
         </>
       )}
