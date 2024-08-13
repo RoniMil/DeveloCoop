@@ -15,24 +15,37 @@ button {
 .container {
     display: flex;
     width: 100%;
+    flex-direction: column;
 }
 
 .CodeMirror {
-    height: 750px;
-    width: 65%; 
+    height: 400px;
+    width: 100%;
     font-size: medium;
 }
 
-#result {
-    white-space: pre-wrap;
+#problem {
+    font-size: small;
     margin-top: 20px;
+    width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    white-space: pre-wrap;
 }
 
-#problem {
-    font-size: x-large;
-    white-space: pre-wrap;
-    margin-left: 20px;
-    width: 35%; 
-    word-wrap: break-word;
-    
+@media (min-width: 768px) {
+    .container {
+        flex-direction: row;
+    }
+
+    .CodeMirror {
+        height: 750px;
+        width: 55%;
+    }
+
+    #problem {
+        margin-top: 0;
+        margin-left: 20px;
+        width: calc(45% - 20px);
+    }
 }

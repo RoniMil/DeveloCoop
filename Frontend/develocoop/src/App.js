@@ -48,21 +48,23 @@ function App() {
         <>
           <h3>Question:</h3>
           <p>{questionName}</p>
-          <div style={{ display: 'flex' }}>
-            <CodeMirror
-              value={questionDeclaration}
-              options={{
-                lineNumbers: true,
-                mode: 'python'
-              }}
-              theme={oneDark}
-              onChange={(value) => {
-                setUserAnswer(value);
-              }}
-            />
-            <div style={{ marginLeft: '20px' }}>
-              <pre>{questionDescription}</pre>
-            </div>
+          <div className="container">
+            <div className="CodeMirror">
+              <CodeMirror
+                value={questionDeclaration}
+                options={{
+                  lineNumbers: true,
+                  mode: 'python'
+                }}
+                theme={oneDark}
+                onChange={(value) => {
+                  setUserAnswer(value);
+                }}
+              />
+              </div>
+              <div id="problem">
+                {questionDescription}
+              </div>
           </div>
           <button onClick={handleSubmit}>Submit Answer</button>
         </>
