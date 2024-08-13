@@ -4,7 +4,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
-import { vscodeDark } from '@uiw/codemirror-theme-vscode';
+import { vscodeDark, vscodeLight } from '@uiw/codemirror-theme-vscode';
 
 
 
@@ -58,15 +58,15 @@ function App() {
       <h1>DeveloCoop</h1>
       <button onClick={fetchQuestion}>Start Session</button>
       {questionName && (
-        <>
+        <div className="main-container">
           <h3>Question:</h3>
           <p>{questionName}</p>
-          <div className="container">
+          <div className="content-container">
             <div className="CodeMirror">
               <CodeMirror
                 value={questionDeclaration}
                 extensions={[python(), autocompletion()]}
-                theme={vscodeDark}
+                theme={vscodeLight}
                 onChange={(value) => {
                   setUserAnswer(value);
                 }}
@@ -86,7 +86,7 @@ function App() {
             </div>
           )}
           <button onClick={handleSubmit}>Submit Answer</button>
-        </>
+        </div>
       )}
     </div>
   );

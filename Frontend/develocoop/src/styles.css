@@ -1,3 +1,7 @@
+/* *{
+    border: 1px solid red !important;
+} */
+
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
@@ -12,11 +16,16 @@ button {
     margin: 10px auto;
 }
 
-.container {
+.main-container {
     display: flex;
-    width: 100%;
     flex-direction: column;
-    margin-bottom: 0;
+    max-width: 100%;
+}
+
+.content-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .CodeMirror {
@@ -24,6 +33,7 @@ button {
     width: 100%;
     font-size: medium;
 }
+
 
 #problem {
     font-size: small;
@@ -34,25 +44,8 @@ button {
     white-space: pre-wrap;
 }
 
-@media (min-width: 768px) {
-    .container {
-        flex-direction: row;
-    }
-
-    .CodeMirror {
-        height: 750px;
-        width: 55%;
-    }
-
-    #problem {
-        margin-top: 0;
-        margin-left: 20px;
-        width: calc(45% - 20px);
-    }
-}
-
 .result-container {
-    margin-top: 0;
+    margin-top: 20px; /* Small margin to keep some space, adjust as needed */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -67,3 +60,22 @@ button {
     white-space: pre-wrap;
     word-wrap: break-word;
 }
+
+@media (min-width: 768px) {
+    .content-container {
+        flex-direction: row;
+    }
+
+    .CodeMirror {
+        width: 55%;
+        margin-bottom: 0; /* Ensure no margin below the CodeMirror */
+    }
+
+    #problem {
+        margin-top: 0;
+        margin-left: 20px;
+        width: calc(45% - 20px);
+    }
+}
+
+
