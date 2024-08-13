@@ -49,7 +49,7 @@ function App() {
       const result = await response.json();
       setSubmissionResult(result.output);
     } catch (error) {
-      console.log("dalit is hot");
+      setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nYou may want to check for infinite loops.`)
     }
   };
 
