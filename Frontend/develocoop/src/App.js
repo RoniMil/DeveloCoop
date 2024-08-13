@@ -3,7 +3,7 @@ import axios from 'axios';
 import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
 import { python } from "@codemirror/lang-python"
-import { oneDark } from '@codemirror/theme-one-dark'; // Import a valid theme
+import { vscodeDark } from '@uiw/codemirror-theme-vscode';
 
 function App() {
   const [questionDeclaration, setQuestionDeclaration] = useState('');
@@ -52,11 +52,12 @@ function App() {
             <div className="CodeMirror">
               <CodeMirror
                 value={questionDeclaration}
-                options={{
-                  lineNumbers: true,
-                  mode: 'python'
-                }}
-                theme={oneDark}
+                // options={{
+                //   lineNumbers: true,
+                //   mode: 'python'
+                // }}
+                extensions={[python()]}
+                theme={vscodeDark}
                 onChange={(value) => {
                   setUserAnswer(value);
                 }}
