@@ -1,3 +1,4 @@
+import json
 import os
 from bson import ObjectId
 from dotenv import find_dotenv, load_dotenv
@@ -5,9 +6,12 @@ from pydantic import BaseModel
 from pymongo import MongoClient
 from pymongo.server_api import ServerApi
 import requests
-from fastapi import FastAPI
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from lobby import Lobby
+import uuid
+from itertools import count
 
 load_dotenv(find_dotenv())
 
@@ -44,12 +48,70 @@ else:
     for test_case, your_answer, answer in wrong_answers:
         print("On input: " + str(list(test_case)) + ", your result: " + str(your_answer) + ", expected answer: " + str(answer))"""
 
-
 # class for submit answer post request framework
 class Submission(BaseModel):
     question_id: str
     user_answer: str
 
+class LobbyCreationResponse(BaseModel):
+    lobby_id: str
+
+class JoinLobbyRequest(BaseModel):
+    lobby_id: str    
+
+lobbies = {}
+lobby_id_counter = count(1)
+
+@app.post("/create_lobby")
+async def create_lobby():
+    lobby_id = str(next(lobby_id_counter))
+    lobbies[lobby_id] = Lobby(lobby_id)
+    return LobbyCreationResponse(lobby_id=lobby_id)
+
+@app.post("/join_lobby")
+async def join_lobby(request: JoinLobbyRequest):
+    lobby_id = request.lobby_id
+    if lobby_id not in lobbies:
+        raise HTTPException(status_code=404, detail="Lobby not found")
+    if lobbies[lobby_id].get_player_count() >= 2:
+        raise HTTPException(status_code=400, detail="Lobby is full")
+    return {"message": "Lobby joined successfully"}
+
+@app.get("/find_lobby")
+async def find_lobby():
+    for lobby_id, lobby in lobbies.items():
+        if lobby.get_player_count() == 1:
+            return {"lobby_id": lobby_id}
+    raise HTTPException(status_code=404, detail="No available lobbies")
+
+@app.websocket("/ws/{lobby_id}")
+async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
+    if lobby_id not in lobbies:
+        await websocket.close(code=4000)
+        return
+
+    lobby = lobbies[lobby_id]
+    await lobby.connect(websocket)
+    try:
+        player_id = lobby.get_player_id(websocket)
+        await websocket.send_json({"type": "player_id", "id": player_id})
+        await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} joined the lobby"}))
+        while True:
+            data = await websocket.receive_json()
+            if data["type"] == "ready":
+                lobby.set_ready(player_id)
+                await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} is ready"}))
+                if lobby.all_players_ready():
+                    await lobby.broadcast(json.dumps({"type": "game_start"}))
+            elif data["type"] == "chat":
+                await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id}: {data['content']}"}))
+    except WebSocketDisconnect:
+        lobby.disconnect(player_id)
+        await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} left the lobby"}))
+        if lobby.get_player_count() == 0:
+            del lobbies[lobby_id]
+
+    
 @app.get("/questions")
 def get_question():
     # !!!change DB to questions when actual DB exists!!!
