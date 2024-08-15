@@ -10,7 +10,6 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from lobby import Lobby
-import uuid
 from itertools import count
 
 load_dotenv(find_dotenv())
@@ -125,7 +124,16 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                     )
                 )
                 if lobby.all_players_ready():
-                    await lobby.broadcast(json.dumps({"type": "game_start"}))
+                    if not lobby.get_question():
+                        # Fetch a question only if it hasn't been set yet
+                        question = get_question()
+                        lobby.set_question(question)
+                    # Send the question to both players
+                    await lobby.broadcast(
+                        json.dumps(
+                            {"type": "game_start", "question": lobby.get_question()}
+                        )
+                    )
             elif data["type"] == "chat":
                 await lobby.broadcast(
                     json.dumps(

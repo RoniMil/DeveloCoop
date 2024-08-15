@@ -7,6 +7,7 @@ class Lobby:
         self.players: Dict[str, WebSocket] = {}
         self.ready_players: set = set()
         self.is_player_one_taken = False
+        self.question = None
 
 
     async def connect(self, websocket: WebSocket):
@@ -30,12 +31,6 @@ class Lobby:
         for websocket in self.players.values():
             await websocket.send_text(message)
 
-    def set_ready(self, player_id: str, is_ready: bool):
-        if is_ready:
-            self.ready_players.add(player_id)
-        else:
-            self.ready_players.discard(player_id)
-
 
     def all_players_ready(self):
         return len(self.ready_players) == 2 and len(self.players) == 2
@@ -48,6 +43,18 @@ class Lobby:
             if ws == websocket:
                 return player_id
         return None
+    
+    def get_question(self):
+        return self.question
+    
+    def set_ready(self, player_id: str, is_ready: bool):
+        if is_ready:
+            self.ready_players.add(player_id)
+        else:
+            self.ready_players.discard(player_id)
+
+    def set_question(self, question):
+        self.question = question
 
     def reset(self):
         self.ready_players.clear()

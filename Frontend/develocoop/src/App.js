@@ -29,20 +29,6 @@ function App() {
   const [chatMessages, setChatMessages] = useState([]);
   const websocket = useRef(null);
 
-  const fetchQuestion = async () => {
-    try {
-      const response = await fetch(`${API_URL}/questions`);
-      const data = await response.json();
-      setQuestionDeclaration(data["Question Declaration"]);
-      setQuestionDescription(data["Question Description"]);
-      setQuestionName(data["Question Name"]);
-      setQuestionId(data["_id"]);
-      setUserAnswer(data["Question Declaration"]);
-    } catch (error) {
-      console.error('Error fetching the question:', error);
-    }
-  };
-
   const handleSubmit = async () => {
     setLoading(true);
     try {
@@ -66,12 +52,22 @@ function App() {
     }
   };
 
-  const startGame = (mode) => {
+  const startGame = async (mode) => {
     if (mode === 'two-players') {
       setShowLobbyOptions(true);
     } else {
       setGameMode(mode);
-      fetchQuestion();
+      try {
+        const response = await fetch(`${API_URL}/questions`);
+        const data = await response.json();
+        setQuestionDeclaration(data["Question Declaration"]);
+        setQuestionDescription(data["Question Description"]);
+        setQuestionName(data["Question Name"]);
+        setQuestionId(data["_id"]);
+        setUserAnswer(data["Question Declaration"]);
+      } catch (error) {
+        console.error('Error fetching the question:', error);
+      }
     }
   };
 
@@ -113,7 +109,7 @@ function App() {
       alert('Failed to create lobby. Please try again.');
     }
   };
-  
+
   const joinLobby = async () => {
     try {
       const response = await fetch(`${API_URL}/join_lobby`, {
@@ -135,7 +131,7 @@ function App() {
       alert('Failed to join lobby. Please check the ID and try again.');
     }
   };
-  
+
   const findLobby = async () => {
     try {
       const response = await fetch(`${API_URL}/find_lobby`);
@@ -172,7 +168,12 @@ function App() {
         } else if (data.type === 'game_start') {
           setInLobby(false);
           setGameMode('two-players');
-          fetchQuestion();
+          // Set the question received from the server
+          setQuestionDeclaration(data.question["Question Declaration"]);
+          setQuestionDescription(data.question["Question Description"]);
+          setQuestionName(data.question["Question Name"]);
+          setQuestionId(data.question["_id"]);
+          setUserAnswer(data.question["Question Declaration"]);
         } else if (data.type === 'player_ready') {
           if (data.ready) {
             setReadyPlayers(prev => new Set(prev).add(data.player_id));
@@ -186,7 +187,6 @@ function App() {
             setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
           }
         } else if (data.type === 'player_left') {
-          // Remove the player from ready players and remove their ready message
           setReadyPlayers(prev => {
             const newSet = new Set(prev);
             newSet.delete(data.player_id);
@@ -318,6 +318,21 @@ function App() {
               <div id="problem">
                 {questionDescription}
               </div>
+            </div>
+            <div className="chat-container">
+              {chatMessages.map((msg, index) => (
+                <p key={`chat-${index}`}>{msg}</p>
+              ))}
+            </div>
+            <div className="chat-input">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                placeholder="Type your message..."
+              />
+              <button onClick={sendChatMessage}>Send</button>
             </div>
             {submissionResult && (
               <div className="result-container">
