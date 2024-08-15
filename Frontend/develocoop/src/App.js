@@ -18,12 +18,15 @@ function App() {
   const [gameMode, setGameMode] = useState(null);
   const [inLobby, setInLobby] = useState(false);
   const [playerId, setPlayerId] = useState(null);
-  const [lobbyMessages, setLobbyMessages] = useState([]);
   const [chatInput, setChatInput] = useState('');
   const [isReady, setIsReady] = useState(false);
   const [lobbyId, setLobbyId] = useState('');
   const [showLobbyOptions, setShowLobbyOptions] = useState(false);
   const [joinLobbyId, setJoinLobbyId] = useState('');
+  const [playerCount, setPlayerCount] = useState(1);
+  const [readyPlayers, setReadyPlayers] = useState(new Set());
+  const [readyMessages, setReadyMessages] = useState([]);
+  const [chatMessages, setChatMessages] = useState([]);
   const websocket = useRef(null);
 
   const fetchQuestion = async () => {
@@ -83,12 +86,15 @@ function App() {
     setLoading(false);
     setInLobby(false);
     setPlayerId(null);
-    setLobbyMessages([]);
+    setChatMessages([]);
+    setReadyMessages([]);
     setChatInput('');
     setIsReady(false);
     setLobbyId('');
     setShowLobbyOptions(false);
     setJoinLobbyId('');
+    setPlayerCount(1);
+    setReadyPlayers(new Set());
     if (websocket.current) {
       websocket.current.close();
     }
@@ -100,7 +106,7 @@ function App() {
       const data = await response.json();
       setLobbyId(data.lobby_id);
       setInLobby(true);
-      setShowLobbyOptions(false);  // Hide lobby options
+      setShowLobbyOptions(false);
       connectToLobby(data.lobby_id);
     } catch (error) {
       console.error('Error creating lobby:', error);
@@ -118,7 +124,7 @@ function App() {
       if (response.ok) {
         setLobbyId(joinLobbyId);
         setInLobby(true);
-        setShowLobbyOptions(false);  // Hide lobby options
+        setShowLobbyOptions(false);
         connectToLobby(joinLobbyId);
       } else {
         const errorData = await response.json();
@@ -137,7 +143,7 @@ function App() {
         const data = await response.json();
         setLobbyId(data.lobby_id);
         setInLobby(true);
-        setShowLobbyOptions(false);  // Hide lobby options
+        setShowLobbyOptions(false);
         connectToLobby(data.lobby_id);
       } else {
         alert('No available lobbies found. Try creating a new one.');
@@ -160,11 +166,34 @@ function App() {
         if (data.type === 'player_id') {
           setPlayerId(data.id);
         } else if (data.type === 'message') {
-          setLobbyMessages(prev => [...prev, data.content]);
+          setChatMessages(prev => [...prev, data.content]);
+        } else if (data.type === 'player_count') {
+          setPlayerCount(data.count);
         } else if (data.type === 'game_start') {
           setInLobby(false);
           setGameMode('two-players');
           fetchQuestion();
+        } else if (data.type === 'player_ready') {
+          if (data.ready) {
+            setReadyPlayers(prev => new Set(prev).add(data.player_id));
+            setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
+          } else {
+            setReadyPlayers(prev => {
+              const newSet = new Set(prev);
+              newSet.delete(data.player_id);
+              return newSet;
+            });
+            setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
+          }
+        } else if (data.type === 'player_left') {
+          // Remove the player from ready players and remove their ready message
+          setReadyPlayers(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(data.player_id);
+            return newSet;
+          });
+          setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
+          setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
         }
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
@@ -185,7 +214,7 @@ function App() {
 
   const toggleReady = () => {
     if (websocket.current) {
-      websocket.current.send(JSON.stringify({ type: 'ready' }));
+      websocket.current.send(JSON.stringify({ type: 'ready', ready: !isReady }));
       setIsReady(!isReady);
     }
   };
@@ -231,13 +260,17 @@ function App() {
           <div className="lobby-header">
             <p className="lobby-info">Lobby ID: {lobbyId}</p>
             {playerId && <p className="player-info">You are Player {playerId}</p>}
+            <p className="player-count">{playerCount}/2 players</p>
             <button onClick={toggleReady} className={`ready-button ${isReady ? 'not-ready' : ''}`}>
               {isReady ? 'Not Ready' : 'Ready'}
             </button>
           </div>
           <div className="chat-container">
-            {lobbyMessages.map((msg, index) => (
-              <p key={index}>{msg}</p>
+            {readyMessages.map((msg, index) => (
+              <p key={`ready-${index}`} className="ready-message"><strong>{msg}</strong></p>
+            ))}
+            {chatMessages.map((msg, index) => (
+              <p key={`chat-${index}`}>{msg}</p>
             ))}
           </div>
           <div className="chat-input">

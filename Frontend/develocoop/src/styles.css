@@ -103,15 +103,15 @@ button {
     position: absolute;
     top: 10px;
     left: 10px;
-} 
+}
 
 .header-image {
     display: block;
     margin: 0 auto 20px auto;
     max-width: 100%;
     height: auto;
-    width: 150px; 
-    border-radius: 50%; 
+    width: 150px;
+    border-radius: 50%;
 }
 
 /* New styles for lobby */
@@ -121,7 +121,7 @@ button {
     padding: 20px;
     background-color: #f0f0f0;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .lobby-header {
@@ -229,7 +229,7 @@ button {
     background-color: #f0f0f0;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .lobby-options button {
@@ -252,7 +252,8 @@ button {
     font-size: 16px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: calc(100% - 22px); /* Accounting for padding */
+    width: calc(100% - 22px);
+    /* Accounting for padding */
 }
 
 .lobby-options div {
@@ -271,7 +272,8 @@ button {
     gap: 10px;
 }
 
-.player-info, .lobby-info {
+.player-info,
+.lobby-info {
     margin: 0;
     flex-basis: 100%;
 }
@@ -282,7 +284,9 @@ button {
 
 /* Responsive design for smaller screens */
 @media (max-width: 600px) {
-    .lobby-options, .lobby-container {
+
+    .lobby-options,
+    .lobby-container {
         max-width: 100%;
         padding: 15px;
     }
@@ -299,5 +303,18 @@ button {
     .ready-button {
         margin-left: 0;
         width: 100%;
+    }
+
+    .ready-message {
+        color: #4CAF50;
+        /* Green color for ready messages */
+        margin-bottom: 10px;
+        border-bottom: 1px solid #e0e0e0;
+        padding-bottom: 5px;
+    }
+
+    .chat-container {
+        display: flex;
+        flex-direction: column;
     }
 }

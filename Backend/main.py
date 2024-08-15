@@ -35,7 +35,7 @@ jdoodle_client_id = os.environ.get("JDOODLE_CLIENT_ID")
 jdoodle_client_secret = os.environ.get("JDOODLE_CLIENT_SECRET")
 
 connection_str = f"mongodb+srv://{mongodb_user}:{mongodb_pwd}@develocoop.vjutg.mongodb.net/?retryWrites=true&w=majority&appName=DeveloCoop"
-client = MongoClient(connection_str, server_api=ServerApi('1'))
+client = MongoClient(connection_str, server_api=ServerApi("1"))
 
 questions_db = client.DeveloCoop.Questions
 test_db = client.DeveloCoop.test
@@ -48,25 +48,31 @@ else:
     for test_case, your_answer, answer in wrong_answers:
         print("On input: " + str(list(test_case)) + ", your result: " + str(your_answer) + ", expected answer: " + str(answer))"""
 
+
 # class for submit answer post request framework
 class Submission(BaseModel):
     question_id: str
     user_answer: str
 
+
 class LobbyCreationResponse(BaseModel):
     lobby_id: str
 
+
 class JoinLobbyRequest(BaseModel):
-    lobby_id: str    
+    lobby_id: str
+
 
 lobbies = {}
 lobby_id_counter = count(1)
+
 
 @app.post("/create_lobby")
 async def create_lobby():
     lobby_id = str(next(lobby_id_counter))
     lobbies[lobby_id] = Lobby(lobby_id)
     return LobbyCreationResponse(lobby_id=lobby_id)
+
 
 @app.post("/join_lobby")
 async def join_lobby(request: JoinLobbyRequest):
@@ -77,12 +83,14 @@ async def join_lobby(request: JoinLobbyRequest):
         raise HTTPException(status_code=400, detail="Lobby is full")
     return {"message": "Lobby joined successfully"}
 
+
 @app.get("/find_lobby")
 async def find_lobby():
     for lobby_id, lobby in lobbies.items():
         if lobby.get_player_count() == 1:
             return {"lobby_id": lobby_id}
     raise HTTPException(status_code=404, detail="No available lobbies")
+
 
 @app.websocket("/ws/{lobby_id}")
 async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
@@ -91,27 +99,54 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
         return
 
     lobby = lobbies[lobby_id]
-    await lobby.connect(websocket)
+    player_id = await lobby.connect(websocket)
     try:
-        player_id = lobby.get_player_id(websocket)
         await websocket.send_json({"type": "player_id", "id": player_id})
-        await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} joined the lobby"}))
+        await lobby.broadcast(
+            json.dumps(
+                {"type": "message", "content": f"Player {player_id} joined the lobby"}
+            )
+        )
+        await lobby.broadcast(
+            json.dumps({"type": "player_count", "count": lobby.get_player_count()})
+        )
         while True:
             data = await websocket.receive_json()
             if data["type"] == "ready":
-                lobby.set_ready(player_id)
-                await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} is ready"}))
+                is_ready = data.get("ready", True)
+                lobby.set_ready(player_id, is_ready)
+                await lobby.broadcast(
+                    json.dumps(
+                        {
+                            "type": "player_ready",
+                            "player_id": player_id,
+                            "ready": is_ready,
+                        }
+                    )
+                )
                 if lobby.all_players_ready():
                     await lobby.broadcast(json.dumps({"type": "game_start"}))
             elif data["type"] == "chat":
-                await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id}: {data['content']}"}))
+                await lobby.broadcast(
+                    json.dumps(
+                        {
+                            "type": "message",
+                            "content": f"Player {player_id}: {data['content']}",
+                        }
+                    )
+                )
     except WebSocketDisconnect:
         lobby.disconnect(player_id)
-        await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} left the lobby"}))
+        await lobby.broadcast(
+            json.dumps({"type": "player_left", "player_id": player_id})
+        )
+        await lobby.broadcast(
+            json.dumps({"type": "player_count", "count": lobby.get_player_count()})
+        )
         if lobby.get_player_count() == 0:
             del lobbies[lobby_id]
 
-    
+
 @app.get("/questions")
 def get_question():
     # !!!change DB to questions when actual DB exists!!!
@@ -119,44 +154,36 @@ def get_question():
     question["_id"] = str(question["_id"])
     return question
 
+
 @app.post("/questions/submit")
-def get_results(submission : Submission):
+def get_results(submission: Submission):
     # from the user POSSIBLE TRANSFORMATION INTO \n\t FORMAT NEEDED
     user_answer = submission.user_answer
     test_db = client.DeveloCoop.test
     # predefined from the excel sheet given a question id
-    #tests = "import math\n\ttests = [i for i in range(0, 10)]\n\tfor t in tests:\n\t\tassert fuc(t) == math.factorial(t)\n"
-    db_entry = test_db.find_one({"_id" : ObjectId(submission.question_id)})
+    db_entry = test_db.find_one({"_id": ObjectId(submission.question_id)})
     tests = db_entry["Question Tests"]
     answer = db_entry["Question Solution"]
-
-    # specific tests for the question id
-    #test_hardcoded_str = "wrong_answers = [(test,\tuser_solution(*test),\tsolution(*test))\tfor test in test_cases\tif user_solution(*test) != solution(*test)]\nif not wrong_answers:\n\tprint('Passed all tests!')\nelse:\n\tprint('Failed on the following tests:')\n\tfor test_case,\tyour_answer,\tanswer in wrong_answers:\n\t\tprint(f'On input: {test_case},\tyour result: {your_answer},\texpected answer: {answer}')"
 
     test_str = f"{tests}\n{test_hardcoded_str}"
 
     execution_data = {
-        'clientId': jdoodle_client_id,
-        'clientSecret': jdoodle_client_secret,
-        'script': f"{answer}\n{user_answer}\n{test_str}",
-        'language': 'python3',
-        'versionIndex': '0'
+        "clientId": jdoodle_client_id,
+        "clientSecret": jdoodle_client_secret,
+        "script": f"{answer}\n{user_answer}\n{test_str}",
+        "language": "python3",
+        "versionIndex": "0",
     }
 
     # Make the POST request to execute code
     response = requests.post("https://api.jdoodle.com/v1/execute", json=execution_data)
 
-
-    # !!!handle timeout case!!!
     # Output the result
     return response.json()
+
 
 # def get_followup
 
 
-
-if __name__ == '__main__':
+if __name__ == "__main__":
     uvicorn.run(app)
-
-
-

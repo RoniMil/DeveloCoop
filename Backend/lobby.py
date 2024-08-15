@@ -1,31 +1,41 @@
 from fastapi import WebSocket
 from typing import Dict
-import json
 
 class Lobby:
     def __init__(self, lobby_id: str):
         self.lobby_id = lobby_id
         self.players: Dict[str, WebSocket] = {}
         self.ready_players: set = set()
-        self.next_player_id = 1
+        self.is_player_one_taken = False
+
 
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
-        player_id = str(self.next_player_id)
+        if self.is_player_one_taken:
+            player_id = "2"
+        else:
+            player_id = "1" 
+            self.is_player_one_taken = True   
         self.players[player_id] = websocket
-        self.next_player_id += 1
         return player_id
 
     def disconnect(self, player_id: str):
         self.players.pop(player_id, None)
         self.ready_players.discard(player_id)
+        if player_id == "1":
+            self.is_player_one_taken = False
+        
 
     async def broadcast(self, message: str):
         for websocket in self.players.values():
             await websocket.send_text(message)
 
-    def set_ready(self, player_id: str):
-        self.ready_players.add(player_id)
+    def set_ready(self, player_id: str, is_ready: bool):
+        if is_ready:
+            self.ready_players.add(player_id)
+        else:
+            self.ready_players.discard(player_id)
+
 
     def all_players_ready(self):
         return len(self.ready_players) == 2 and len(self.players) == 2
