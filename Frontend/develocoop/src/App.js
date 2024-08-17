@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
 import { python } from "@codemirror/lang-python";
@@ -30,11 +30,13 @@ function App() {
   const [chatMessages, setChatMessages] = useState([]);
   const websocket = useRef(null);
   const [editorContent, setEditorContent] = useState('');
+  const isInitialMount = useRef(true);
 
 
-  const handleEditorChange = (content) => {
+  const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
-  };
+    setUserAnswer(content);
+  }, []);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -58,7 +60,7 @@ function App() {
       setLoading(false);
     }
   };
-  
+
 
   const startGame = async (mode) => {
     if (mode === 'two-players') {
@@ -182,6 +184,9 @@ function App() {
           setQuestionName(data.question["Question Name"]);
           setQuestionId(data.question["_id"]);
           setUserAnswer(data.question["Question Declaration"]);
+          if (!lobbyId) {
+            setLobbyId(data.lobbyId);
+          }
         } else if (data.type === 'player_ready') {
           if (data.ready) {
             setReadyPlayers(prev => new Set(prev).add(data.player_id));
@@ -227,13 +232,22 @@ function App() {
     }
   };
 
+
+
   useEffect(() => {
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      if (questionDeclaration) {
+        setEditorContent(questionDeclaration);
+        setUserAnswer(questionDeclaration);
+      }
+    }
     return () => {
       if (websocket.current) {
         websocket.current.close();
       }
     };
-  }, []);
+  }, [questionDeclaration]);
 
   if (showLobbyOptions) {
     return (
@@ -311,11 +325,13 @@ function App() {
             <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
             <h3>{questionName}</h3>
             <div className="content-container">
-            {gameMode === 'two-players' ? (
+              {gameMode === 'two-players' ? (
                 <CooperativeEditor
-                  initialContent={questionDeclaration}
+                  questionDeclaration={questionDeclaration}
                   onChange={handleEditorChange}
                   roomName={lobbyId} // Use lobbyId as the room name
+                  initialContent={editorContent}
+                  isPlayer1={playerId === '1'}
                 />
               ) : (
                 <CodeMirror
