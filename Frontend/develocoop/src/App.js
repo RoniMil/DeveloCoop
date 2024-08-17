@@ -4,6 +4,7 @@ import './styles.css';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import frogImage from './images/develocoop_logo.png';
+import CooperativeEditor from './CooperativeEditor';
 
 const API_URL = 'http://localhost:8000';
 
@@ -28,13 +29,19 @@ function App() {
   const [readyMessages, setReadyMessages] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
   const websocket = useRef(null);
+  const [editorContent, setEditorContent] = useState('');
+
+
+  const handleEditorChange = (content) => {
+    setEditorContent(content);
+  };
 
   const handleSubmit = async () => {
     setLoading(true);
     try {
       const data = {
         question_id: questionId,
-        user_answer: userAnswer
+        user_answer: editorContent
       }
       const response = await fetch(`${API_URL}/questions/submit`, {
         method: 'POST',
@@ -51,6 +58,7 @@ function App() {
       setLoading(false);
     }
   };
+  
 
   const startGame = async (mode) => {
     if (mode === 'two-players') {
@@ -303,18 +311,25 @@ function App() {
             <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
             <h3>{questionName}</h3>
             <div className="content-container">
-              <div className="CodeMirror">
+            {gameMode === 'two-players' ? (
+                <CooperativeEditor
+                  initialContent={questionDeclaration}
+                  onChange={handleEditorChange}
+                  roomName={lobbyId} // Use lobbyId as the room name
+                />
+              ) : (
                 <CodeMirror
-                  value={questionDeclaration}
+                  value={userAnswer}
                   extensions={[python(), autocompletion()]}
                   onChange={(value) => {
                     setUserAnswer(value);
+                    setEditorContent(value);
                   }}
                   basicSetup={{
                     tabSize: 4
                   }}
                 />
-              </div>
+              )}
               <div id="problem">
                 {questionDescription}
               </div>
