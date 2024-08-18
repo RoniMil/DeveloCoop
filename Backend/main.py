@@ -52,6 +52,7 @@ else:
 class Submission(BaseModel):
     question_id: str
     user_answer: str
+    lobby_id: str | None = None
 
 
 class LobbyCreationResponse(BaseModel):
@@ -72,7 +73,6 @@ async def create_lobby():
     lobbies[lobby_id] = Lobby(lobby_id)
     return LobbyCreationResponse(lobby_id=lobby_id)
 
-
 @app.post("/join_lobby")
 async def join_lobby(request: JoinLobbyRequest):
     lobby_id = request.lobby_id
@@ -81,7 +81,6 @@ async def join_lobby(request: JoinLobbyRequest):
     if lobbies[lobby_id].get_player_count() >= 2:
         raise HTTPException(status_code=400, detail="Lobby is full")
     return {"message": "Lobby joined successfully"}
-
 
 @app.get("/find_lobby")
 async def find_lobby():
@@ -134,6 +133,26 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                             {"type": "game_start", "question": lobby.get_question()}
                         )
                     )
+            if data["type"] == "submit_ready":
+                is_submit_ready = data.get("submit_ready", True)
+                lobby.set_submit_ready(player_id, is_submit_ready)
+                await lobby.send_editor_content(data.get("editor_content", ""))
+                await lobby.broadcast(
+                    json.dumps(
+                        {
+                            "type": "player_submit_ready",
+                            "player_id": player_id,
+                            "submit_ready": is_submit_ready,
+                        }
+                    )
+                )
+                if lobby.all_players_submit_ready():
+                    # Send the question to both players
+                    await lobby.broadcast(
+                        json.dumps(
+                            {"type": "submission", "editor_content": lobby.get_editor_content()}
+                        )
+                    )        
             elif data["type"] == "chat":
                 await lobby.broadcast(
                     json.dumps(

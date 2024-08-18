@@ -21,31 +21,36 @@ function App() {
   const [playerId, setPlayerId] = useState(null);
   const [chatInput, setChatInput] = useState('');
   const [isReady, setIsReady] = useState(false);
+  const [isSubmitReady, setIsSubmitReady] = useState(false);
   const [lobbyId, setLobbyId] = useState('');
   const [showLobbyOptions, setShowLobbyOptions] = useState(false);
   const [joinLobbyId, setJoinLobbyId] = useState('');
   const [playerCount, setPlayerCount] = useState(1);
   const [readyPlayers, setReadyPlayers] = useState(new Set());
+  const [submitReadyPlayers, setSubmitReadyPlayers] = useState(new Set());
   const [readyMessages, setReadyMessages] = useState([]);
+  const [submitReadyMessages, setSubmitReadyMessages] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
-  const websocket = useRef(null);
   const [editorContent, setEditorContent] = useState('');
   const isInitialMount = useRef(true);
   const websocketRef = useRef(null);
-
 
   const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
     setUserAnswer(content);
   }, []);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (submissionContent) => {
     setLoading(true);
     try {
       const data = {
         question_id: questionId,
-        user_answer: editorContent
-      }
+        user_answer: submissionContent,
+        lobby_id: lobbyId
+      };
+
+      console.log('Submitting data:', data);
+
       const response = await fetch(`${API_URL}/questions/submit`, {
         method: 'POST',
         headers: {
@@ -53,15 +58,20 @@ function App() {
         },
         body: JSON.stringify(data)
       });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
       const result = await response.json();
       setSubmissionResult(result.output);
     } catch (error) {
-      setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nYou may want to check for infinite loops.`)
+      console.error('Submission error:', error);
+      setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nPlease check your input and try again.`)
     } finally {
       setLoading(false);
     }
   };
-
 
   const startGame = async (mode) => {
     if (mode === 'two-players') {
@@ -95,15 +105,18 @@ function App() {
     setPlayerId(null);
     setChatMessages([]);
     setReadyMessages([]);
+    setSubmitReadyMessages([]);
     setChatInput('');
     setIsReady(false);
+    setIsSubmitReady(false);
     setLobbyId('');
     setShowLobbyOptions(false);
     setJoinLobbyId('');
     setPlayerCount(1);
     setReadyPlayers(new Set());
-    if (websocket.current) {
-      websocket.current.close();
+    setSubmitReadyPlayers(new Set());
+    if (websocketRef.current) {
+      websocketRef.current.close();
     }
   };
 
@@ -210,6 +223,22 @@ function App() {
               setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
             }
             break;
+          case 'player_submit_ready':
+            if (data.submit_ready) {
+              setSubmitReadyPlayers(prev => new Set(prev).add(data.player_id));
+              setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
+            } else {
+              setSubmitReadyPlayers(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(data.player_id);
+                return newSet;
+              });
+              setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
+            }
+            break;
+          case 'submit_code':
+            handleSubmit(data.editor_content);
+            break;
           case 'player_left':
             setReadyPlayers(prev => {
               const newSet = new Set(prev);
@@ -227,7 +256,6 @@ function App() {
 
     websocketRef.current.onclose = (event) => {
       console.log(`Disconnected from lobby: ${lobbyId}`, event);
-      // Attempt to reconnect
       setTimeout(() => connectToLobby(lobbyId), 1000);
     };
 
@@ -256,6 +284,19 @@ function App() {
     }
   }, [isReady]);
 
+  const toggleSubmitReady = useCallback(() => {
+    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+      websocketRef.current.send(JSON.stringify({
+        type: 'submit_ready',
+        submit_ready: !isSubmitReady,
+        editor_content: editorContent
+      }));
+      setIsSubmitReady(!isSubmitReady);
+    } else {
+      console.error('WebSocket is not open, cannot send submit ready state');
+    }
+  }, [isSubmitReady, editorContent]);
+
   useEffect(() => {
     return () => {
       if (websocketRef.current) {
@@ -269,7 +310,6 @@ function App() {
       connectToLobby(lobbyId);
     }
   }, [lobbyId, connectToLobby]);
-
 
   useEffect(() => {
     if (isInitialMount.current) {
@@ -304,6 +344,7 @@ function App() {
     );
   }
 
+  // MAYBE REDUNDANT
   if (inLobby) {
     return (
       <div style={{ padding: '20px' }}>
@@ -394,7 +435,7 @@ function App() {
                       onChange={handleEditorChange}
                       roomName={lobbyId}
                       isPlayer1={playerId === '1'}
-                      userId = {`Player ${playerId}`}
+                      userId={`Player ${playerId}`}
                     />
                   ) : (
                     <CodeMirror
@@ -414,6 +455,9 @@ function App() {
                   </div>
                 </div>
                 <div className="chat-container">
+                  {submitReadyMessages.map((msg, index) => (
+                    <p key={`ready-to-submit${index}`} className="ready-message"><strong>{msg}</strong></p>
+                  ))}
                   {chatMessages.map((msg, index) => (
                     <p key={`chat-${index}`}>{msg}</p>
                   ))}
@@ -434,8 +478,8 @@ function App() {
                     <pre>{submissionResult}</pre>
                   </div>
                 )}
-                <button onClick={handleSubmit} disabled={loading} className="button">
-                  {loading ? 'Submitting...' : 'Submit Answer'}
+                <button onClick={toggleSubmitReady} disabled={loading} className="button">
+                  {isSubmitReady ? 'Waiting...' : 'Submit'}
                 </button>
                 {loading && <div className="loading-spinner"></div>}
               </div>
