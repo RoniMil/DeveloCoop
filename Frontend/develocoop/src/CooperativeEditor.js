@@ -37,7 +37,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
       });
 
       awareness.setLocalStateField("user", {
-        name: "User",
+        name: props.userId,
         color: colorRef.current,
       });
 

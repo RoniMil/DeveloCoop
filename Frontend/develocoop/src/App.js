@@ -394,6 +394,7 @@ function App() {
                       onChange={handleEditorChange}
                       roomName={lobbyId}
                       isPlayer1={playerId === '1'}
+                      userId = {`Player ${playerId}`}
                     />
                   ) : (
                     <CodeMirror
