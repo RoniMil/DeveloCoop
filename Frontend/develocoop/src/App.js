@@ -31,6 +31,7 @@ function App() {
   const websocket = useRef(null);
   const [editorContent, setEditorContent] = useState('');
   const isInitialMount = useRef(true);
+  const websocketRef = useRef(null);
 
 
   const handleEditorChange = useCallback((content) => {
@@ -113,7 +114,6 @@ function App() {
       setLobbyId(data.lobby_id);
       setInLobby(true);
       setShowLobbyOptions(false);
-      connectToLobby(data.lobby_id);
     } catch (error) {
       console.error('Error creating lobby:', error);
       alert('Failed to create lobby. Please try again.');
@@ -131,7 +131,6 @@ function App() {
         setLobbyId(joinLobbyId);
         setInLobby(true);
         setShowLobbyOptions(false);
-        connectToLobby(joinLobbyId);
       } else {
         const errorData = await response.json();
         alert(errorData.detail);
@@ -160,78 +159,116 @@ function App() {
     }
   };
 
-  const connectToLobby = (lobbyId) => {
-    websocket.current = new WebSocket(`ws://localhost:8000/ws/${lobbyId}`);
-    websocket.current.onopen = () => {
-      console.log('Connected to lobby');
+  const connectToLobby = useCallback((lobbyId) => {
+    console.log(`Connecting to lobby: ${lobbyId}`);
+    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+      console.log('WebSocket already open, skipping connection');
+      return;
+    }
+
+    websocketRef.current = new WebSocket(`ws://localhost:8000/ws/${lobbyId}`);
+
+    websocketRef.current.onopen = () => {
+      console.log(`Connected to lobby: ${lobbyId}`);
     };
 
-    websocket.current.onmessage = (event) => {
+    websocketRef.current.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        if (data.type === 'player_id') {
-          setPlayerId(data.id);
-        } else if (data.type === 'message') {
-          setChatMessages(prev => [...prev, data.content]);
-        } else if (data.type === 'player_count') {
-          setPlayerCount(data.count);
-        } else if (data.type === 'game_start') {
-          setInLobby(false);
-          setGameMode('two-players');
-          // Set the question received from the server
-          setQuestionDeclaration(data.question["Question Declaration"]);
-          setQuestionDescription(data.question["Question Description"]);
-          setQuestionName(data.question["Question Name"]);
-          setQuestionId(data.question["_id"]);
-          setUserAnswer(data.question["Question Declaration"]);
-          if (!lobbyId) {
-            setLobbyId(data.lobbyId);
-          }
-        } else if (data.type === 'player_ready') {
-          if (data.ready) {
-            setReadyPlayers(prev => new Set(prev).add(data.player_id));
-            setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
-          } else {
+        console.log('Received WebSocket message:', data);
+
+        switch (data.type) {
+          case 'player_id':
+            setPlayerId(data.id);
+            break;
+          case 'message':
+            setChatMessages(prev => [...prev, data.content]);
+            break;
+          case 'player_count':
+            setPlayerCount(data.count);
+            break;
+          case 'game_start':
+            console.log('Game starting, updating state...');
+            setInLobby(false);
+            setGameMode('two-players');
+            setQuestionDeclaration(data.question["Question Declaration"]);
+            setQuestionDescription(data.question["Question Description"]);
+            setQuestionName(data.question["Question Name"]);
+            setQuestionId(data.question["_id"]);
+            setUserAnswer(data.question["Question Declaration"]);
+            break;
+          case 'player_ready':
+            if (data.ready) {
+              setReadyPlayers(prev => new Set(prev).add(data.player_id));
+              setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
+            } else {
+              setReadyPlayers(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(data.player_id);
+                return newSet;
+              });
+              setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
+            }
+            break;
+          case 'player_left':
             setReadyPlayers(prev => {
               const newSet = new Set(prev);
               newSet.delete(data.player_id);
               return newSet;
             });
             setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
-          }
-        } else if (data.type === 'player_left') {
-          setReadyPlayers(prev => {
-            const newSet = new Set(prev);
-            newSet.delete(data.player_id);
-            return newSet;
-          });
-          setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
-          setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
+            setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
+            break;
         }
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
       }
     };
 
-    websocket.current.onclose = () => {
-      console.log('Disconnected from lobby');
+    websocketRef.current.onclose = (event) => {
+      console.log(`Disconnected from lobby: ${lobbyId}`, event);
+      // Attempt to reconnect
+      setTimeout(() => connectToLobby(lobbyId), 1000);
     };
-  };
 
-  const sendChatMessage = () => {
-    if (chatInput.trim() && websocket.current) {
-      websocket.current.send(JSON.stringify({ type: 'chat', content: chatInput }));
+    websocketRef.current.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+  }, []);
+
+  const sendChatMessage = useCallback(() => {
+    if (chatInput.trim() && websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+      console.log(`Sending chat message: ${chatInput}`);
+      websocketRef.current.send(JSON.stringify({ type: 'chat', content: chatInput }));
       setChatInput('');
+    } else {
+      console.error('WebSocket is not open or chat input is empty');
+      console.log('WebSocket readyState:', websocketRef.current ? websocketRef.current.readyState : 'WebSocket not initialized');
     }
-  };
+  }, [chatInput]);
 
-  const toggleReady = () => {
-    if (websocket.current) {
-      websocket.current.send(JSON.stringify({ type: 'ready', ready: !isReady }));
+  const toggleReady = useCallback(() => {
+    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+      websocketRef.current.send(JSON.stringify({ type: 'ready', ready: !isReady }));
       setIsReady(!isReady);
+    } else {
+      console.error('WebSocket is not open, cannot send ready state');
     }
-  };
+  }, [isReady]);
 
+  useEffect(() => {
+    return () => {
+      if (websocketRef.current) {
+        websocketRef.current.close();
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (lobbyId) {
+      connectToLobby(lobbyId);
+    }
+  }, [lobbyId, connectToLobby]);
 
 
   useEffect(() => {
@@ -242,11 +279,6 @@ function App() {
         setUserAnswer(questionDeclaration);
       }
     }
-    return () => {
-      if (websocket.current) {
-        websocket.current.close();
-      }
-    };
   }, [questionDeclaration]);
 
   if (showLobbyOptions) {
@@ -314,69 +346,101 @@ function App() {
     <div style={{ padding: '20px' }}>
       <img src={frogImage} alt="Frog Coding" className="header-image" />
       <h1>DeveloCoop</h1>
-      {!gameMode ? (
+      {!gameMode && !inLobby ? (
         <div className="main-menu">
           <button onClick={() => startGame('one-player')}>One Player</button>
           <button onClick={() => startGame('two-players')}>Two Players</button>
         </div>
       ) : (
-        questionName && (
-          <div className="main-container">
-            <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
-            <h3>{questionName}</h3>
-            <div className="content-container">
-              {gameMode === 'two-players' ? (
-                <CooperativeEditor
-                  questionDeclaration={questionDeclaration}
-                  onChange={handleEditorChange}
-                  roomName={lobbyId} // Use lobbyId as the room name
-                  initialContent={editorContent}
-                  isPlayer1={playerId === '1'}
+        <>
+          <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
+          {inLobby ? (
+            <div className="lobby-container">
+              <div className="lobby-header">
+                <p className="lobby-info">Lobby ID: {lobbyId}</p>
+                {playerId && <p className="player-info">You are Player {playerId}</p>}
+                <p className="player-count">{playerCount}/2 players</p>
+                <button onClick={toggleReady} className={`ready-button ${isReady ? 'not-ready' : ''}`}>
+                  {isReady ? 'Not Ready' : 'Ready'}
+                </button>
+              </div>
+              <div className="chat-container">
+                {readyMessages.map((msg, index) => (
+                  <p key={`ready-${index}`} className="ready-message"><strong>{msg}</strong></p>
+                ))}
+                {chatMessages.map((msg, index) => (
+                  <p key={`chat-${index}`}>{msg}</p>
+                ))}
+              </div>
+              <div className="chat-input">
+                <input
+                  type="text"
+                  value={chatInput}
+                  onChange={(e) => setChatInput(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                  placeholder="Type your message..."
                 />
-              ) : (
-                <CodeMirror
-                  value={userAnswer}
-                  extensions={[python(), autocompletion()]}
-                  onChange={(value) => {
-                    setUserAnswer(value);
-                    setEditorContent(value);
-                  }}
-                  basicSetup={{
-                    tabSize: 4
-                  }}
-                />
-              )}
-              <div id="problem">
-                {questionDescription}
+                <button onClick={sendChatMessage}>Send</button>
               </div>
             </div>
-            <div className="chat-container">
-              {chatMessages.map((msg, index) => (
-                <p key={`chat-${index}`}>{msg}</p>
-              ))}
-            </div>
-            <div className="chat-input">
-              <input
-                type="text"
-                value={chatInput}
-                onChange={(e) => setChatInput(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-                placeholder="Type your message..."
-              />
-              <button onClick={sendChatMessage}>Send</button>
-            </div>
-            {submissionResult && (
-              <div className="result-container">
-                <h3>Results:</h3>
-                <pre>{submissionResult}</pre>
+          ) : (
+            questionName && (
+              <div className="main-container">
+                <h3>{questionName}</h3>
+                <div className="content-container">
+                  {gameMode === 'two-players' ? (
+                    <CooperativeEditor
+                      questionDeclaration={questionDeclaration}
+                      onChange={handleEditorChange}
+                      roomName={lobbyId}
+                      isPlayer1={playerId === '1'}
+                    />
+                  ) : (
+                    <CodeMirror
+                      value={userAnswer}
+                      extensions={[python(), autocompletion()]}
+                      onChange={(value) => {
+                        setUserAnswer(value);
+                        setEditorContent(value);
+                      }}
+                      basicSetup={{
+                        tabSize: 4
+                      }}
+                    />
+                  )}
+                  <div id="problem">
+                    {questionDescription}
+                  </div>
+                </div>
+                <div className="chat-container">
+                  {chatMessages.map((msg, index) => (
+                    <p key={`chat-${index}`}>{msg}</p>
+                  ))}
+                </div>
+                <div className="chat-input">
+                  <input
+                    type="text"
+                    value={chatInput}
+                    onChange={(e) => setChatInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                    placeholder="Type your message..."
+                  />
+                  <button onClick={sendChatMessage}>Send</button>
+                </div>
+                {submissionResult && (
+                  <div className="result-container">
+                    <h3>Results:</h3>
+                    <pre>{submissionResult}</pre>
+                  </div>
+                )}
+                <button onClick={handleSubmit} disabled={loading} className="button">
+                  {loading ? 'Submitting...' : 'Submit Answer'}
+                </button>
+                {loading && <div className="loading-spinner"></div>}
               </div>
-            )}
-            <button onClick={handleSubmit} disabled={loading} className="button">
-              {loading ? 'Submitting...' : 'Submit Answer'}
-            </button>
-            {loading && <div className="loading-spinner"></div>}
-          </div>
-        )
+            )
+          )}
+        </>
       )}
     </div>
   );
