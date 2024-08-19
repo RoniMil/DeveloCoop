@@ -163,7 +163,7 @@ function App() {
         setLobbyId(data.lobby_id);
         setInLobby(true);
         setShowLobbyOptions(false);
-        connectToLobby(data.lobby_id);
+        // connectToLobby(data.lobby_id);
       } else {
         alert('No available lobbies found. Try creating a new one.');
       }
@@ -196,7 +196,9 @@ function App() {
             setPlayerId(data.id);
             break;
           case 'message':
+            console.log(data.content);
             setChatMessages(prev => [...prev, data.content]);
+            console.log(data.content);
             break;
           case 'player_count':
             setPlayerCount(data.count);
@@ -264,8 +266,10 @@ function App() {
     };
 
     websocketRef.current.onclose = (event) => {
+      if (!event.wasClean) {
+        setTimeout(() => connectToLobby(lobbyId), 1000);
+      } 
       console.log(`Disconnected from lobby: ${lobbyId}`, event);
-      setTimeout(() => connectToLobby(lobbyId), 1000);
     };
 
     websocketRef.current.onerror = (error) => {

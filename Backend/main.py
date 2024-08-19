@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from lobby import Lobby
 from itertools import count
+import random
 
 load_dotenv(find_dotenv())
 
@@ -84,10 +85,11 @@ async def join_lobby(request: JoinLobbyRequest):
 
 @app.get("/find_lobby")
 async def find_lobby():
-    for lobby_id, lobby in lobbies.items():
-        if lobby.get_player_count() == 1:
-            return {"lobby_id": lobby_id}
-    raise HTTPException(status_code=404, detail="No available lobbies")
+    available_lobbies = [lobby_id for lobby_id, lobby in lobbies.items() if lobby.get_player_count() == 1]
+    if not available_lobbies:
+        raise HTTPException(status_code=404, detail="No available lobbies")
+    random_lobby_id = random.choice(available_lobbies)
+    return {"lobby_id": random_lobby_id}
 
 
 @app.websocket("/ws/{lobby_id}")
@@ -133,7 +135,6 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                             {"type": "game_start", "question": lobby.get_question()}
                         )
                     )
-                    lobby.reset_ready()
             if data["type"] == "submit_ready":
                 is_submit_ready = data.get("submit_ready", True)
                 lobby.set_submit_ready(player_id, is_submit_ready)
