@@ -70,6 +70,7 @@ function App() {
       setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nPlease check your input and try again.`)
     } finally {
       setLoading(false);
+      setIsSubmitReady(false)
     }
   };
 
@@ -237,9 +238,15 @@ function App() {
             }
             break;
           case 'submit_code':
-            console.log(questionId);
-            console.log(lobbyId);
+            console.log(`Submitted players: ${submitReadyPlayers.size}`);
             handleSubmit(data.question_id, data.editor_content, data.lobby_id);
+            console.log(`Submitted players: ${submitReadyPlayers.size}`);
+            break;
+          case 'reset_submit_ready':
+            setIsSubmitReady(false);
+            setSubmitReadyPlayers(new Set());
+            setSubmitReadyMessages([]);
+            console.log(`Submitted players: ${submitReadyPlayers.size}`);
             break;
           case 'player_left':
             setReadyPlayers(prev => {
@@ -346,7 +353,7 @@ function App() {
     );
   }
 
-  
+
   return (
     <div style={{ padding: '20px' }}>
       <img src={frogImage} alt="Frog Coding" className="header-image" />

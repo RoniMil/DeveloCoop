@@ -75,10 +75,11 @@ class Lobby:
     def set_editor_content(self, editor_content):
         self.editor_content = editor_content
 
-    def reset(self):
+    def reset_ready(self):
         self.ready_players.clear()
-        self.submit_ready_players.clear()
-        self.editor_content = None
+
+    def reset_submit_ready(self):
+        self.submit_ready_players.clear()    
 
     async def send_to_player(self, player_id: str, message: str):
         if player_id in self.players:

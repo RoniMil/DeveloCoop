@@ -126,13 +126,14 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                     if not lobby.get_question():
                         # Fetch a question only if it hasn't been set yet
                         question = get_question()
-                        lobby.set_question(question)
+                        lobby.set_question(question)   
                     # Send the question to both players
                     await lobby.broadcast(
                         json.dumps(
                             {"type": "game_start", "question": lobby.get_question()}
                         )
                     )
+                    lobby.reset_ready()
             if data["type"] == "submit_ready":
                 is_submit_ready = data.get("submit_ready", True)
                 lobby.set_submit_ready(player_id, is_submit_ready)
@@ -153,7 +154,9 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                         json.dumps(
                             {"type": "submit_code", "question_id": lobby.get_question()["_id"], "editor_content": lobby.get_editor_content(), "lobby_id": lobby.get_lobby_id()}
                         )
-                    )        
+                    )   
+                    await lobby.broadcast(json.dumps({"type": "reset_submit_ready"}))  
+                    lobby.reset_submit_ready()   
             elif data["type"] == "chat":
                 await lobby.broadcast(
                     json.dumps(
