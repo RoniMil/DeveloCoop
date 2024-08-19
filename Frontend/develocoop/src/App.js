@@ -64,7 +64,14 @@ function App() {
       }
 
       const result = await response.json();
-      setSubmissionResult(result.output);
+  
+      if (result.output.includes("Passed all")) {
+        setSubmissionResult(`${result.output}\nMemory used: ${result.memory}\nCPU time used: ${result.cpuTime}`);
+      } else { 
+        setSubmissionResult(result.output) 
+      }
+  
+
     } catch (error) {
       console.error('Submission error:', error);
       setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nPlease check your input and try again.`)
@@ -240,15 +247,12 @@ function App() {
             }
             break;
           case 'submit_code':
-            console.log(`Submitted players: ${submitReadyPlayers.size}`);
             handleSubmit(data.question_id, data.editor_content, data.lobby_id);
-            console.log(`Submitted players: ${submitReadyPlayers.size}`);
             break;
           case 'reset_submit_ready':
             setIsSubmitReady(false);
             setSubmitReadyPlayers(new Set());
             setSubmitReadyMessages([]);
-            console.log(`Submitted players: ${submitReadyPlayers.size}`);
             break;
           case 'player_left':
             setReadyPlayers(prev => {
@@ -421,7 +425,7 @@ function App() {
                         setEditorContent(value);
                       }}
                       basicSetup={{
-                        tabSize: 4
+                        tabSize: 2
                       }}
                     />
                   )}

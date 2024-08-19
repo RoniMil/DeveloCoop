@@ -24,7 +24,11 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
         value: '',
         mode: 'python',
         theme: 'default',
-        lineNumbers: true
+        lineNumbers: true,
+        tabSize: 2, 
+        extraKeys: {
+          "Ctrl-Space": "autocomplete"
+        }
       });
 
       ydocRef.current = new Y.Doc();
