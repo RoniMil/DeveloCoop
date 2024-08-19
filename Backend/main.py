@@ -136,7 +136,7 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
             if data["type"] == "submit_ready":
                 is_submit_ready = data.get("submit_ready", True)
                 lobby.set_submit_ready(player_id, is_submit_ready)
-                await lobby.send_editor_content(data.get("editor_content", ""))
+                # await lobby.send_editor_content(data.get("editor_content", ""))
                 await lobby.broadcast(
                     json.dumps(
                         {
@@ -147,10 +147,11 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                     )
                 )
                 if lobby.all_players_submit_ready():
+                    lobby.set_editor_content(data.get("editor_content", ""))
                     # Send the question to both players
                     await lobby.broadcast(
                         json.dumps(
-                            {"type": "submission", "editor_content": lobby.get_editor_content()}
+                            {"type": "submit_code", "question_id": lobby.get_question()["_id"], "editor_content": lobby.get_editor_content(), "lobby_id": lobby.get_lobby_id()}
                         )
                     )        
             elif data["type"] == "chat":
@@ -184,7 +185,6 @@ def get_question():
 
 @app.post("/questions/submit")
 def get_results(submission: Submission):
-    # from the user POSSIBLE TRANSFORMATION INTO \n\t FORMAT NEEDED
     user_answer = submission.user_answer
     test_db = client.DeveloCoop.test
     # predefined from the excel sheet given a question id

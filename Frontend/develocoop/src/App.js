@@ -40,13 +40,13 @@ function App() {
     setUserAnswer(content);
   }, []);
 
-  const handleSubmit = async (submissionContent) => {
+  const handleSubmit = async (questionID, submissionContent, lobbyID) => {
     setLoading(true);
     try {
       const data = {
-        question_id: questionId,
+        question_id: questionID,
         user_answer: submissionContent,
-        lobby_id: lobbyId
+        lobby_id: lobbyID
       };
 
       console.log('Submitting data:', data);
@@ -237,7 +237,9 @@ function App() {
             }
             break;
           case 'submit_code':
-            handleSubmit(data.editor_content);
+            console.log(questionId);
+            console.log(lobbyId);
+            handleSubmit(data.question_id, data.editor_content, data.lobby_id);
             break;
           case 'player_left':
             setReadyPlayers(prev => {
@@ -344,45 +346,7 @@ function App() {
     );
   }
 
-  // MAYBE REDUNDANT
-  if (inLobby) {
-    return (
-      <div style={{ padding: '20px' }}>
-        <img src={frogImage} alt="Frog Coding" className="header-image" />
-        <h1>DeveloCoop - Lobby</h1>
-        <button onClick={backToMainMenu} className="back-button">Back to Main Menu</button>
-        <div className="lobby-container">
-          <div className="lobby-header">
-            <p className="lobby-info">Lobby ID: {lobbyId}</p>
-            {playerId && <p className="player-info">You are Player {playerId}</p>}
-            <p className="player-count">{playerCount}/2 players</p>
-            <button onClick={toggleReady} className={`ready-button ${isReady ? 'not-ready' : ''}`}>
-              {isReady ? 'Not Ready' : 'Ready'}
-            </button>
-          </div>
-          <div className="chat-container">
-            {readyMessages.map((msg, index) => (
-              <p key={`ready-${index}`} className="ready-message"><strong>{msg}</strong></p>
-            ))}
-            {chatMessages.map((msg, index) => (
-              <p key={`chat-${index}`}>{msg}</p>
-            ))}
-          </div>
-          <div className="chat-input">
-            <input
-              type="text"
-              value={chatInput}
-              onChange={(e) => setChatInput(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-              placeholder="Type your message..."
-            />
-            <button onClick={sendChatMessage}>Send</button>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
+  
   return (
     <div style={{ padding: '20px' }}>
       <img src={frogImage} alt="Frog Coding" className="header-image" />

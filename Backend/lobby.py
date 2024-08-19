@@ -50,6 +50,9 @@ class Lobby:
 
     def get_question(self):
         return self.question
+    
+    def get_lobby_id(self):
+        return self.lobby_id
 
     def get_editor_content(self):
         return self.editor_content
@@ -81,11 +84,3 @@ class Lobby:
         if player_id in self.players:
             await self.players[player_id].send_text(message)
 
-    async def send_editor_content(self, editor_content):
-        self.editor_content = editor_content
-        if self.all_players_submit_ready():
-            await self.broadcast(
-                json.dumps(
-                    {"type": "submit_code", "editor_content": self.editor_content}
-                )
-            )
