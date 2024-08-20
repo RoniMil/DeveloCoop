@@ -38,7 +38,8 @@ connection_str = f"mongodb+srv://{mongodb_user}:{mongodb_pwd}@develocoop.vjutg.m
 client = MongoClient(connection_str, server_api=ServerApi("1"))
 
 questions_db = client.DeveloCoop.Questions
-test_db = client.DeveloCoop.test
+mini_db = client.DeveloCoop.MiniDB
+mini_db_followups = client.DeveloCoop.MiniDBFollowUps
 
 test_hardcoded_str = """wrong_answers = [(test, user_solution(*test), solution(*test)) for test in test_cases if user_solution(*test) != solution(*test)]
 if not wrong_answers:
@@ -182,7 +183,7 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
 @app.get("/questions")
 def get_question():
     # !!!change DB to questions when actual DB exists!!!
-    question = test_db.aggregate([{"$sample": {"size": 1}}]).next()
+    question = mini_db.aggregate([{"$sample": {"size": 1}}]).next()
     question["_id"] = str(question["_id"])
     return question
 
@@ -212,8 +213,18 @@ def get_results(submission: Submission):
     # Output the result
     return response.json()
 
-
-# def get_followup
+@app.get("/follow-up-questions/{question_name}")
+def get_follow_up_questions(question_name: str):
+    # Find all follow-up questions based on the original question name
+    follow_ups = list(mini_db_followups.find({"Original Question": question_name}))
+    
+    if follow_ups:
+        # Remove the _id field and convert ObjectId to string for each follow-up
+        for follow_up in follow_ups:
+            follow_up["_id"] = str(follow_up["_id"])
+        return follow_ups
+    else:
+        raise HTTPException(status_code=404, detail="No follow-up questions found")
 
 
 if __name__ == "__main__":

@@ -67,6 +67,7 @@ function App() {
   
       if (result.output.includes("Passed all")) {
         setSubmissionResult(`${result.output}\nMemory used: ${result.memory}\nCPU time used: ${result.cpuTime}`);
+        // set new state that allows presenting the next question button and thus allows moving to the next question
       } else { 
         setSubmissionResult(result.output) 
       }
