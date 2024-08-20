@@ -129,17 +129,17 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                     if not lobby.get_question():
                         # Fetch a question only if it hasn't been set yet
                         question = get_question()
-                        lobby.set_question(question)   
+                        lobby.set_question(question)
+                        lobby.set_follow_up_questions(get_follow_up_questions(question["Question Name"]))   
                     # Send the question to both players
                     await lobby.broadcast(
                         json.dumps(
                             {"type": "game_start", "question": lobby.get_question()}
                         )
                     )
-            if data["type"] == "submit_ready":
+            elif data["type"] == "submit_ready":
                 is_submit_ready = data.get("submit_ready", True)
                 lobby.set_submit_ready(player_id, is_submit_ready)
-                # await lobby.send_editor_content(data.get("editor_content", ""))
                 await lobby.broadcast(
                     json.dumps(
                         {
@@ -159,6 +159,36 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                     )   
                     await lobby.broadcast(json.dumps({"type": "reset_submit_ready"}))  
                     lobby.reset_submit_ready()   
+            elif data["type"] == "next_question_ready":
+                is_next_question_ready = data.get("next_question_ready", True)
+                lobby.set_next_question_ready(player_id, is_next_question_ready)
+                await lobby.broadcast(
+                    json.dumps(
+                        {
+                            "type": "player_next_question_ready",
+                            "player_id": player_id,
+                            "ready": is_next_question_ready,
+                        }
+                    )
+                )
+                if lobby.all_players_next_question_ready():
+                    follow_up_questions = lobby.get_follow_up_questions()
+                    # Fetch a question only if it hasn't been set yet
+                    if not follow_up_questions:
+                        # End the session if no follow-up questions are left
+                        await lobby.broadcast(
+                            json.dumps(
+                                {"type": "session_end", "message": "No more follow-up questions available."}
+                            )
+                        ) 
+                    else:
+                        next_question = follow_up_questions.pop(random.randrange(len(follow_up_questions)))
+                        lobby.set_question(next_question)
+                        await lobby.broadcast(
+                            json.dumps(
+                                {"type": "move_to_next_question", "question": next_question}
+                            )
+                        )  
             elif data["type"] == "chat":
                 await lobby.broadcast(
                     json.dumps(
@@ -191,9 +221,11 @@ def get_question():
 @app.post("/questions/submit")
 def get_results(submission: Submission):
     user_answer = submission.user_answer
-    test_db = client.DeveloCoop.test
-    # predefined from the excel sheet given a question id
-    db_entry = test_db.find_one({"_id": ObjectId(submission.question_id)})
+
+    follow_up_entry = client.DeveloCoop.MiniDBFollowUps.find_one({"_id": ObjectId(submission.question_id)})
+    # get the entry from the correct database (follow up if follow_up_entry is not None)
+    db_entry = follow_up_entry if follow_up_entry else client.DeveloCoop.MiniDB.find_one({"_id": ObjectId(submission.question_id)})
+    
     tests = db_entry["Question Tests"]
     answer = db_entry["Question Solution"]
 
@@ -217,7 +249,6 @@ def get_results(submission: Submission):
 def get_follow_up_questions(question_name: str):
     # Find all follow-up questions based on the original question name
     follow_ups = list(mini_db_followups.find({"Original Question": question_name}))
-    
     if follow_ups:
         # Remove the _id field and convert ObjectId to string for each follow-up
         for follow_up in follow_ups:

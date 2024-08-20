@@ -1,4 +1,4 @@
-﻿Question Name,Question Description,Question Declaration,Question Solution,Question Tests,Buggy Solution,,
+﻿Question Name,Question Description,Question Declaration,Question Solution,Question Tests,Buggy Solution
 Prime Number,"For a given number N check if it is prime or not. A prime number is a number which is only divisible by 1 and itself.
  
 Example 1:
@@ -45,18 +45,17 @@ Constraints:
     return 1  # return 1 if N is not divisible by any other number.
 
 ","test_cases = [
-    (1,),    # Expected Output: 0, Pass
-    (2,),    # Expected Output: 1, Pass
-    (3,),    # Expected Output: 1, Pass
-    (4,),    # Expected Output: 0, Pass
-    (5,),    # Expected Output: 1, Pass
-    (25,),   # Expected Output: 0, Pass
-    (29,),   # Expected Output: 1, Pass
-    (49,),   # Expected Output: 0, Pass
-    (97,),   # Expected Output: 1, Pass
-    (100,),  # Expected Output: 0, Pass
+    (1,),    # Expected: 0, Test Failed
+    (2,),    # Expected: 1, Test Passed
+    (3,),    # Expected: 1, Test Passed
+    (4,),    # Expected: 0, Test Passed
+    (17,),   # Expected: 1, Test Passed
+    (25,),   # Expected: 0, Test Passed
+    (97,),   # Expected: 1, Test Passed
+    (100,),  # Expected: 0, Test Passed
+    (101,),  # Expected: 1, Test Passed
+    (999983,) # Expected: 1, Test Passed
 ]
-
 
 user_solution = isPrime
 solution = isPrime_answer","def isPrime(N):
@@ -72,7 +71,7 @@ solution = isPrime_answer","def isPrime(N):
         if N % i == 0:  # if N is divisible by any other number return 0
             return N
         i += 1
-    return 1  # return 1 if N is not divisible by any other number.",,
+    return 1  # return 1 if N is not divisible by any other number."
 Palindrome String,"Given a string S, check if it is palindrome or not.
 Example 1:
 Input: S = ""abba""
@@ -90,11 +89,11 @@ Expected Auxiliary Space: O(1)
 Constraints:
 1 <= Length of S<= 2*105
 ","def isPalindrome(S):
-	""
-	type S: str
-	type return: int
-	""
-	pass
+ """"""
+ type S: str
+ type return: int
+ """"""
+ pass
 ","def isPalindrome_answer(S):
 		""""""
 		type S: str
@@ -105,16 +104,16 @@ Constraints:
 				return 0
 		return 1
 ","test_cases = [
-	(""racecar"", ),
-	(""A man a plan a canal Panama"", ),
-	(""12321"", ),
-	(""Was it a car or a cat I saw"", ),
-	(""level"", ),
-	(""palindrome"", ),
-	(""No lemon, no melon"", ),
-	(""deified"", ),
-	(""Hello"", ),
-	(""madam"", )
+    (""abba"",), # Expected output: 1
+    (""abc"",), # Expected output: 0
+    (""a"",), # Expected output: 1 (Edge case: Single character string)
+    ("""",), # Expected output: 1 (Edge case: Empty string)
+    (""racecar"",), # Expected output: 1
+    (""palindrome"",), # Expected output: 0
+    (""noon"",), # Expected output: 1
+    (""A man a plan a canal Panama"",), # Expected output: 0 (Should fail due to spaces and capitalization)
+    (""Able was I saw Elba"",), # Expected output: 0 (Should fail due to spaces and capitalization)
+    (""abcdcba"",) # Expected output: 1
 ]
 
 user_solution = isPalindrome
@@ -126,7 +125,7 @@ solution = isPalindrome_answer","def isPalindrome(S):
   for i in range(len(S) / 2):
    if S[i] != S[len(S) - i]:
     return 0
-  return 1",,
+  return 1"
 GCD of two numbers,"Given two positive integers a and b, find GCD of a and b.
 Note: Don't use the inbuilt gcd function
 Example 1:
@@ -148,12 +147,12 @@ Expected Auxiliary Space: O(1)
 Constraints:
 1 ≤ a, b ≤ 109
 ","def gcd(a, b):
-		""""""
-		type a: int
-		type b: int
-		type return: int
-		""""""
-		pass
+    """"""
+    type a: int
+    type b: int
+    type return: int
+    """"""
+    pass
 ","def gcd_answer(a, b):
 		""""""
 		type a: int
@@ -167,16 +166,16 @@ Constraints:
 		# recursively calling gcd function with b and a % b.
 		return gcd_answer(b, a % b)
 ","test_cases = [
-	(48, 18),
-	(56, 98),
-	(101, 10),
-	(0, 5),
-	(0, 0),
-	(-25, 10),
-	(-25, -10),
-	(25, 10),
-	(1, 1),
-	(12, 36)
+    (48, 18),  # Succeeds: gcd(48, 18) should be 6
+    (56, 98),  # Succeeds: gcd(56, 98) should be 14
+    (101, 10),  # Succeeds: gcd(101, 10) should be 1 (101 is a prime number)
+    (0, 5),  # Succeeds: gcd(0, 5) should be 5
+    (0, 0),  # Should fail: gcd(0, 0) is undefined in mathematics
+    (-25, 10),  # Succeeds: gcd(-25, 10) should be 5 (gcd of negatives is usually taken as positive)
+    (-25, -10),  # Succeeds: gcd(-25, -10) should be 5
+    (25, 10),  # Should fail: gcd(25, 10) should be 5
+    (1, 1),  # Succeeds: gcd(1, 1) should be 1
+    (12, 36)  # Succeeds: gcd(12, 36) should be 12
 ]
 
 user_solution = gcd
@@ -191,7 +190,7 @@ solution = gcd_answer","def gcd(a, b):
    return a
   
   # recursively calling gcd function with b and a % b.
-  return gcd_answer(b % a, a % b)",,
+  return gcd_answer(b % a, a % b)"
 Min and Max in Array,"Given an array arr. Your task is to find the minimum and maximum elements in the array.
 Note: Return an array that contains two elements the first one will be a minimum element and the second will be a maximum of an array.
 Examples:
@@ -235,19 +234,17 @@ Constraints:
     return (mn, mx)
 
 ","test_cases = [
-    ([3, 2, 1, 56, 10000, 167],),  # Expected Output: (1, 10000), Pass
-    ([1, 345, 234, 21, 56789],),   # Expected Output: (1, 56789), Pass
-    ([56789],),                    # Expected Output: (56789, 56789), Pass
-    ([10, 20, 30, 40, 50],),       # Expected Output: (10, 50), Pass
-    ([],),                         # Expected Output: (Error or special handling), Fail
-    ([-10, -20, -30, -40, -50],),  # Expected Output: (-50, -10), Pass
-    ([1, 1, 1, 1],),               # Expected Output: (1, 1), Pass
-    ([100, 200, 100, 200],),       # Expected Output: (100, 200), Pass
-    ([-1, 0, 1],),                 # Expected Output: (-1, 1), Pass
-    ([10000, 5000, 10000, 5000],)  # Expected Output: (5000, 10000), Pass
+    ([3, 2, 1, 56, 10000, 167],)    # Expected: (1, 10000), Test Passed
+    ([1, 345, 234, 21, 56789],)     # Expected: (1, 56789), Test Passed
+    ([56789],)                      # Expected: (56789, 56789), Test Passed
+    ([10, 20, 30, 40, 50],)         # Expected: (10, 50), Test Passed
+    ([1012, 1012, 1012],)           # Expected: (1012, 1012), Test Passed
+    ([2, 1, 4, 1, 5],)              # Expected: (1, 5), Test Passed
+    ([],)                           # Expected: (inf, -inf), Test Failed (Empty List)
+    ([0, 0, 0, 0],)                 # Expected: (0, 0), Test Passed
+    ([-1, -2, -3, -4],)             # Expected: (-4, -1), Test Passed
+    ([1012, 1000000, 999999999],)   # Expected: (1012, 999999999), Test Passed
 ]
-
-
 
 user_solution = get_min_and_max
 solution = get_min_and_max_answer","def get_min_and_max(arr):
@@ -267,7 +264,7 @@ solution = get_min_and_max_answer","def get_min_and_max(arr):
         mx = max(num, mn)
 
     # Returning the minimum and maximum values as a tuple
-    return (mn, num)",,
+    return (mn, num)"
 Check for subsequence,"Given two strings A and B, find if A is a subsequence of B.
 Example 1:
 Input:
@@ -317,20 +314,17 @@ Constraints:
     return j == len(A)
 
 ","test_cases = [
-    (""AXY"", ""YADXCP""),            # Expected Output: False, Pass
-    (""gksrek"", ""geeksforgeeks""),  # Expected Output: True, Pass
-    (""abc"", ""ahbgdc""),            # Expected Output: True, Pass
-    (""axc"", ""ahbgdc""),            # Expected Output: False, Pass
-    ("""", ""anything""),             # Expected Output: True, Pass
-    (""abc"", ""abc""),               # Expected Output: True, Pass
-    (""abc"", """"),                  # Expected Output: False, Pass
-    (""abc"", ""def""),               # Expected Output: False, Pass
-    (""ace"", ""abcde""),             # Expected Output: True, Pass
-    (""aec"", ""abcde""),             # Expected Output: False, Pass
+    (""AXY"", ""YADXCP""),   # Expected: False, Test Passed
+    (""gksrek"", ""geeksforgeeks""),  # Expected: True, Test Passed
+    (""abc"", ""ahbgdc""),  # Expected: True, Test Passed
+    (""axc"", ""ahbgdc""),  # Expected: False, Test Passed
+    ("""", ""ahbgdc""),     # Expected: True, Test Passed (Empty A is always a subsequence)
+    (""ahbgdc"", ""ahbgdc""),  # Expected: True, Test Passed
+    (""ahbgdc"", """"),     # Expected: False, Test Passed (A cannot be subsequence of empty B)
+    (""abc"", ""abcabc""),  # Expected: True, Test Passed
+    (""longerstring"", ""short""),  # Expected: False, Test Passed
+    (""xyz"", ""xaybz"")   # Expected: True, Test Passed
 ]
-
-
-
 
 user_solution = isSubSequence
 solution = isSubSequence_answer","def isSubSequence(A, B):
@@ -348,4 +342,4 @@ solution = isSubSequence_answer","def isSubSequence(A, B):
             i += 1
     
     # returning True if A is a subsequence of B, else False.
-    return j == len(A)",,
+    return j == len(A)"

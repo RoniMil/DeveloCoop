@@ -22,16 +22,21 @@ function App() {
   const [chatInput, setChatInput] = useState('');
   const [isReady, setIsReady] = useState(false);
   const [isSubmitReady, setIsSubmitReady] = useState(false);
+  const [isNextQuestionReady, setIsNextQuestionReady] = useState(false);
   const [lobbyId, setLobbyId] = useState('');
   const [showLobbyOptions, setShowLobbyOptions] = useState(false);
   const [joinLobbyId, setJoinLobbyId] = useState('');
   const [playerCount, setPlayerCount] = useState(1);
   const [readyPlayers, setReadyPlayers] = useState(new Set());
   const [submitReadyPlayers, setSubmitReadyPlayers] = useState(new Set());
+  const [nextQuestionReadyPlayers, setNextQuestionReadyPlayers] = useState(new Set());
   const [readyMessages, setReadyMessages] = useState([]);
   const [submitReadyMessages, setSubmitReadyMessages] = useState([]);
+  const [nextQuestionReadyMessages, setNextQuestionReadyMessages] = useState([]);
   const [chatMessages, setChatMessages] = useState([]);
   const [editorContent, setEditorContent] = useState('');
+  const [passedAllTests, setPassedAllTests] = useState(false);
+  const [showGameOver, setShowGameOver] = useState(false);
   const isInitialMount = useRef(true);
   const websocketRef = useRef(null);
 
@@ -64,14 +69,15 @@ function App() {
       }
 
       const result = await response.json();
-  
+
       if (result.output.includes("Passed all")) {
         setSubmissionResult(`${result.output}\nMemory used: ${result.memory}\nCPU time used: ${result.cpuTime}`);
         // set new state that allows presenting the next question button and thus allows moving to the next question
-      } else { 
-        setSubmissionResult(result.output) 
+        setPassedAllTests(true);
+      } else {
+        setSubmissionResult(result.output);
       }
-  
+
 
     } catch (error) {
       console.error('Submission error:', error);
@@ -101,6 +107,31 @@ function App() {
     }
   };
 
+  const handleSessionEnd = () => {
+    setShowGameOver(true);
+    setTimeout(() => {
+      setShowGameOver(false);
+      setQuestionDeclaration('');
+      setQuestionDescription('');
+      setQuestionName('');
+      setUserAnswer('');
+      setQuestionId(null);
+      setSubmissionResult('');
+      setLoading(false);
+      setInLobby(true);
+      setReadyMessages([]);
+      setSubmitReadyMessages([]);
+      setNextQuestionReadyMessages([]);
+      setIsReady(false);
+      setIsSubmitReady(false);
+      setIsNextQuestionReady(false);
+      setReadyPlayers(new Set());
+      setSubmitReadyPlayers(new Set());
+      setNextQuestionReadyPlayers(new Set());
+      setPassedAllTests(false);
+    }, 5000); // Show "Game Over" screen for 5 seconds
+  };
+
   const backToMainMenu = () => {
     setGameMode(null);
     setQuestionDeclaration('');
@@ -115,15 +146,19 @@ function App() {
     setChatMessages([]);
     setReadyMessages([]);
     setSubmitReadyMessages([]);
+    setNextQuestionReadyMessages([]);
     setChatInput('');
     setIsReady(false);
     setIsSubmitReady(false);
+    setIsNextQuestionReady(false);
     setLobbyId('');
     setShowLobbyOptions(false);
     setJoinLobbyId('');
     setPlayerCount(1);
     setReadyPlayers(new Set());
     setSubmitReadyPlayers(new Set());
+    setNextQuestionReadyPlayers(new Set());
+    setPassedAllTests(false);
     if (websocketRef.current) {
       websocketRef.current.close();
     }
@@ -171,7 +206,6 @@ function App() {
         setLobbyId(data.lobby_id);
         setInLobby(true);
         setShowLobbyOptions(false);
-        // connectToLobby(data.lobby_id);
       } else {
         alert('No available lobbies found. Try creating a new one.');
       }
@@ -247,6 +281,19 @@ function App() {
               setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
             }
             break;
+          case 'player_next_question_ready':
+            if (data.next_question_ready) {
+              setNextQuestionReadyPlayers(prev => new Set(prev).add(data.player_id));
+              setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to proceed to the next question`]);
+            } else {
+              setNextQuestionReadyPlayers(prev => {
+                const newSet = new Set(prev);
+                newSet.delete(data.player_id);
+                return newSet;
+              });
+              setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to proceed to the next question`));
+            }
+            break;
           case 'submit_code':
             handleSubmit(data.question_id, data.editor_content, data.lobby_id);
             break;
@@ -254,6 +301,21 @@ function App() {
             setIsSubmitReady(false);
             setSubmitReadyPlayers(new Set());
             setSubmitReadyMessages([]);
+            break;
+          case 'move_to_next_question':
+            setQuestionDeclaration(data.question["Question Declaration"]);
+            setQuestionDescription(data.question["Question Description"]);
+            setQuestionName(data.question["Question Name"]);
+            setQuestionId(data.question["_id"]);
+            setUserAnswer(data.question["Question Declaration"]);
+            setSubmissionResult('');
+            setSubmitReadyMessages([]);
+            setNextQuestionReadyMessages([]);
+            setIsSubmitReady(false);
+            setIsNextQuestionReady(false);
+            setSubmitReadyPlayers(new Set());
+            setNextQuestionReadyPlayers(new Set());
+            setPassedAllTests(false);
             break;
           case 'player_left':
             setReadyPlayers(prev => {
@@ -264,6 +326,9 @@ function App() {
             setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
             setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
             break;
+          case 'session_end':
+            // session end function (state handling etc)
+            handleSessionEnd()
         }
       } catch (error) {
         console.error('Error parsing WebSocket message:', error);
@@ -273,7 +338,7 @@ function App() {
     websocketRef.current.onclose = (event) => {
       if (!event.wasClean) {
         setTimeout(() => connectToLobby(lobbyId), 1000);
-      } 
+      }
       console.log(`Disconnected from lobby: ${lobbyId}`, event);
     };
 
@@ -314,6 +379,15 @@ function App() {
       console.error('WebSocket is not open, cannot send submit ready state');
     }
   }, [isSubmitReady, editorContent]);
+
+  const toggleNextQuestionReady = useCallback(() => {
+    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+      websocketRef.current.send(JSON.stringify({ type: 'next_question_ready', next_question_ready: !isNextQuestionReady }));
+      setIsNextQuestionReady(!isNextQuestionReady);
+    } else {
+      console.error('WebSocket is not open, cannot send next question ready state');
+    }
+  }, [isNextQuestionReady]);
 
   useEffect(() => {
     return () => {
@@ -367,7 +441,12 @@ function App() {
     <div style={{ padding: '20px' }}>
       <img src={frogImage} alt="Frog Coding" className="header-image" />
       <h1>DeveloCoop</h1>
-      {!gameMode && !inLobby ? (
+      {showGameOver ? (
+        <div className="game-over-screen">
+          <h2>Game Over</h2>
+          <p>Returning to the main menu...</p>
+        </div>
+      ) : !gameMode && !inLobby ? (
         <div className="main-menu">
           <button onClick={() => startGame('one-player')}>One Player</button>
           <button onClick={() => startGame('two-players')}>Two Players</button>
@@ -438,6 +517,9 @@ function App() {
                   {submitReadyMessages.map((msg, index) => (
                     <p key={`ready-to-submit${index}`} className="ready-message"><strong>{msg}</strong></p>
                   ))}
+                  {nextQuestionReadyMessages.map((msg, index) => (
+                    <p key={`ready-to-move-to-next-question${index}`} className="ready-message"><strong>{msg}</strong></p>
+                  ))}
                   {chatMessages.map((msg, index) => (
                     <p key={`chat-${index}`}>{msg}</p>
                   ))}
@@ -462,6 +544,11 @@ function App() {
                   {isSubmitReady ? 'Waiting...' : 'Submit'}
                 </button>
                 {loading && <div className="loading-spinner"></div>}
+                {passedAllTests && (
+                  <button onClick={toggleNextQuestionReady} className="button">
+                    {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
+                  </button>
+                )}
               </div>
             )
           )}

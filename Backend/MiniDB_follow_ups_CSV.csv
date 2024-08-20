@@ -40,7 +40,21 @@ Constraints:
         else:
             num += 1  # increase num if it doesn't divide N
     return int(N)
-",,Prime Number
+","test_cases = [
+    (5,),   # Expected: 5, Test Passed
+    (24,),  # Expected: 3, Test Passed
+    (15,),  # Expected: 5, Test Passed
+    (7,),   # Expected: 7, Test Passed
+    (49,),  # Expected: 7, Test Passed
+    (50,),  # Expected: 5, Test Passed
+    (97,),  # Expected: 97, Test Passed
+    (1,),   # Expected: Failed: N < 2, Invalid input
+    (1000000007,),  # Expected: 1000000007, Test Passed
+    (1024,)  # Expected: 2, Test Passed
+]
+
+user_solution = largestPrimeFactor
+solution = largestPrimeFactor_answer",Prime Number
 Sum of all prime numbers between 1 and N.,"You are given a positive integer N, return the sum of all prime numbers between 1 and N(inclusive).
  
 Example 1:
@@ -93,7 +107,21 @@ Constraints:
 
     return tot
 
-",,Prime Number
+","test_cases = [
+    (5,),   # Expected: 5, Test Passed
+    (24,),  # Expected: 3, Test Passed
+    (15,),  # Expected: 5, Test Passed
+    (7,),   # Expected: 7, Test Passed
+    (49,),  # Expected: 7, Test Passed
+    (50,),  # Expected: 5, Test Passed
+    (97,),  # Expected: 97, Test Passed
+    (1,),   # Expected: Failed: N < 2, Invalid input
+    (1000000007,),  # Expected: 1000000007, Test Passed
+    (1024,)  # Expected: 2, Test Passed
+]
+
+user_solution = prime_Sum
+solution = prime_Sum_answer",Prime Number
 Pairs of prime number,"Find all pairs (sets) of prime numbers (p,q) such that p*q <= n, where n is given number.
  
 Example 1:
@@ -144,7 +172,22 @@ def prime_pairs_answer(n):
                     res.append(i)
                     res.append(j)
     return res
-",,Prime Number
+","test_cases = [
+    (1,),   # Expected: [], Test Passed
+    (4,),   # Expected: [2, 2], Test Passed
+    (8,),   # Expected: [2, 2, 2, 3, 3, 2], Test Passed
+    (10,),  # Expected: [2, 2, 2, 3, 3, 2, 2, 5, 5, 2], Test Passed
+    (15,),  # Expected: [2, 2, 2, 3, 3, 2, 2, 5, 5, 2, 3, 5, 5, 3], Test Passed
+    (25,),  # Expected: [2, 2, 2, 3, 3, 2, 2, 5, 5, 2, 3, 5, 5, 3, 2, 7, 7, 2, 3, 7, 7, 3, 5, 5], Test Passed
+    (0,),   # Expected: [], Test Passed
+    (400,), # Expected: [2, 2, 2, 3, 3, 2, ..., 31, 13], Test Passed
+    (399,), # Expected: [2, 2, 2, 3, 3, 2, ..., 31, 13], Test Passed
+    (20,)   # Expected: [2, 2, 2, 3, 3, 2, 2, 5, 5, 2, 3, 5, 5, 3, 2, 7, 7, 2, 3, 7, 7, 3], Test Passed
+]
+
+
+user_solution = prime_pairs
+solution = prime_pairs_answer",Prime Number
 LCM And GCD,"Given two integers a and b, write a function lcmAndGcd() to compute their LCM and GCD. The function takes two integers a and b as input and returns a list containing their LCM and GCD.
 Example 1:
 Input: a = 5 , b = 10
@@ -153,7 +196,7 @@ Explanation: LCM of 5 and 10 is 10, while thier GCD is 5.
 Input: a = 14 , b = 8
 Output: 56 2
 Explanation: LCM of 14 and 8 is 56, while thier GCD is 2.
-Expected Time Complexity: O(log(min(a, b))
+Expected Time Complexity: O(log(min(a, b)))
 Expected Auxiliary Space: O(1)
 Constraints:
 1 <= a, b <= 109
@@ -180,7 +223,23 @@ def lcmAndGcd_answer(a, b):
     arr[0], arr[1] = l, g
 
     return arr
-",,GCD of two numbers
+","test_cases = [
+    (5, 10),   # Expected: [10, 5], Test Passed
+    (14, 8),   # Expected: [56, 2], Test Passed
+    (1, 1),   # Expected: [1, 1], Test Passed
+    (1000000000, 2),   # Expected: [1000000000, 2], Test Passed
+    (13, 7),   # Expected: [91, 1], Test Passed
+    (9, 6),    # Expected: [18, 3], Test Passed
+    (0, 5),    # Expected: Error/Failure, Invalid input (a = 0)
+    (1000000000, 1000000000),   # Expected: [1000000000, 1000000000], Test Passed
+    (1, 1000000000),   # Expected: [1000000000, 1], Test Passed
+    (50, 75)  # Expected: [150, 25], Test Passed
+]
+
+
+
+user_solution = lcmAndGcd
+solution = lcmAndGcd_answer",GCD of two numbers
 Add two fractions,"You are given four numbers num1, den1, num2, and den2. You need to find (num1/den1)+(num2/den2) and output the result in the form of (numx/denx).
 Input Format:
 The first line of input contains an integer T denoting the number of test cases . Then T test cases follow . Each test case contains four integers num1, den1, num2, den2 respectively .
@@ -231,7 +290,24 @@ def addFraction_answer(num1, den1, num2, den2):
     den3 = den3 // cf
     num3 = num3 // cf
     print(""%d/%d"" % (num3, den3))
-",,GCD of two numbers
+","test_cases = [
+    (1, 500, 2, 500),  # Expected: 3/500, Test Passed
+    (1, 2, 1, 3),  # Expected: 5/6, Test Passed
+    (3, 4, 5, 6),  # Expected: 19/12, Test Passed
+    (0, 1, 1, 2),  # Expected: 1/2, Test Passed
+    (10, 20, 10, 30),  # Expected: 1/1, Test Passed
+    (7, 13, 14, 13),  # Expected: 21/13, Test Passed
+    (1, 1, 1, 1),  # Expected: 2/1, Test Passed
+    (2, 0, 3, 4),  # Expected: Error/Failure, Invalid input (denominator = 0)
+    (10, 15, 20, 25),  # Expected: 2/1, Test Passed
+    (1000, 250, 500, 125)  # Expected: 9/2, Test Passed
+]
+
+
+
+
+user_solution = addFraction
+solution = addFraction_answer",GCD of two numbers
 GCD of Array,"Given an array of N positive integers, find GCD of all the array elements.
 Example 1:
 Input: N = 3, arr[] = {2, 4, 6}
@@ -274,7 +350,22 @@ def gcd_answer(N, arr):
     # returning gcd of all N numbers.
     return ans
 
-",,GCD of two numbers
+","test_cases = [
+    (3, [2, 4, 6]),  # Expected: 2, Test Passed
+    (1, [1]),  # Expected: 1, Test Passed
+    (4, [5, 10, 15, 20]),  # Expected: 5, Test Passed
+    (5, [13, 26, 39, 52, 65]),  # Expected: 13, Test Passed
+    (2, [9, 27]),  # Expected: 9, Test Passed
+    (3, [7, 14, 21]),  # Expected: 7, Test Passed
+    (4, [8, 16, 32, 64]),  # Expected: 8, Test Passed
+    (3, [101, 202, 303]),  # Expected: 101, Test Passed
+    (2, [5, 7]),  # Expected: 1, Test Passed
+    (3, [0, 6, 9]),  # Expected: Error/Failure, Invalid input (contains zero)
+]
+
+
+user_solution = gcd
+solution = gcd_answer",GCD of two numbers
 Second Largest,"Given an array arr, return the second largest distinct element from an array. If the second largest element doesn't exist then return -1.
 Examples:
 Input: arr = [12, 35, 1, 10, 34, 1]
@@ -316,7 +407,22 @@ Constraints:
     else:
         return second
 
-",,Min and Max in Array
+","test_cases = [
+    ([12, 35, 1, 10, 34, 1]),  # Expected: 34, Test Passed
+    ([10, 10]),  # Expected: -1, Test Passed
+    ([5, 20, 10, 15]),  # Expected: 15, Test Passed
+    ([7, 7, 7, 7]),  # Expected: -1, Test Passed
+    ([100, 200, 300, 400, 500]),  # Expected: 400, Test Passed
+    ([1]),  # Expected: -1, Test Passed (Single element, no second largest)
+    ([2, 2, 3, 3, 3, 4]),  # Expected: 3, Test Passed
+    ([1, 2]),  # Expected: 1, Test Passed
+    ([0, 0, 0]),  # Expected: -1, Test Passed (All elements are the same)
+    ([])  # Expected: -1, Test Passed (Empty array)
+]
+
+
+user_solution = print2largest
+solution = print2largest_answer",Min and Max in Array
 Rotate Array,"Given an unsorted array arr[] of size n. Rotate the array to the left (counter-clockwise direction) by d steps, where d is a positive integer. 
 Note: Consider the array as circular.
 Examples :
@@ -358,7 +464,23 @@ Constraints:
     
     # Finally, reversing the whole array.
     arr[0:n] = reversed(arr[0:n])
-",,Min and Max in Array
+","test_cases = [
+    ([1, 2, 3, 4, 5], 2, 5),  # Expected: [3, 4, 5, 1, 2], Test Passed
+    ([2, 4, 6, 8, 10, 12, 14, 16, 18, 20], 3, 10),  # Expected: [8, 10, 12, 14, 16, 18, 20, 2, 4, 6], Test Passed
+    ([1, 2, 3], 3, 3),  # Expected: [1, 2, 3], Test Passed
+    ([1, 2, 3], 0, 3),  # Expected: [1, 2, 3], Test Passed
+    ([1, 2, 3, 4, 5], 1, 5),  # Expected: [2, 3, 4, 5, 1], Test Passed
+    ([1, 2, 3, 4, 5], 5, 5),  # Expected: [1, 2, 3, 4, 5], Test Passed
+    ([1, 2, 3, 4, 5], 7, 5),  # Expected: [3, 4, 5, 1, 2], Test Passed (d > n)
+    ([10, 20, 30], 1, 3),  # Expected: [20, 30, 10], Test Passed
+    ([1], 1, 1),  # Expected: [1], Test Passed (Single element array)
+    ([], 1, 0)  # Expected: Error/Failure, Invalid input (empty array)
+]
+
+
+
+user_solution = rotateArr
+solution = rotateArr_answer",Min and Max in Array
 Count of smaller elements,"Given an unsorted array arr. Find the count of elements less than or equal to the given element x.
 Examples:
 Input: x = 9, arr = [10, 1, 2, 8, 4, 5] 
@@ -396,7 +518,24 @@ Constraints:
 
     return count  # Return the count of elements
 
-",,Min and Max in Array
+","test_cases = [
+    (9, [10, 1, 2, 8, 4, 5]),  # Expected: 5, Test Passed
+    (2, [1, 2, 2, 5, 7, 2, 9]),  # Expected: 4, Test Passed
+    (5, [5, 5, 5, 5]),  # Expected: 4, Test Passed
+    (0, [1, 2, 3, 4, 5]),  # Expected: 0, Test Passed
+    (10, [10, 20, 30, 40]),  # Expected: 1, Test Passed
+    (100, [1, 50, 100, 150]),  # Expected: 3, Test Passed
+    (5, [2, 4, 6, 8, 10]),  # Expected: 2, Test Passed
+    (1, [1, 1, 1, 1, 1]),  # Expected: 5, Test Passed
+    (50, [25, 50, 75]),  # Expected: 2, Test Passed
+    (3, [])  # Expected: 0, Test Passed (Empty array)
+]
+
+
+
+
+user_solution = countOfElements
+solution = countOfElements_answer",Min and Max in Array
 Anagram,"Given two strings a and b consisting of lowercase characters. The task is to check whether two given strings are an anagram of each other or not. An anagram of a string is another string that contains the same characters, only the order of characters can be different. For example, act and tac are an anagram of each other. Strings a and b can only contain lower case alphabets.
 Note:-
 Example 1:
@@ -459,7 +598,25 @@ def isAnagram_answer(a, b):
     # returning the result.       
     return True
 
-",,Palindrome String
+","test_cases = [
+    (""geeksforgeeks"", ""forgeeksgeeks""),  # Expected: True, Test Passed
+    (""allergy"", ""allergic""),  # Expected: False, Test Passed
+    (""listen"", ""silent""),  # Expected: True, Test Passed
+    (""triangle"", ""integral""),  # Expected: True, Test Passed
+    (""rat"", ""car""),  # Expected: False, Test Passed
+    (""abc"", ""cba""),  # Expected: True, Test Passed
+    (""aabbcc"", ""bbaacc""),  # Expected: True, Test Passed
+    (""abcd"", ""dcba""),  # Expected: True, Test Passed
+    (""aabbc"", ""abbcc""),  # Expected: False, Test Passed
+    ("""", """")  # Expected: True, Test Passed
+]
+
+
+
+
+
+user_solution = isAnagram
+solution = isAnagram_answer",Palindrome String
 Anagram Palindrome,"Given a string S, Check if characters of the given string can be rearranged to form a palindrome.
 Note: You have to return 1 if it is possible to convert the given string into palindrome else return 0. 
 Example 1:
@@ -508,7 +665,22 @@ Constraints:
     return 1
 
 
-",,Palindrome String
+","test_cases = [
+    (""geeksogeeks"",),  # Expected: 1, Test Passed
+    (""geeksforgeeks"",),  # Expected: 0, Test Passed
+    (""aabbcc"",),  # Expected: 1, Test Passed
+    (""abc"",),  # Expected: 0, Test Passed
+    (""aaa"",),  # Expected: 1, Test Passed
+    (""racecar"",),  # Expected: 1, Test Passed
+    ("""",),  # Expected: 1, Test Passed
+    (""aabbccddeeffg"",),  # Expected: 1, Test Passed
+    (""abcdefg"",),  # Expected: 0, Test Passed
+    (""aaaaaa"",)  # Expected: 1, Test Passed
+]
+
+
+user_solution = isPossible
+solution = isPossible_answer",Palindrome String
 Anagram of String,"Given two strings S1 and S2 in lowercase, the task is to make them anagram. The only allowed operation is to remove a character from any string. Find the minimum number of characters to be deleted to make both the strings anagram. Two strings are called anagram of each other if one of them can be converted into another by rearranging its letters.
 Example 1:
 Input:
@@ -559,7 +731,23 @@ Constraints:
 
     return result
 
-",,Palindrome String
+","test_cases = [
+    (""bcadeh"", ""hea""),  # Expected: 3, Test Passed
+    (""cddgk"", ""gcd""),  # Expected: 2, Test Passed
+    (""abcd"", ""efgh""),  # Expected: 8, Test Passed
+    (""hello"", ""billion""),  # Expected: 6, Test Passed
+    (""anagram"", ""manga""),  # Expected: 3, Test Passed
+    (""test"", ""tset""),  # Expected: 0, Test Passed
+    ("""", """"),  # Expected: 0, Test Passed
+    (""abc"", ""def""),  # Expected: 6, Test Passed
+    (""listen"", ""silent""),  # Expected: 0, Test Passed
+    (""abcdef"", ""ghijkl"")  # Expected: 12, Test Passed
+]
+
+
+
+user_solution = remAnagram
+solution = remAnagram_answer",Palindrome String
 Uncommon characters,"Given two strings A and B consisting of lowercase english characters. Find the characters that are not common in the two strings. 
 Note :- Return the string in sorted order.
 Example 1:
@@ -627,7 +815,21 @@ String may contain duplicate characters.
     else:
         return ""-1""
 
-",,Check for subsequence
+","test_cases = [
+    (""geeksforgeeks"", ""geeksquiz""),  # Expected: ""fioqruz"", Test Passed
+    (""characters"", ""alphabets""),  # Expected: ""bclpr"", Test Passed
+    (""abc"", ""def""),  # Expected: ""abcdef"", Test Passed
+    ("""", """"),  # Expected: ""-1"", Test Passed (Both strings are empty)
+    (""abc"", """"),  # Expected: ""abc"", Test Passed (One string is empty)
+    ("""", ""xyz""),  # Expected: ""xyz"", Test Passed (One string is empty)
+    (""abcdef"", ""abcdef""),  # Expected: ""-1"", Test Passed (Both strings are identical)
+    (""aaa"", ""bbb""),  # Expected: ""ab"", Test Passed
+    (""abcd"", ""abef""),  # Expected: ""cdef"", Test Passed
+    (""geek"", ""geeky"")  # Expected: ""y"", Test Passed
+]
+
+user_solution = uncommonChars
+solution = uncommonChars_answer",Check for subsequence
 Non Repeating Character,"Given a string s consisting of lowercase Latin Letters. Return the first non-repeating character in s. If there is no non-repeating character, return '$'.
 Note : When you return '$' driver code will output -1.
 Examples:
@@ -671,7 +873,23 @@ Constraints:
     # if there is no non-repeating character then we return '$'.
     return '$'
 
-",,Check for subsequence
+","test_cases = [
+    (""hello"",),  # Expected: ""h"", Test Passed
+    (""zxvczbtxyzvy"",),  # Expected: ""c"", Test Passed
+    (""abcdef"",),  # Expected: ""a"", Test Passed
+    (""aabbcc"",),  # Expected: ""$"", Test Passed
+    (""racecar"",),  # Expected: ""e"", Test Passed
+    (""aabbc"",),  # Expected: ""c"", Test Passed
+    ("""",),  # Expected: ""$"", Test Passed (Empty string)
+    (""zzzyyyxxx"",),  # Expected: ""$"", Test Passed
+    (""geeksforgeeks"",),  # Expected: ""f"", Test Passed
+    (""abcdefgabcdefg"",)  # Expected: ""$"", Test Passed
+]
+
+
+
+user_solution = nonRepeatingCharacter
+solution = nonRepeatingCharacter_answer",Check for subsequence
 Multiply two strings,"Given two numbers as strings s1 and s2. Calculate their Product.
 
 Note: The numbers can be negative and You are not allowed to use any built-in function or convert the strings to integers. There can be zeros in the begining of the numbers. You don't need to specify '+' sign in the begining of positive numbers.
@@ -763,4 +981,19 @@ Constraints:
     # Returning the final product
     return res
 
-",,Check for subsequence
+","test_cases = [
+    (""0033"", ""2""),  # Expected: ""66"", Test Passed
+    (""11"", ""23""),  # Expected: ""253"", Test Passed
+    (""-11"", ""23""),  # Expected: ""-253"", Test Passed
+    (""0"", ""12345""),  # Expected: ""0"", Test Passed
+    (""123"", ""0""),  # Expected: ""0"", Test Passed
+    (""-123"", ""-456""),  # Expected: ""56088"", Test Passed
+    (""00012"", ""00034""),  # Expected: ""408"", Test Passed
+    (""999"", ""999""),  # Expected: ""998001"", Test Passed
+    (""1"", ""1""),  # Expected: ""1"", Test Passed
+    (""123456789"", ""987654321"")  # Expected: ""121932631112635269"", Test Passed
+]
+
+
+user_solution = multiplyStrings
+solution = multiplyStrings_answer",Check for subsequence

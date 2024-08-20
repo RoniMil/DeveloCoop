@@ -9,8 +9,10 @@ class Lobby:
         self.players: Dict[str, WebSocket] = {}
         self.ready_players: set = set()
         self.submit_ready_players: set = set()
+        self.next_question_ready_players: set = set()
         self.is_player_one_taken = False
         self.question = None
+        self.follow_up_questions = None
         self.editor_content = None
 
     async def connect(self, websocket: WebSocket):
@@ -38,6 +40,9 @@ class Lobby:
 
     def all_players_submit_ready(self):
         return len(self.submit_ready_players) == 2 and len(self.players) == 2
+    
+    def all_players_next_question_ready(self):
+        return len(self.next_question_ready_players) == 2 and len(self.players) == 2
 
     def get_player_count(self):
         return len(self.players)
@@ -50,6 +55,9 @@ class Lobby:
 
     def get_question(self):
         return self.question
+    
+    def get_follow_up_questions(self):
+        return self.follow_up_questions
     
     def get_lobby_id(self):
         return self.lobby_id
@@ -69,8 +77,17 @@ class Lobby:
         else:
             self.submit_ready_players.discard(player_id)
 
+    def set_next_question_ready(self, player_id: str, is_next_question_ready: bool):
+        if is_next_question_ready:
+            self.submit_ready_players.add(player_id)
+        else:
+            self.submit_ready_players.discard(player_id)        
+
     def set_question(self, question):
         self.question = question
+
+    def set_follow_up_questions(self, follow_up_questions):
+        self.follow_up_questions = follow_up_questions    
 
     def set_editor_content(self, editor_content):
         self.editor_content = editor_content
@@ -79,7 +96,10 @@ class Lobby:
         self.ready_players.clear()
 
     def reset_submit_ready(self):
-        self.submit_ready_players.clear()    
+        self.submit_ready_players.clear()   
+
+    def reset_next_question_ready(self):
+        self.next_question_ready_players.clear()     
 
     async def send_to_player(self, player_id: str, message: str):
         if player_id in self.players:
