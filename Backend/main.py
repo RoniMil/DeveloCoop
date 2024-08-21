@@ -182,7 +182,7 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                         {
                             "type": "player_next_question_ready",
                             "player_id": player_id,
-                            "ready": is_next_question_ready,
+                            "next_question_ready": is_next_question_ready,
                         }
                     )
                 )

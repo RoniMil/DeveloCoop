@@ -292,14 +292,14 @@ function App() {
           case 'player_next_question_ready':
             if (data.next_question_ready) {
               setNextQuestionReadyPlayers(prev => new Set(prev).add(data.player_id));
-              setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to proceed to the next question`]);
+              setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
             } else {
               setNextQuestionReadyPlayers(prev => {
                 const newSet = new Set(prev);
                 newSet.delete(data.player_id);
                 return newSet;
               });
-              setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to proceed to the next question`));
+              setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
             }
             break;
           case 'submit_code':
