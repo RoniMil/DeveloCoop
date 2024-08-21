@@ -41,6 +41,7 @@ questions_db = client.DeveloCoop.Questions
 mini_db = client.DeveloCoop.MiniDB
 mini_db_followups = client.DeveloCoop.MiniDBFollowUps
 
+
 test_hardcoded_str = """wrong_answers = [(test, user_solution(*test), solution(*test)) for test in test_cases if user_solution(*test) != solution(*test)]
 if not wrong_answers:
     print('Passed all tests!')
@@ -63,6 +64,11 @@ class LobbyCreationResponse(BaseModel):
 
 class JoinLobbyRequest(BaseModel):
     lobby_id: str
+
+
+# def create_buggy_follow_up_description(follow_up):
+#     description = f"Now you are given a buggy solution for the {follow_up["Original Question"]} question. Can you find the bugs and fix them?\n\nDescription reminder:\n{follow_up["Question Description"]}"
+#     return description
 
 
 lobbies = {}
@@ -180,7 +186,8 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                             json.dumps(
                                 {"type": "session_end", "message": "No more follow-up questions available."}
                             )
-                        ) 
+                        )
+                        lobby.reset_next_question_ready()
                     else:
                         next_question = follow_up_questions.pop(random.randrange(len(follow_up_questions)))
                         lobby.set_question(next_question)
@@ -253,6 +260,7 @@ def get_follow_up_questions(question_name: str):
         # Remove the _id field and convert ObjectId to string for each follow-up
         for follow_up in follow_ups:
             follow_up["_id"] = str(follow_up["_id"])
+            # follow_up["Question Description"] = create_buggy_follow_up_description(follow_up)
         return follow_ups
     else:
         raise HTTPException(status_code=404, detail="No follow-up questions found")

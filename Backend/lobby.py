@@ -79,9 +79,9 @@ class Lobby:
 
     def set_next_question_ready(self, player_id: str, is_next_question_ready: bool):
         if is_next_question_ready:
-            self.submit_ready_players.add(player_id)
+            self.next_question_ready_players.add(player_id)
         else:
-            self.submit_ready_players.discard(player_id)        
+            self.next_question_ready_players.discard(player_id)        
 
     def set_question(self, question):
         self.question = question

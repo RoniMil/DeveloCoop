@@ -1,0 +1,64 @@
+﻿Question Name,Question Description,Question Declaration,Question Solution,Question Tests,
+Check for subsequence,"Given two strings A and B, find if A is a subsequence of B.
+Example 1:
+Input:
+A = AXY 
+B = YADXCP
+Output: 0 
+Explanation: A is not a subsequence of B
+as 'Y' appears before 'A'.
+ 
+Example 2:
+Input:
+A = gksrek
+B = geeksforgeeks
+Output: 1
+Explanation: A is a subsequence of B.
+ 
+Your Task:  
+You dont need to read input or print anything. Complete the function isSubSequence() which takes A and B as input parameters and returns a boolean value denoting if A is a subsequence of B or not. 
+ 
+Expected Time Complexity: O(N) where N is length of string B.
+Expected Auxiliary Space: O(1)
+Constraints:
+1<= |A|,|B| <=104
+ 
+","def isSubSequence(A, B):
+    """"""
+    type A: str
+    type B: str
+    type return: bool
+    """"""
+    pass
+","def isSubSequence_answer(A, B):
+    """"""
+    type A: str
+    type B: str
+    type return: bool
+    """"""
+    i = j = 0
+    
+    # iterating over A and B to check if characters match.
+    while i < len(B) and j < len(A):
+        if A[j] == B[i]:
+            j += 1
+        i += 1
+    
+    # returning True if A is a subsequence of B, else False.
+    return j == len(A)
+
+","test_cases = [
+    (""AXY"", ""YADXCP""),   # Expected: False, Test Passed
+    (""gksrek"", ""geeksforgeeks""),  # Expected: True, Test Passed
+    (""abc"", ""ahbgdc""),  # Expected: True, Test Passed
+    (""axc"", ""ahbgdc""),  # Expected: False, Test Passed
+    ("""", ""ahbgdc""),     # Expected: True, Test Passed (Empty A is always a subsequence)
+    (""ahbgdc"", ""ahbgdc""),  # Expected: True, Test Passed
+    (""ahbgdc"", """"),     # Expected: False, Test Passed (A cannot be subsequence of empty B)
+    (""abc"", ""abcabc""),  # Expected: True, Test Passed
+    (""longerstring"", ""short""),  # Expected: False, Test Passed
+    (""xyz"", ""xaybz"")   # Expected: True, Test Passed
+]
+
+user_solution = isSubSequence
+solution = isSubSequence_answer",

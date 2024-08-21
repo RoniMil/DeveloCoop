@@ -234,15 +234,15 @@ Constraints:
     return (mn, mx)
 
 ","test_cases = [
-    ([3, 2, 1, 56, 10000, 167],)    # Expected: (1, 10000), Test Passed
-    ([1, 345, 234, 21, 56789],)     # Expected: (1, 56789), Test Passed
-    ([56789],)                      # Expected: (56789, 56789), Test Passed
-    ([10, 20, 30, 40, 50],)         # Expected: (10, 50), Test Passed
-    ([1012, 1012, 1012],)           # Expected: (1012, 1012), Test Passed
-    ([2, 1, 4, 1, 5],)              # Expected: (1, 5), Test Passed
-    ([],)                           # Expected: (inf, -inf), Test Failed (Empty List)
-    ([0, 0, 0, 0],)                 # Expected: (0, 0), Test Passed
-    ([-1, -2, -3, -4],)             # Expected: (-4, -1), Test Passed
+    ([3, 2, 1, 56, 10000, 167],),    # Expected: (1, 10000), Test Passed
+    ([1, 345, 234, 21, 56789],),     # Expected: (1, 56789), Test Passed
+    ([56789],),                      # Expected: (56789, 56789), Test Passed
+    ([10, 20, 30, 40, 50],),         # Expected: (10, 50), Test Passed
+    ([1012, 1012, 1012],),           # Expected: (1012, 1012), Test Passed
+    ([2, 1, 4, 1, 5],),              # Expected: (1, 5), Test Passed
+    ([],),                           # Expected: (inf, -inf), Test Failed (Empty List)
+    ([0, 0, 0, 0],),                 # Expected: (0, 0), Test Passed
+    ([-1, -2, -3, -4],),             # Expected: (-4, -1), Test Passed
     ([1012, 1000000, 999999999],)   # Expected: (1012, 999999999), Test Passed
 ]
 

@@ -303,11 +303,13 @@ function App() {
             setSubmitReadyMessages([]);
             break;
           case 'move_to_next_question':
+            console.log(`next question ready players before reset: ${nextQuestionReadyPlayers.size}`);
             setQuestionDeclaration(data.question["Question Declaration"]);
             setQuestionDescription(data.question["Question Description"]);
             setQuestionName(data.question["Question Name"]);
             setQuestionId(data.question["_id"]);
             setUserAnswer(data.question["Question Declaration"]);
+            setEditorContent(data.question["Question Declaration"]);
             setSubmissionResult('');
             setSubmitReadyMessages([]);
             setNextQuestionReadyMessages([]);
@@ -316,6 +318,7 @@ function App() {
             setSubmitReadyPlayers(new Set());
             setNextQuestionReadyPlayers(new Set());
             setPassedAllTests(false);
+            console.log(`next question ready players after reset: ${nextQuestionReadyPlayers.size}`);
             break;
           case 'player_left':
             setReadyPlayers(prev => {
@@ -495,6 +498,7 @@ function App() {
                       roomName={lobbyId}
                       isPlayer1={playerId === '1'}
                       userId={`Player ${playerId}`}
+                      questionId={questionId}
                     />
                   ) : (
                     <CodeMirror

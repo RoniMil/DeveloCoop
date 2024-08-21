@@ -188,6 +188,76 @@ def prime_pairs_answer(n):
 
 user_solution = prime_pairs
 solution = prime_pairs_answer",Prime Number
+Prime Number - Fix The Bug,"Now you are given a buggy solution for the Prime Number question. Can you find the bug and fix it?
+
+Description reminder:
+For a given number N check if it is prime or not. A prime number is a number which is only divisible by 1 and itself.
+ 
+Example 1:
+Input:
+N = 5
+Output:
+1
+Explanation:
+5 has 2 factors 1 and 5 only.
+Example 2:
+Input:
+N = 25
+Output:
+0
+Explanation:
+25 has 3 factors 1, 5, 25
+Your Task:
+You don't need to read input or print anything. Your task is to complete the function isPrime() which takes an integer N as input parameters and returns an integer, 1 if N is a prime number or 0 otherwise.
+ 
+Expected Time Complexity: O(sqrt(N))
+Expected Space Complexity: O(1)
+ 
+Constraints:
+1 <= N <= 109
+","def isPrime(N):
+    """"""
+    type N: int
+    type return: int
+    """"""
+    if N == 1:  # if N = 1 return 0
+        return 0
+    i = 2
+    # loop from 2 to sqrt(N)
+    while i * i <= (N+1):
+        if N % i == 0:  # if N is divisible by any other number return 0
+            return N
+        i += 1
+    return 1  # return 1 if N is not divisible by any other number.","def isPrime_answer(N):
+    """"""
+    type N: int
+    type return: int
+    """"""
+    if N == 1:  # if N = 1 return 0
+        return 0
+    i = 2
+    # loop from 2 to sqrt(N)
+    while i * i <= N:
+        if N % i == 0:  # if N is divisible by any other number return 0
+            return 0
+        i += 1
+    return 1  # return 1 if N is not divisible by any other number.
+
+","test_cases = [
+    (1,),    # Expected: 0, Test Failed
+    (2,),    # Expected: 1, Test Passed
+    (3,),    # Expected: 1, Test Passed
+    (4,),    # Expected: 0, Test Passed
+    (17,),   # Expected: 1, Test Passed
+    (25,),   # Expected: 0, Test Passed
+    (97,),   # Expected: 1, Test Passed
+    (100,),  # Expected: 0, Test Passed
+    (101,),  # Expected: 1, Test Passed
+    (999983,) # Expected: 1, Test Passed
+]
+
+user_solution = isPrime
+solution = isPrime_answer",Prime Number
 LCM And GCD,"Given two integers a and b, write a function lcmAndGcd() to compute their LCM and GCD. The function takes two integers a and b as input and returns a list containing their LCM and GCD.
 Example 1:
 Input: a = 5 , b = 10
@@ -360,7 +430,7 @@ def gcd_answer(N, arr):
     (4, [8, 16, 32, 64]),  # Expected: 8, Test Passed
     (3, [101, 202, 303]),  # Expected: 101, Test Passed
     (2, [5, 7]),  # Expected: 1, Test Passed
-    (3, [0, 6, 9]),  # Expected: Error/Failure, Invalid input (contains zero)
+    (3, [0, 6, 9])  # Expected: Error/Failure, Invalid input (contains zero)
 ]
 
 
