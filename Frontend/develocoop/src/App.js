@@ -81,7 +81,7 @@ function App() {
 
     } catch (error) {
       console.error('Submission error:', error);
-      setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nPlease check your input and try again.`)
+      setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nPlease check your input and try again.\nHint: you may want to check for infinite loops.`)
     } finally {
       setLoading(false);
       setIsSubmitReady(false)
