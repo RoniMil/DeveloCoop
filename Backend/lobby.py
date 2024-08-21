@@ -35,6 +35,14 @@ class Lobby:
         for websocket in self.players.values():
             await websocket.send_text(message)
 
+    def reset_lobby(self):
+        self.ready_players.clear()
+        self.submit_ready_players.clear()
+        self.next_question_ready_players.clear()
+        self.question = None
+        self.follow_up_questions = None
+        self.editor_content = None        
+
     def all_players_ready(self):
         return len(self.ready_players) == 2 and len(self.players) == 2
 

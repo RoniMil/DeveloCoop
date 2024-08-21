@@ -109,27 +109,15 @@ function App() {
 
   const handleSessionEnd = () => {
     setShowGameOver(true);
+
+    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+      websocketRef.current.send(JSON.stringify({ type: 'reset_lobby' }));
+    }
+
     setTimeout(() => {
       setShowGameOver(false);
-      setQuestionDeclaration('');
-      setQuestionDescription('');
-      setQuestionName('');
-      setUserAnswer('');
-      setQuestionId(null);
-      setSubmissionResult('');
-      setLoading(false);
-      setInLobby(true);
-      setReadyMessages([]);
-      setSubmitReadyMessages([]);
-      setNextQuestionReadyMessages([]);
-      setIsReady(false);
-      setIsSubmitReady(false);
-      setIsNextQuestionReady(false);
-      setReadyPlayers(new Set());
-      setSubmitReadyPlayers(new Set());
-      setNextQuestionReadyPlayers(new Set());
-      setPassedAllTests(false);
     }, 5000); // Show "Game Over" screen for 5 seconds
+
   };
 
   const backToMainMenu = () => {
@@ -244,6 +232,26 @@ function App() {
             break;
           case 'player_count':
             setPlayerCount(data.count);
+            break;
+          case 'lobby_reset':
+            setQuestionDeclaration('');
+            setQuestionDescription('');
+            setQuestionName('');
+            setUserAnswer('');
+            setQuestionId(null);
+            setSubmissionResult('');
+            setLoading(false);
+            setReadyMessages([]);
+            setSubmitReadyMessages([]);
+            setNextQuestionReadyMessages([]);
+            setIsReady(false);
+            setIsSubmitReady(false);
+            setIsNextQuestionReady(false);
+            setReadyPlayers(new Set());
+            setSubmitReadyPlayers(new Set());
+            setNextQuestionReadyPlayers(new Set());
+            setPassedAllTests(false);
+            setInLobby(true);
             break;
           case 'game_start':
             console.log('Game starting, updating state...');
@@ -447,7 +455,7 @@ function App() {
       {showGameOver ? (
         <div className="game-over-screen">
           <h2>Game Over</h2>
-          <p>Returning to the main menu...</p>
+          <p>Returning to lobby...</p>
         </div>
       ) : !gameMode && !inLobby ? (
         <div className="main-menu">

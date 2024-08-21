@@ -39,7 +39,7 @@ client = MongoClient(connection_str, server_api=ServerApi("1"))
 
 questions_db = client.DeveloCoop.Questions
 
-# !!!!!!!!!DEBUG!!!!!!!!!!!
+# !!!!!!!!!DEBUG DBs!!!!!!!!!!!
 mini_db = client.DeveloCoop.MiniDB
 mini_db_followups = client.DeveloCoop.MiniDBFollowUps
 
@@ -71,6 +71,11 @@ class JoinLobbyRequest(BaseModel):
 def create_buggy_follow_up_description(follow_up):
     description = f"Now you are given a buggy solution for the {follow_up["Original Question"]} question. Can you find the bugs and fix them?\n\nDescription reminder:\n{follow_up["Question Description"]}"
     return description
+
+def fetch_and_set_question(lobby):
+    question = get_question()
+    lobby.set_question(question)
+    lobby.set_follow_up_questions(get_follow_up_questions(question["Question Name"]))   
 
 
 lobbies = {}
@@ -121,7 +126,11 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
         )
         while True:
             data = await websocket.receive_json()
-            if data["type"] == "ready":
+            if data["type"] == "reset_lobby":
+                lobby.reset_lobby()
+                fetch_and_set_question(lobby)
+                await lobby.broadcast(json.dumps({"type": "lobby_reset"}))
+            elif data["type"] == "ready":
                 is_ready = data.get("ready", True)
                 lobby.set_ready(player_id, is_ready)
                 await lobby.broadcast(
@@ -135,10 +144,8 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
                 )
                 if lobby.all_players_ready():
                     if not lobby.get_question():
-                        # Fetch a question only if it hasn't been set yet
-                        question = get_question()
-                        lobby.set_question(question)
-                        lobby.set_follow_up_questions(get_follow_up_questions(question["Question Name"]))   
+                        # Fetch and save question only if it hasn't been set yet
+                        fetch_and_set_question(lobby)
                     # Send the question to both players
                     await lobby.broadcast(
                         json.dumps(
