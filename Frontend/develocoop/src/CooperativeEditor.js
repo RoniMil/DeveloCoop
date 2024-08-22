@@ -26,10 +26,13 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
         mode: 'python',
         theme: 'default',
         lineNumbers: true,
-        tabSize: 2, 
+        indentUnit: 2,
+        indentWithTabs: false,
         extraKeys: {
           "Ctrl-Space": "autocomplete"
-        }
+        },
+        // maybe remove
+        lineWrapping: true
       });
 
       ydocRef.current = new Y.Doc();
