@@ -3,9 +3,7 @@ import './styles.css';
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
-
-
-const API_URL = 'http://localhost:8000';
+import { API_URL, GAME_MODES } from './gameConfig';
 
 function App() {
   const [questionDeclaration, setQuestionDeclaration] = useState('');
@@ -88,7 +86,7 @@ function App() {
   };
 
   const startGame = async (mode) => {
-    if (mode === 'two-players') {
+    if (mode === GAME_MODES.TWO_PLAYERS) {
       setShowLobbyOptions(true);
     } else {
       setGameMode(mode);
