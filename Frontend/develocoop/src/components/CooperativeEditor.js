@@ -30,9 +30,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
         indentWithTabs: false,
         extraKeys: {
           "Ctrl-Space": "autocomplete"
-        },
-        // maybe remove
-        lineWrapping: true
+        }
       });
 
       ydocRef.current = new Y.Doc();

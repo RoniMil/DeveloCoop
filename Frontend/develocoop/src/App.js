@@ -3,7 +3,8 @@ import './styles.css';
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
-import { API_URL, GAME_MODES } from './gameConfig';
+import { GAME_MODES } from './gameConfig';
+import { fetchQuestion, submitAnswer, createLobby, joinLobby, findLobby } from './apiService';
 
 function App() {
   const [questionDeclaration, setQuestionDeclaration] = useState('');
@@ -37,6 +38,42 @@ function App() {
   const isInitialMount = useRef(true);
   const websocketRef = useRef(null);
 
+  const handleCreateLobby = async () => {
+    try {
+      const data = await createLobby();
+      setLobbyId(data.lobby_id);
+      setInLobby(true);
+      setShowLobbyOptions(false);
+    } catch (error) {
+      console.error('Error creating lobby:', error);
+      alert('Failed to create lobby. Please try again.');
+    }
+  };
+
+  const handleJoinLobby = async () => {
+    try {
+      await joinLobby(joinLobbyId);
+      setLobbyId(joinLobbyId);
+      setInLobby(true);
+      setShowLobbyOptions(false);
+    } catch (error) {
+      console.error('Error joining lobby:', error);
+      alert('Failed to join lobby. Please check the ID and try again.');
+    }
+  };
+
+  const handleFindLobby = async () => {
+    try {
+      const data = await findLobby();
+      setLobbyId(data.lobby_id);
+      setInLobby(true);
+      setShowLobbyOptions(false);
+    } catch (error) {
+      console.error('Error finding lobby:', error);
+      alert('Failed to find an available lobby. Please try again or create a new one.');
+    }
+  };
+
   const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
     setUserAnswer(content);
@@ -45,37 +82,13 @@ function App() {
   const handleSubmit = async (questionID, submissionContent, lobbyID) => {
     setLoading(true);
     try {
-      const data = {
-        question_id: questionID,
-        user_answer: submissionContent,
-        lobby_id: lobbyID
-      };
-
-      console.log('Submitting data:', data);
-
-      const response = await fetch(`${API_URL}/questions/submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data)
-      });
-
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-
-      const result = await response.json();
-
+      const result = await submitAnswer(questionID, submissionContent, lobbyID);
       if (result.output.includes("Passed all")) {
         setSubmissionResult(`${result.output}\nMemory used: ${result.memory}\nCPU time used: ${result.cpuTime}`);
-        // set new state that allows presenting the next question button and thus allows moving to the next question
         setPassedAllTests(true);
       } else {
         setSubmissionResult(result.output);
       }
-
-
     } catch (error) {
       console.error('Submission error:', error);
       setSubmissionResult(`There's been an error processing your submission: [${error.message}].\nPlease check your input and try again.\nHint: you may want to check for infinite loops.`)
@@ -91,8 +104,7 @@ function App() {
     } else {
       setGameMode(mode);
       try {
-        const response = await fetch(`${API_URL}/questions`);
-        const data = await response.json();
+        const data = await fetchQuestion()
         setQuestionDeclaration(data["Question Declaration"]);
         setQuestionDescription(data["Question Description"]);
         setQuestionName(data["Question Name"]);
@@ -149,56 +161,6 @@ function App() {
     }
   };
 
-  const createLobby = async () => {
-    try {
-      const response = await fetch(`${API_URL}/create_lobby`, { method: 'POST' });
-      const data = await response.json();
-      setLobbyId(data.lobby_id);
-      setInLobby(true);
-      setShowLobbyOptions(false);
-    } catch (error) {
-      console.error('Error creating lobby:', error);
-      alert('Failed to create lobby. Please try again.');
-    }
-  };
-
-  const joinLobby = async () => {
-    try {
-      const response = await fetch(`${API_URL}/join_lobby`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ lobby_id: joinLobbyId }),
-      });
-      if (response.ok) {
-        setLobbyId(joinLobbyId);
-        setInLobby(true);
-        setShowLobbyOptions(false);
-      } else {
-        const errorData = await response.json();
-        alert(errorData.detail);
-      }
-    } catch (error) {
-      console.error('Error joining lobby:', error);
-      alert('Failed to join lobby. Please check the ID and try again.');
-    }
-  };
-
-  const findLobby = async () => {
-    try {
-      const response = await fetch(`${API_URL}/find_lobby`);
-      if (response.ok) {
-        const data = await response.json();
-        setLobbyId(data.lobby_id);
-        setInLobby(true);
-        setShowLobbyOptions(false);
-      } else {
-        alert('No available lobbies found. Try creating a new one.');
-      }
-    } catch (error) {
-      console.error('Error finding lobby:', error);
-      alert('Failed to find an available lobby. Please try again or create a new one.');
-    }
-  };
 
   const connectToLobby = useCallback((lobbyId) => {
     console.log(`Connecting to lobby: ${lobbyId}`);
@@ -308,7 +270,6 @@ function App() {
             setSubmitReadyMessages([]);
             break;
           case 'move_to_next_question':
-            console.log(`next question ready players before reset: ${nextQuestionReadyPlayers.size}`);
             setQuestionDeclaration(data.question["Question Declaration"]);
             setQuestionDescription(data.question["Question Description"]);
             setQuestionName(data.question["Question Name"]);
@@ -323,7 +284,6 @@ function App() {
             setSubmitReadyPlayers(new Set());
             setNextQuestionReadyPlayers(new Set());
             setPassedAllTests(false);
-            console.log(`next question ready players after reset: ${nextQuestionReadyPlayers.size}`);
             break;
           case 'player_left':
             setReadyPlayers(prev => {
@@ -428,7 +388,7 @@ function App() {
         <h1>DeveloCoop - Two Players Mode</h1>
         <button onClick={() => setShowLobbyOptions(false)} className="back-button">Back to Main Menu</button>
         <div className="lobby-options">
-          <button onClick={createLobby}>Create a new lobby</button>
+          <button onClick={handleCreateLobby}>Create a new lobby</button>
           <div>
             <input
               type="text"
@@ -436,9 +396,9 @@ function App() {
               onChange={(e) => setJoinLobbyId(e.target.value)}
               placeholder="Enter lobby ID"
             />
-            <button onClick={joinLobby}>Join lobby</button>
+            <button onClick={handleJoinLobby}>Join lobby</button>
           </div>
-          <button onClick={findLobby}>Find a random lobby</button>
+          <button onClick={handleFindLobby}>Find a random lobby</button>
         </div>
       </div>
     );
@@ -464,45 +424,45 @@ function App() {
           <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
           {inLobby ? (
             <LobbyInterface
-            lobbyId={lobbyId}
-            playerId={playerId}
-            playerCount={playerCount}
-            isReady={isReady}
-            toggleReady={toggleReady}
-            readyMessages={readyMessages}
-            chatMessages={chatMessages}
-            chatInput={chatInput}
-            setChatInput={setChatInput}
-            sendChatMessage={sendChatMessage}
-          />
-          ) : (
-            questionName && (
-              <GameInterface
-              questionName={questionName}
-              questionDescription={questionDescription}
-              gameMode={gameMode}
-              questionDeclaration={questionDeclaration}
-              handleEditorChange={handleEditorChange}
-              userAnswer={userAnswer}
-              setUserAnswer={setUserAnswer}
-              setEditorContent={setEditorContent}
               lobbyId={lobbyId}
               playerId={playerId}
-              questionId={questionId}
-              submissionResult={submissionResult}
-              loading={loading}
-              isSubmitReady={isSubmitReady}
-              toggleSubmitReady={toggleSubmitReady}
-              passedAllTests={passedAllTests}
-              isNextQuestionReady={isNextQuestionReady}
-              toggleNextQuestionReady={toggleNextQuestionReady}
-              submitReadyMessages={submitReadyMessages}
-              nextQuestionReadyMessages={nextQuestionReadyMessages}
+              playerCount={playerCount}
+              isReady={isReady}
+              toggleReady={toggleReady}
+              readyMessages={readyMessages}
               chatMessages={chatMessages}
               chatInput={chatInput}
               setChatInput={setChatInput}
               sendChatMessage={sendChatMessage}
             />
+          ) : (
+            questionName && (
+              <GameInterface
+                questionName={questionName}
+                questionDescription={questionDescription}
+                gameMode={gameMode}
+                questionDeclaration={questionDeclaration}
+                handleEditorChange={handleEditorChange}
+                userAnswer={userAnswer}
+                setUserAnswer={setUserAnswer}
+                setEditorContent={setEditorContent}
+                lobbyId={lobbyId}
+                playerId={playerId}
+                questionId={questionId}
+                submissionResult={submissionResult}
+                loading={loading}
+                isSubmitReady={isSubmitReady}
+                toggleSubmitReady={toggleSubmitReady}
+                passedAllTests={passedAllTests}
+                isNextQuestionReady={isNextQuestionReady}
+                toggleNextQuestionReady={toggleNextQuestionReady}
+                submitReadyMessages={submitReadyMessages}
+                nextQuestionReadyMessages={nextQuestionReadyMessages}
+                chatMessages={chatMessages}
+                chatInput={chatInput}
+                setChatInput={setChatInput}
+                sendChatMessage={sendChatMessage}
+              />
             )
           )}
         </>
