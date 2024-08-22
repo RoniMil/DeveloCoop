@@ -100,13 +100,13 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
   useEffect(() => {
     if (cmInstanceRef.current && props.questionId !== questionIdRef.current) {
       const ytext = ydocRef.current.getText('codemirror');
-      
+
       if (props.isPlayer1) {
         ytext.delete(0, ytext.length);
         ytext.insert(0, props.questionDeclaration);
         questionIdRef.current = props.questionId;
       }
-      
+
       initializedRef.current = false;
     }
   }, [props.questionId, props.questionDeclaration, props.isPlayer1]);

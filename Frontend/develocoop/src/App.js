@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import CodeMirror from '@uiw/react-codemirror';
 import './styles.css';
-import { python } from "@codemirror/lang-python";
-import { autocompletion } from '@codemirror/autocomplete';
+import LobbyInterface from './components/LobbyInterface';
+import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
-import CooperativeEditor from './CooperativeEditor';
+
 
 const API_URL = 'http://localhost:8000';
 
@@ -466,102 +465,46 @@ function App() {
         <>
           <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
           {inLobby ? (
-            <div className="lobby-container">
-              <div className="lobby-header">
-                <p className="lobby-info">Lobby ID: {lobbyId}</p>
-                {playerId && <p className="player-info">You are Player {playerId}</p>}
-                <p className="player-count">{playerCount}/2 players</p>
-                <button onClick={toggleReady} className={`ready-button ${isReady ? 'not-ready' : ''}`}>
-                  {isReady ? 'Not Ready' : 'Ready'}
-                </button>
-              </div>
-              <div className="chat-container">
-                {readyMessages.map((msg, index) => (
-                  <p key={`ready-${index}`} className="ready-message"><strong>{msg}</strong></p>
-                ))}
-                {chatMessages.map((msg, index) => (
-                  <p key={`chat-${index}`}>{msg}</p>
-                ))}
-              </div>
-              <div className="chat-input">
-                <input
-                  type="text"
-                  value={chatInput}
-                  onChange={(e) => setChatInput(e.target.value)}
-                  onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-                  placeholder="Type your message..."
-                />
-                <button onClick={sendChatMessage}>Send</button>
-              </div>
-            </div>
+            <LobbyInterface
+            lobbyId={lobbyId}
+            playerId={playerId}
+            playerCount={playerCount}
+            isReady={isReady}
+            toggleReady={toggleReady}
+            readyMessages={readyMessages}
+            chatMessages={chatMessages}
+            chatInput={chatInput}
+            setChatInput={setChatInput}
+            sendChatMessage={sendChatMessage}
+          />
           ) : (
             questionName && (
-              <div className="main-container">
-                <h3>{questionName}</h3>
-                <div className="content-container">
-                  {gameMode === 'two-players' ? (
-                    <CooperativeEditor
-                      questionDeclaration={questionDeclaration}
-                      onChange={handleEditorChange}
-                      roomName={lobbyId}
-                      isPlayer1={playerId === '1'}
-                      userId={`Player ${playerId}`}
-                      questionId={questionId}
-                    />
-                  ) : (
-                    <CodeMirror
-                      value={userAnswer}
-                      extensions={[python(), autocompletion()]}
-                      onChange={(value) => {
-                        setUserAnswer(value);
-                        setEditorContent(value);
-                      }}
-                      basicSetup={{
-                        tabSize: 2
-                      }}
-                    />
-                  )}
-                  <div id="problem">
-                    {questionDescription}
-                  </div>
-                </div>
-                <div className="chat-container">
-                  {submitReadyMessages.map((msg, index) => (
-                    <p key={`ready-to-submit${index}`} className="ready-message"><strong>{msg}</strong></p>
-                  ))}
-                  {nextQuestionReadyMessages.map((msg, index) => (
-                    <p key={`ready-to-move-to-next-question${index}`} className="ready-message"><strong>{msg}</strong></p>
-                  ))}
-                  {chatMessages.map((msg, index) => (
-                    <p key={`chat-${index}`}>{msg}</p>
-                  ))}
-                </div>
-                <div className="chat-input">
-                  <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-                    placeholder="Type your message..."
-                  />
-                  <button onClick={sendChatMessage}>Send</button>
-                </div>
-                {submissionResult && (
-                  <div className="result-container">
-                    <h3>Results:</h3>
-                    <pre>{submissionResult}</pre>
-                  </div>
-                )}
-                <button onClick={toggleSubmitReady} disabled={loading} className="button">
-                  {isSubmitReady ? 'Waiting...' : 'Submit'}
-                </button>
-                {loading && <div className="loading-spinner"></div>}
-                {passedAllTests && (
-                  <button onClick={toggleNextQuestionReady} className="button">
-                    {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
-                  </button>
-                )}
-              </div>
+              <GameInterface
+              questionName={questionName}
+              questionDescription={questionDescription}
+              gameMode={gameMode}
+              questionDeclaration={questionDeclaration}
+              handleEditorChange={handleEditorChange}
+              userAnswer={userAnswer}
+              setUserAnswer={setUserAnswer}
+              setEditorContent={setEditorContent}
+              lobbyId={lobbyId}
+              playerId={playerId}
+              questionId={questionId}
+              submissionResult={submissionResult}
+              loading={loading}
+              isSubmitReady={isSubmitReady}
+              toggleSubmitReady={toggleSubmitReady}
+              passedAllTests={passedAllTests}
+              isNextQuestionReady={isNextQuestionReady}
+              toggleNextQuestionReady={toggleNextQuestionReady}
+              submitReadyMessages={submitReadyMessages}
+              nextQuestionReadyMessages={nextQuestionReadyMessages}
+              chatMessages={chatMessages}
+              chatInput={chatInput}
+              setChatInput={setChatInput}
+              sendChatMessage={sendChatMessage}
+            />
             )
           )}
         </>
