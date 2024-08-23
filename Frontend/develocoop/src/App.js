@@ -3,38 +3,49 @@ import './styles.css';
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
-import { GAME_MODES } from './gameConfig';
+import { GAME_MODES, WS_URL } from './gameConfig';
 import { fetchQuestion, submitAnswer, createLobby, joinLobby, findLobby } from './apiService';
 
 function App() {
-  const [questionDeclaration, setQuestionDeclaration] = useState('');
-  const [questionDescription, setQuestionDescription] = useState('');
-  const [questionName, setQuestionName] = useState('');
-  const [userAnswer, setUserAnswer] = useState('');
-  const [questionId, setQuestionId] = useState(null);
-  const [submissionResult, setSubmissionResult] = useState('');
-  const [loading, setLoading] = useState(false);
+  // Game state
   const [gameMode, setGameMode] = useState(null);
   const [inLobby, setInLobby] = useState(false);
+  const [showLobbyOptions, setShowLobbyOptions] = useState(false);
+  const [showGameOver, setShowGameOver] = useState(false);
+
+  // Player state
   const [playerId, setPlayerId] = useState(null);
-  const [chatInput, setChatInput] = useState('');
+  const [playerCount, setPlayerCount] = useState(1);
+
+  // Question state
+  const [questionData, setQuestionData] = useState({
+    declaration: '',
+    description: '',
+    name: '',
+    id: null
+  });
+  const [userAnswer, setUserAnswer] = useState('');
+  const [editorContent, setEditorContent] = useState('');
+
+  // Lobby state
+  const [lobbyId, setLobbyId] = useState('');
+  const [joinLobbyId, setJoinLobbyId] = useState('');
+
+  // Game progress state
   const [isReady, setIsReady] = useState(false);
   const [isSubmitReady, setIsSubmitReady] = useState(false);
   const [isNextQuestionReady, setIsNextQuestionReady] = useState(false);
-  const [lobbyId, setLobbyId] = useState('');
-  const [showLobbyOptions, setShowLobbyOptions] = useState(false);
-  const [joinLobbyId, setJoinLobbyId] = useState('');
-  const [playerCount, setPlayerCount] = useState(1);
-  const [readyPlayers, setReadyPlayers] = useState(new Set());
-  const [submitReadyPlayers, setSubmitReadyPlayers] = useState(new Set());
-  const [nextQuestionReadyPlayers, setNextQuestionReadyPlayers] = useState(new Set());
+  const [passedAllTests, setPassedAllTests] = useState(false);
+
+  // UI state
+  const [submissionResult, setSubmissionResult] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [chatInput, setChatInput] = useState('');
+  const [chatMessages, setChatMessages] = useState([]);
   const [readyMessages, setReadyMessages] = useState([]);
   const [submitReadyMessages, setSubmitReadyMessages] = useState([]);
   const [nextQuestionReadyMessages, setNextQuestionReadyMessages] = useState([]);
-  const [chatMessages, setChatMessages] = useState([]);
-  const [editorContent, setEditorContent] = useState('');
-  const [passedAllTests, setPassedAllTests] = useState(false);
-  const [showGameOver, setShowGameOver] = useState(false);
+
   const isInitialMount = useRef(true);
   const websocketRef = useRef(null);
 
@@ -104,11 +115,13 @@ function App() {
     } else {
       setGameMode(mode);
       try {
-        const data = await fetchQuestion()
-        setQuestionDeclaration(data["Question Declaration"]);
-        setQuestionDescription(data["Question Description"]);
-        setQuestionName(data["Question Name"]);
-        setQuestionId(data["_id"]);
+        const data = await fetchQuestion();
+        setQuestionData({
+          declaration: data["Question Declaration"],
+          description: data["Question Description"],
+          name: data["Question Name"],
+          id: data["_id"]
+        });
         setUserAnswer(data["Question Declaration"]);
       } catch (error) {
         console.error('Error fetching the question:', error);
@@ -116,10 +129,11 @@ function App() {
     }
   };
 
+  
   const handleSessionEnd = () => {
     setShowGameOver(true);
 
-    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+    if (websocketRef.current?.readyState === WebSocket.OPEN) {
       websocketRef.current.send(JSON.stringify({ type: 'reset_lobby' }));
     }
 
@@ -130,12 +144,10 @@ function App() {
   };
 
   const backToMainMenu = () => {
+    // Reset all state to initial values
     setGameMode(null);
-    setQuestionDeclaration('');
-    setQuestionDescription('');
-    setQuestionName('');
+    setQuestionData({ declaration: '', description: '', name: '', id: null });
     setUserAnswer('');
-    setQuestionId(null);
     setSubmissionResult('');
     setLoading(false);
     setInLobby(false);
@@ -152,9 +164,6 @@ function App() {
     setShowLobbyOptions(false);
     setJoinLobbyId('');
     setPlayerCount(1);
-    setReadyPlayers(new Set());
-    setSubmitReadyPlayers(new Set());
-    setNextQuestionReadyPlayers(new Set());
     setPassedAllTests(false);
     if (websocketRef.current) {
       websocketRef.current.close();
@@ -169,7 +178,7 @@ function App() {
       return;
     }
 
-    websocketRef.current = new WebSocket(`ws://localhost:8000/ws/${lobbyId}`);
+    websocketRef.current = new WebSocket(`${WS_URL}/${lobbyId}`);
 
     websocketRef.current.onopen = () => {
       console.log(`Connected to lobby: ${lobbyId}`);
@@ -193,11 +202,8 @@ function App() {
             setPlayerCount(data.count);
             break;
           case 'lobby_reset':
-            setQuestionDeclaration('');
-            setQuestionDescription('');
-            setQuestionName('');
+            setQuestionData({ declaration: '', description: '', name: '', id: null });
             setUserAnswer('');
-            setQuestionId(null);
             setSubmissionResult('');
             setLoading(false);
             setReadyMessages([]);
@@ -206,9 +212,6 @@ function App() {
             setIsReady(false);
             setIsSubmitReady(false);
             setIsNextQuestionReady(false);
-            setReadyPlayers(new Set());
-            setSubmitReadyPlayers(new Set());
-            setNextQuestionReadyPlayers(new Set());
             setPassedAllTests(false);
             setInLobby(true);
             break;
@@ -216,48 +219,27 @@ function App() {
             console.log('Game starting, updating state...');
             setInLobby(false);
             setGameMode('two-players');
-            setQuestionDeclaration(data.question["Question Declaration"]);
-            setQuestionDescription(data.question["Question Description"]);
-            setQuestionName(data.question["Question Name"]);
-            setQuestionId(data.question["_id"]);
+            setQuestionData({ declaration: data.question["Question Declaration"], description: data.question["Question Description"], name: data.question["Question Name"], id: data.question["_id"] })
             setUserAnswer(data.question["Question Declaration"]);
             break;
           case 'player_ready':
             if (data.ready) {
-              setReadyPlayers(prev => new Set(prev).add(data.player_id));
               setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
             } else {
-              setReadyPlayers(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(data.player_id);
-                return newSet;
-              });
               setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
             }
             break;
           case 'player_submit_ready':
             if (data.submit_ready) {
-              setSubmitReadyPlayers(prev => new Set(prev).add(data.player_id));
               setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
             } else {
-              setSubmitReadyPlayers(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(data.player_id);
-                return newSet;
-              });
               setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
             }
             break;
           case 'player_next_question_ready':
             if (data.next_question_ready) {
-              setNextQuestionReadyPlayers(prev => new Set(prev).add(data.player_id));
               setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
             } else {
-              setNextQuestionReadyPlayers(prev => {
-                const newSet = new Set(prev);
-                newSet.delete(data.player_id);
-                return newSet;
-              });
               setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
             }
             break;
@@ -266,14 +248,10 @@ function App() {
             break;
           case 'reset_submit_ready':
             setIsSubmitReady(false);
-            setSubmitReadyPlayers(new Set());
             setSubmitReadyMessages([]);
             break;
           case 'move_to_next_question':
-            setQuestionDeclaration(data.question["Question Declaration"]);
-            setQuestionDescription(data.question["Question Description"]);
-            setQuestionName(data.question["Question Name"]);
-            setQuestionId(data.question["_id"]);
+            setQuestionData({ declaration: data.question["Question Declaration"], description: data.question["Question Description"], name: data.question["Question Name"], id: data.question["_id"] });
             setUserAnswer(data.question["Question Declaration"]);
             setEditorContent(data.question["Question Declaration"]);
             setSubmissionResult('');
@@ -281,21 +259,13 @@ function App() {
             setNextQuestionReadyMessages([]);
             setIsSubmitReady(false);
             setIsNextQuestionReady(false);
-            setSubmitReadyPlayers(new Set());
-            setNextQuestionReadyPlayers(new Set());
             setPassedAllTests(false);
             break;
           case 'player_left':
-            setReadyPlayers(prev => {
-              const newSet = new Set(prev);
-              newSet.delete(data.player_id);
-              return newSet;
-            });
             setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
             setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
             break;
           case 'session_end':
-            // session end function (state handling etc)
             handleSessionEnd()
         }
       } catch (error) {
@@ -374,12 +344,12 @@ function App() {
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
-      if (questionDeclaration) {
-        setEditorContent(questionDeclaration);
-        setUserAnswer(questionDeclaration);
+      if (questionData.declaration) {
+        setEditorContent(questionData.declaration);
+        setUserAnswer(questionData.declaration);
       }
     }
-  }, [questionDeclaration]);
+  }, [questionData.declaration]);
 
   if (showLobbyOptions) {
     return (
@@ -404,7 +374,6 @@ function App() {
     );
   }
 
-
   return (
     <div style={{ padding: '20px' }}>
       <img src={frogImage} alt="Frog Coding" className="header-image" />
@@ -416,8 +385,8 @@ function App() {
         </div>
       ) : !gameMode && !inLobby ? (
         <div className="main-menu">
-          <button onClick={() => startGame('one-player')}>One Player</button>
-          <button onClick={() => startGame('two-players')}>Two Players</button>
+          <button onClick={() => startGame(GAME_MODES.ONE_PLAYER)}>One Player</button>
+          <button onClick={() => startGame(GAME_MODES.TWO_PLAYERS)}>Two Players</button>
         </div>
       ) : (
         <>
@@ -436,19 +405,19 @@ function App() {
               sendChatMessage={sendChatMessage}
             />
           ) : (
-            questionName && (
+            questionData.name && (
               <GameInterface
-                questionName={questionName}
-                questionDescription={questionDescription}
+                questionName={questionData.name}
+                questionDescription={questionData.description}
                 gameMode={gameMode}
-                questionDeclaration={questionDeclaration}
+                questionDeclaration={questionData.declaration}
                 handleEditorChange={handleEditorChange}
                 userAnswer={userAnswer}
                 setUserAnswer={setUserAnswer}
                 setEditorContent={setEditorContent}
                 lobbyId={lobbyId}
                 playerId={playerId}
-                questionId={questionId}
+                questionId={questionData.id}
                 submissionResult={submissionResult}
                 loading={loading}
                 isSubmitReady={isSubmitReady}

@@ -95,14 +95,15 @@ Constraints:
  """"""
  pass
 ","def isPalindrome_answer(S):
-		""""""
-		type S: str
-		type return: int
-		""""""
-		for i in range(len(S) // 2):
-			if S[i] != S[len(S) - i - 1]:
-				return 0
-		return 1
+    """"""
+    type S: str
+    type return: int
+    """"""
+    for i in range(len(S) // 2):
+        if S[i] != S[len(S) - i - 1]:
+            return 0
+    return 1
+
 ","test_cases = [
     (""abba"",), # Expected output: 1
     (""abc"",), # Expected output: 0
@@ -118,14 +119,15 @@ Constraints:
 
 user_solution = isPalindrome
 solution = isPalindrome_answer","def isPalindrome(S):
-  """"""
-  type S: str
-  type return: int
-  """"""
-  for i in range(len(S) / 2):
-   if S[i] != S[len(S) - i]:
-    return 0
-  return 1"
+    """"""
+    type S: str
+    type return: int
+    """"""
+    for i in range(len(S) / 2):
+        if S[i] != S[len(S) - i]:
+            return 0
+    return 1
+"
 GCD of two numbers,"Given two positive integers a and b, find GCD of a and b.
 Note: Don't use the inbuilt gcd function
 Example 1:
@@ -154,17 +156,18 @@ Constraints:
     """"""
     pass
 ","def gcd_answer(a, b):
-		""""""
-		type a: int
-		type b: int
-		type return: int
-		""""""
-		# base case: if b is 0, return a as gcd.
-		if b == 0:
-			return a
-		
-		# recursively calling gcd function with b and a % b.
-		return gcd_answer(b, a % b)
+    """"""
+    type a: int
+    type b: int
+    type return: int
+    """"""
+    # base case: if b is 0, return a as gcd.
+    if b == 0:
+        return a
+    
+    # recursively calling gcd function with b and a % b.
+    return gcd_answer(b, a % b)
+
 ","test_cases = [
     (48, 18),  # Succeeds: gcd(48, 18) should be 6
     (56, 98),  # Succeeds: gcd(56, 98) should be 14
@@ -180,17 +183,18 @@ Constraints:
 
 user_solution = gcd
 solution = gcd_answer","def gcd(a, b):
-  """"""
-  type a: int
-  type b: int
-  type return: int
-  """"""
-  # base case: if b is 0, return a as gcd.
-  if b == 1:
-   return a
-  
-  # recursively calling gcd function with b and a % b.
-  return gcd_answer(b % a, a % b)"
+    """"""
+    type a: int
+    type b: int
+    type return: int
+    """"""
+    # base case: if b is 0, return a as gcd.
+    if b == 1:
+        return a
+    
+    # recursively calling gcd function with b and a % b.
+    return gcd_answer(b % a, a % b)
+"
 Min and Max in Array,"Given an array arr. Your task is to find the minimum and maximum elements in the array.
 Note: Return an array that contains two elements the first one will be a minimum element and the second will be a maximum of an array.
 Examples:
