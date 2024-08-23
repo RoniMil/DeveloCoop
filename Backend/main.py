@@ -1,14 +1,11 @@
-import json
 import os
 from dotenv import find_dotenv, load_dotenv
-from pydantic import BaseModel
 import requests
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+from websocket_handler import handle_websocket
 from game_logic import GameLogic
-from lobby import Lobby
-from itertools import count
 import random
 from backend_config import ORIGINS, TEST_STR, JDOODLE_URL
 from database import get_question, get_follow_up_questions, get_question_by_id
@@ -55,62 +52,7 @@ async def find_lobby():
 
 @app.websocket("/ws/{lobby_id}")
 async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
-    lobby = game_logic.get_lobby(lobby_id)
-    if not lobby:
-        await websocket.close(code=4000)
-        return
-
-    player_id = await lobby.connect(websocket)
-    try:
-        await websocket.send_json({"type": "player_id", "id": player_id})
-        await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id} joined the lobby"}))
-        await lobby.broadcast(json.dumps({"type": "player_count", "count": lobby.get_player_count()}))
-        
-        while True:
-            data = await websocket.receive_json()
-            if data["type"] == "reset_lobby":
-                lobby.reset_lobby()
-                fetch_and_set_question(lobby, get_question, get_follow_up_questions)
-                await lobby.broadcast(json.dumps({"type": "lobby_reset"}))
-            elif data["type"] == "ready":
-                is_ready = data.get("ready", True)
-                lobby.set_ready(player_id, is_ready)
-                await lobby.broadcast(json.dumps({"type": "player_ready", "player_id": player_id, "ready": is_ready}))
-                if lobby.all_players_ready():
-                    if not lobby.get_question():
-                        fetch_and_set_question(lobby, get_question, get_follow_up_questions)
-                    await lobby.broadcast(json.dumps({"type": "game_start", "question": lobby.get_question()}))
-            elif data["type"] == "submit_ready":
-                is_submit_ready = data.get("submit_ready", True)
-                lobby.set_submit_ready(player_id, is_submit_ready)
-                await lobby.broadcast(json.dumps({"type": "player_submit_ready", "player_id": player_id, "submit_ready": is_submit_ready}))
-                if lobby.all_players_submit_ready():
-                    lobby.set_editor_content(data.get("editor_content", ""))
-                    await lobby.broadcast(json.dumps({"type": "submit_code", "question_id": lobby.get_question()["_id"], "editor_content": lobby.get_editor_content(), "lobby_id": lobby.get_lobby_id()}))
-                    await lobby.broadcast(json.dumps({"type": "reset_submit_ready"}))
-                    lobby.reset_submit_ready()
-            elif data["type"] == "next_question_ready":
-                is_next_question_ready = data.get("next_question_ready", True)
-                lobby.set_next_question_ready(player_id, is_next_question_ready)
-                await lobby.broadcast(json.dumps({"type": "player_next_question_ready", "player_id": player_id, "next_question_ready": is_next_question_ready}))
-                if lobby.all_players_next_question_ready():
-                    follow_up_questions = lobby.get_follow_up_questions()
-                    if not follow_up_questions:
-                        await lobby.broadcast(json.dumps({"type": "session_end", "message": "No more follow-up questions available."}))
-                    else:
-                        next_question = follow_up_questions.pop(random.randrange(len(follow_up_questions)))
-                        lobby.set_question(next_question)
-                        await lobby.broadcast(json.dumps({"type": "move_to_next_question", "question": next_question}))
-                    lobby.reset_next_question_ready()
-            elif data["type"] == "chat":
-                await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id}: {data['content']}"}))
-
-    except WebSocketDisconnect:
-        lobby.disconnect(player_id)
-        await lobby.broadcast(json.dumps({"type": "player_left", "player_id": player_id}))
-        await lobby.broadcast(json.dumps({"type": "player_count", "count": lobby.get_player_count()}))
-        if lobby.get_player_count() == 0:
-            game_logic.remove_lobby(lobby_id)
+    await handle_websocket(websocket, lobby_id, game_logic, get_question, get_follow_up_questions)
 
 
 @app.get("/questions")
