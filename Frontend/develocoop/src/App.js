@@ -3,8 +3,9 @@ import './styles.css';
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
-import { GAME_MODES, WS_URL } from './gameConfig';
+import { GAME_MODES } from './gameConfig';
 import { fetchQuestion, submitAnswer, createLobby, joinLobby, findLobby } from './apiService';
+import useWebSocket from './hooks/useWebSocket';
 
 function App() {
   // Game state
@@ -46,7 +47,97 @@ function App() {
   const [nextQuestionReadyMessages, setNextQuestionReadyMessages] = useState([]);
 
   const isInitialMount = useRef(true);
-  const websocketRef = useRef(null);
+
+  const handleWebSocketMessage = useCallback((data) => {
+    switch (data.type) {
+      case 'player_id':
+        setPlayerId(data.id);
+        break;
+      case 'message':
+        setChatMessages(prev => [...prev, data.content]);
+        break;
+      case 'player_count':
+        setPlayerCount(data.count);
+        break;
+      case 'lobby_reset':
+        setQuestionData({ declaration: '', description: '', name: '', id: null });
+        setEditorContent('');
+        setSubmissionResult('');
+        setLoading(false);
+        setReadyMessages([]);
+        setSubmitReadyMessages([]);
+        setNextQuestionReadyMessages([]);
+        setIsReady(false);
+        setIsSubmitReady(false);
+        setIsNextQuestionReady(false);
+        setPassedAllTests(false);
+        setInLobby(true);
+        break;
+      case 'game_start':
+        setInLobby(false);
+        setGameMode('two-players');
+        setQuestionData({
+          declaration: data.question["Question Declaration"],
+          description: data.question["Question Description"],
+          name: data.question["Question Name"],
+          id: data.question["_id"]
+        });
+        setEditorContent(data.question["Question Declaration"]);
+        break;
+      case 'player_ready':
+        if (data.ready) {
+          setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
+        } else {
+          setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
+        }
+        break;
+      case 'player_submit_ready':
+        if (data.submit_ready) {
+          setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
+        } else {
+          setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
+        }
+        break;
+      case 'player_next_question_ready':
+        if (data.next_question_ready) {
+          setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
+        } else {
+          setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
+        }
+        break;
+      case 'submit_code':
+        handleSubmit(data.question_id, data.editor_content, data.lobby_id);
+        break;
+      case 'reset_submit_ready':
+        setIsSubmitReady(false);
+        setSubmitReadyMessages([]);
+        break;
+      case 'move_to_next_question':
+        setQuestionData({
+          declaration: data.question["Question Declaration"],
+          description: data.question["Question Description"],
+          name: data.question["Question Name"],
+          id: data.question["_id"]
+        });
+        setEditorContent(data.question["Question Declaration"]);
+        setSubmissionResult('');
+        setSubmitReadyMessages([]);
+        setNextQuestionReadyMessages([]);
+        setIsSubmitReady(false);
+        setIsNextQuestionReady(false);
+        setPassedAllTests(false);
+        break;
+      case 'player_left':
+        setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
+        setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
+        break;
+      case 'session_end':
+        handleSessionEnd();
+        break;
+    }
+  }, []);
+
+  const sendWebSocketMessage = useWebSocket(lobbyId, handleWebSocketMessage);
 
   const handleCreateLobby = async () => {
     try {
@@ -127,22 +218,15 @@ function App() {
     }
   };
 
-  
   const handleSessionEnd = () => {
     setShowGameOver(true);
-
-    if (websocketRef.current?.readyState === WebSocket.OPEN) {
-      websocketRef.current.send(JSON.stringify({ type: 'reset_lobby' }));
-    }
-
+    sendWebSocketMessage({ type: 'reset_lobby' });
     setTimeout(() => {
       setShowGameOver(false);
-    }, 5000); // Show "Game Over" screen for 5 seconds
-
+    }, 5000);
   };
 
   const backToMainMenu = () => {
-    // Reset all state to initial values
     setGameMode(null);
     setQuestionData({ declaration: '', description: '', name: '', id: null });
     setEditorContent('');
@@ -163,180 +247,33 @@ function App() {
     setJoinLobbyId('');
     setPlayerCount(1);
     setPassedAllTests(false);
-    if (websocketRef.current) {
-      websocketRef.current.close();
-    }
   };
 
-
-  const connectToLobby = useCallback((lobbyId) => {
-    console.log(`Connecting to lobby: ${lobbyId}`);
-    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-      console.log('WebSocket already open, skipping connection');
-      return;
-    }
-
-    websocketRef.current = new WebSocket(`${WS_URL}/${lobbyId}`);
-
-    websocketRef.current.onopen = () => {
-      console.log(`Connected to lobby: ${lobbyId}`);
-    };
-
-    websocketRef.current.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        console.log('Received WebSocket message:', data);
-
-        switch (data.type) {
-          case 'player_id':
-            setPlayerId(data.id);
-            break;
-          case 'message':
-            console.log(data.content);
-            setChatMessages(prev => [...prev, data.content]);
-            console.log(data.content);
-            break;
-          case 'player_count':
-            setPlayerCount(data.count);
-            break;
-          case 'lobby_reset':
-            setQuestionData({ declaration: '', description: '', name: '', id: null });
-            setEditorContent('');
-            setSubmissionResult('');
-            setLoading(false);
-            setReadyMessages([]);
-            setSubmitReadyMessages([]);
-            setNextQuestionReadyMessages([]);
-            setIsReady(false);
-            setIsSubmitReady(false);
-            setIsNextQuestionReady(false);
-            setPassedAllTests(false);
-            setInLobby(true);
-            break;
-          case 'game_start':
-            console.log('Game starting, updating state...');
-            setInLobby(false);
-            setGameMode('two-players');
-            setQuestionData({ declaration: data.question["Question Declaration"], description: data.question["Question Description"], name: data.question["Question Name"], id: data.question["_id"] })
-            setEditorContent(data.question["Question Declaration"]);
-            break;
-          case 'player_ready':
-            if (data.ready) {
-              setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
-            } else {
-              setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
-            }
-            break;
-          case 'player_submit_ready':
-            if (data.submit_ready) {
-              setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
-            } else {
-              setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
-            }
-            break;
-          case 'player_next_question_ready':
-            if (data.next_question_ready) {
-              setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
-            } else {
-              setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
-            }
-            break;
-          case 'submit_code':
-            handleSubmit(data.question_id, data.editor_content, data.lobby_id);
-            break;
-          case 'reset_submit_ready':
-            setIsSubmitReady(false);
-            setSubmitReadyMessages([]);
-            break;
-          case 'move_to_next_question':
-            setQuestionData({ declaration: data.question["Question Declaration"], description: data.question["Question Description"], name: data.question["Question Name"], id: data.question["_id"] });
-            setEditorContent(data.question["Question Declaration"]);
-            setSubmissionResult('');
-            setSubmitReadyMessages([]);
-            setNextQuestionReadyMessages([]);
-            setIsSubmitReady(false);
-            setIsNextQuestionReady(false);
-            setPassedAllTests(false);
-            break;
-          case 'player_left':
-            setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
-            setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
-            break;
-          case 'session_end':
-            handleSessionEnd()
-        }
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
-      }
-    };
-
-    websocketRef.current.onclose = (event) => {
-      if (!event.wasClean) {
-        setTimeout(() => connectToLobby(lobbyId), 1000);
-      }
-      console.log(`Disconnected from lobby: ${lobbyId}`, event);
-    };
-
-    websocketRef.current.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-  }, []);
-
   const sendChatMessage = useCallback(() => {
-    if (chatInput.trim() && websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-      console.log(`Sending chat message: ${chatInput}`);
-      websocketRef.current.send(JSON.stringify({ type: 'chat', content: chatInput }));
+    if (chatInput.trim()) {
+      sendWebSocketMessage({ type: 'chat', content: chatInput });
       setChatInput('');
-    } else {
-      console.error('WebSocket is not open or chat input is empty');
-      console.log('WebSocket readyState:', websocketRef.current ? websocketRef.current.readyState : 'WebSocket not initialized');
     }
-  }, [chatInput]);
+  }, [chatInput, sendWebSocketMessage]);
 
   const toggleReady = useCallback(() => {
-    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-      websocketRef.current.send(JSON.stringify({ type: 'ready', ready: !isReady }));
-      setIsReady(!isReady);
-    } else {
-      console.error('WebSocket is not open, cannot send ready state');
-    }
-  }, [isReady]);
+    sendWebSocketMessage({ type: 'ready', ready: !isReady });
+    setIsReady(!isReady);
+  }, [isReady, sendWebSocketMessage]);
 
   const toggleSubmitReady = useCallback(() => {
-    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-      websocketRef.current.send(JSON.stringify({
-        type: 'submit_ready',
-        submit_ready: !isSubmitReady,
-        editor_content: editorContent
-      }));
-      setIsSubmitReady(!isSubmitReady);
-    } else {
-      console.error('WebSocket is not open, cannot send submit ready state');
-    }
-  }, [isSubmitReady, editorContent]);
+    sendWebSocketMessage({
+      type: 'submit_ready',
+      submit_ready: !isSubmitReady,
+      editor_content: editorContent
+    });
+    setIsSubmitReady(!isSubmitReady);
+  }, [isSubmitReady, editorContent, sendWebSocketMessage]);
 
   const toggleNextQuestionReady = useCallback(() => {
-    if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
-      websocketRef.current.send(JSON.stringify({ type: 'next_question_ready', next_question_ready: !isNextQuestionReady }));
-      setIsNextQuestionReady(!isNextQuestionReady);
-    } else {
-      console.error('WebSocket is not open, cannot send next question ready state');
-    }
-  }, [isNextQuestionReady]);
-
-  useEffect(() => {
-    return () => {
-      if (websocketRef.current) {
-        websocketRef.current.close();
-      }
-    };
-  }, []);
-
-  useEffect(() => {
-    if (lobbyId) {
-      connectToLobby(lobbyId);
-    }
-  }, [lobbyId, connectToLobby]);
+    sendWebSocketMessage({ type: 'next_question_ready', next_question_ready: !isNextQuestionReady });
+    setIsNextQuestionReady(!isNextQuestionReady);
+  }, [isNextQuestionReady, sendWebSocketMessage]);
 
   useEffect(() => {
     if (isInitialMount.current) {
