@@ -6,6 +6,8 @@ from pymongo.server_api import ServerApi
 from bson import ObjectId
 import os
 
+# handle database init and operations
+
 load_dotenv(find_dotenv())
 
 mongodb_pwd = os.environ.get("MONGODB_PWD")

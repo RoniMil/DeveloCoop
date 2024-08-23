@@ -3,6 +3,8 @@ from fastapi import WebSocket, WebSocketDisconnect
 import random
 from game_logic import fetch_and_set_question
 
+# manages and handles incoming websocket connections, clients communication, client messages to the server
+
 async def handle_websocket(websocket: WebSocket, lobby_id: str, game_logic, get_question, get_follow_up_questions):
     lobby = game_logic.get_lobby(lobby_id)
     if not lobby:

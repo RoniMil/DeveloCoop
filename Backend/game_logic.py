@@ -3,6 +3,8 @@ from typing import Dict
 from itertools import count
 from lobby import Lobby
 
+# module responsible for handling the game logic (lobby and question handling etc) and the data models used by the server
+
 class Submission(BaseModel):
     question_id: str
     user_answer: str
