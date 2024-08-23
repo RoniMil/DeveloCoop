@@ -24,7 +24,6 @@ function App() {
     name: '',
     id: null
   });
-  const [userAnswer, setUserAnswer] = useState('');
   const [editorContent, setEditorContent] = useState('');
 
   // Lobby state
@@ -87,7 +86,6 @@ function App() {
 
   const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
-    setUserAnswer(content);
   }, []);
 
   const handleSubmit = async (questionID, submissionContent, lobbyID) => {
@@ -122,7 +120,7 @@ function App() {
           name: data["Question Name"],
           id: data["_id"]
         });
-        setUserAnswer(data["Question Declaration"]);
+        setEditorContent(data["Question Declaration"]);
       } catch (error) {
         console.error('Error fetching the question:', error);
       }
@@ -147,7 +145,7 @@ function App() {
     // Reset all state to initial values
     setGameMode(null);
     setQuestionData({ declaration: '', description: '', name: '', id: null });
-    setUserAnswer('');
+    setEditorContent('');
     setSubmissionResult('');
     setLoading(false);
     setInLobby(false);
@@ -203,7 +201,7 @@ function App() {
             break;
           case 'lobby_reset':
             setQuestionData({ declaration: '', description: '', name: '', id: null });
-            setUserAnswer('');
+            setEditorContent('');
             setSubmissionResult('');
             setLoading(false);
             setReadyMessages([]);
@@ -220,7 +218,7 @@ function App() {
             setInLobby(false);
             setGameMode('two-players');
             setQuestionData({ declaration: data.question["Question Declaration"], description: data.question["Question Description"], name: data.question["Question Name"], id: data.question["_id"] })
-            setUserAnswer(data.question["Question Declaration"]);
+            setEditorContent(data.question["Question Declaration"]);
             break;
           case 'player_ready':
             if (data.ready) {
@@ -252,7 +250,6 @@ function App() {
             break;
           case 'move_to_next_question':
             setQuestionData({ declaration: data.question["Question Declaration"], description: data.question["Question Description"], name: data.question["Question Name"], id: data.question["_id"] });
-            setUserAnswer(data.question["Question Declaration"]);
             setEditorContent(data.question["Question Declaration"]);
             setSubmissionResult('');
             setSubmitReadyMessages([]);
@@ -346,7 +343,6 @@ function App() {
       isInitialMount.current = false;
       if (questionData.declaration) {
         setEditorContent(questionData.declaration);
-        setUserAnswer(questionData.declaration);
       }
     }
   }, [questionData.declaration]);
@@ -412,8 +408,7 @@ function App() {
                 gameMode={gameMode}
                 questionDeclaration={questionData.declaration}
                 handleEditorChange={handleEditorChange}
-                userAnswer={userAnswer}
-                setUserAnswer={setUserAnswer}
+                editorContent={editorContent}
                 setEditorContent={setEditorContent}
                 lobbyId={lobbyId}
                 playerId={playerId}

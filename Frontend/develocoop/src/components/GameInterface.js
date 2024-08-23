@@ -4,7 +4,7 @@ import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import CooperativeEditor from './CooperativeEditor';
 
-const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, userAnswer, setUserAnswer, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
+const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
     return (
         <div className="main-container">
             <h3>{questionName}</h3>
@@ -20,10 +20,9 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     />
                 ) : (
                     <CodeMirror
-                        value={userAnswer}
+                        value={editorContent}
                         extensions={[python(), autocompletion()]}
                         onChange={(value) => {
-                            setUserAnswer(value);
                             setEditorContent(value);
                         }}
                         basicSetup={{

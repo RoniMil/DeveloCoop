@@ -8,13 +8,13 @@ export const fetchQuestion = async () => {
     return await response.json();
 };
 
-export const submitAnswer = async (questionId, userAnswer, lobbyId) => {
+export const submitAnswer = async (questionId, editorContent, lobbyId) => {
     const response = await fetch(`${API_URL}/questions/submit`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ question_id: questionId, user_answer: userAnswer, lobby_id: lobbyId })
+        body: JSON.stringify({ question_id: questionId, user_answer: editorContent, lobby_id: lobbyId })
     });
     if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
