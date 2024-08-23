@@ -34,27 +34,31 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     {questionDescription}
                 </div>
             </div>
-            <div className="chat-container">
-                {submitReadyMessages.map((msg, index) => (
-                    <p key={`ready-to-submit${index}`} className="ready-message"><strong>{msg}</strong></p>
-                ))}
-                {nextQuestionReadyMessages.map((msg, index) => (
-                    <p key={`ready-to-move-to-next-question${index}`} className="ready-message"><strong>{msg}</strong></p>
-                ))}
-                {chatMessages.map((msg, index) => (
-                    <p key={`chat-${index}`}>{msg}</p>
-                ))}
-            </div>
-            <div className="chat-input">
-                <input
-                    type="text"
-                    value={chatInput}
-                    onChange={(e) => setChatInput(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
-                    placeholder="Type your message..."
-                />
-                <button onClick={sendChatMessage}>Send</button>
-            </div>
+            {gameMode === 'two-players' && (
+                <>
+                    <div className="chat-container">
+                        {submitReadyMessages.map((msg, index) => (
+                            <p key={`ready-to-submit${index}`} className="ready-message"><strong>{msg}</strong></p>
+                        ))}
+                        {nextQuestionReadyMessages.map((msg, index) => (
+                            <p key={`ready-to-move-to-next-question${index}`} className="ready-message"><strong>{msg}</strong></p>
+                        ))}
+                        {chatMessages.map((msg, index) => (
+                            <p key={`chat-${index}`}>{msg}</p>
+                        ))}
+                    </div>
+                    <div className="chat-input">
+                        <input
+                            type="text"
+                            value={chatInput}
+                            onChange={(e) => setChatInput(e.target.value)}
+                            onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
+                            placeholder="Type your message..."
+                        />
+                        <button onClick={sendChatMessage}>Send</button>
+                    </div>
+                </>
+            )}
             {submissionResult && (
                 <div className="result-container">
                     <h3>Results:</h3>

@@ -357,12 +357,14 @@ function App() {
                 passedAllTests={passedAllTests}
                 isNextQuestionReady={isNextQuestionReady}
                 toggleNextQuestionReady={toggleNextQuestionReady}
-                submitReadyMessages={submitReadyMessages}
-                nextQuestionReadyMessages={nextQuestionReadyMessages}
-                chatMessages={chatMessages}
-                chatInput={chatInput}
-                setChatInput={setChatInput}
-                sendChatMessage={sendChatMessage}
+                {...(gameMode === GAME_MODES.TWO_PLAYERS && {
+                  submitReadyMessages,
+                  nextQuestionReadyMessages,
+                  chatMessages,
+                  chatInput,
+                  setChatInput,
+                  sendChatMessage
+                })}
               />
             )
           )}
