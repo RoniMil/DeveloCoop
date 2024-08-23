@@ -1,10 +1,7 @@
 import json
 import os
-from bson import ObjectId
 from dotenv import find_dotenv, load_dotenv
 from pydantic import BaseModel
-from pymongo import MongoClient
-from pymongo.server_api import ServerApi
 import requests
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -12,13 +9,13 @@ import uvicorn
 from lobby import Lobby
 from itertools import count
 import random
-
-load_dotenv(find_dotenv())
+from backend_config import ORIGINS, TEST_STR, JDOODLE_URL
+from database import get_question, get_follow_up_questions, get_question_by_id
 
 app = FastAPI()
 
 origins = [
-    "http://localhost:3000",  # The origin of your Next.js frontend
+    ORIGINS,
 ]
 
 app.add_middleware(
@@ -29,28 +26,10 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-mongodb_pwd = os.environ.get("MONGODB_PWD")
-mongodb_user = os.environ.get("MONGODB_USER")
+load_dotenv(find_dotenv())
+
 jdoodle_client_id = os.environ.get("JDOODLE_CLIENT_ID")
 jdoodle_client_secret = os.environ.get("JDOODLE_CLIENT_SECRET")
-
-connection_str = f"mongodb+srv://{mongodb_user}:{mongodb_pwd}@develocoop.vjutg.mongodb.net/?retryWrites=true&w=majority&appName=DeveloCoop"
-client = MongoClient(connection_str, server_api=ServerApi("1"))
-
-questions_db = client.DeveloCoop.Questions
-
-# !!!!!!!!!DEBUG DBs!!!!!!!!!!!
-mini_db = client.DeveloCoop.MiniDB
-mini_db_followups = client.DeveloCoop.MiniDBFollowUps
-
-
-test_hardcoded_str = """wrong_answers = [(test, user_solution(*test), solution(*test)) for test in test_cases if user_solution(*test) != solution(*test)]
-if not wrong_answers:
-    print('Passed all tests!')
-else:
-    print('Failed on the following tests:')
-    for test_case, your_answer, answer in wrong_answers:
-        print("On input: " + str(list(test_case)) + ", your result: " + str(your_answer) + ", expected answer: " + str(answer))"""
 
 
 # class for submit answer post request framework
@@ -228,25 +207,20 @@ async def websocket_endpoint(websocket: WebSocket, lobby_id: str):
 
 
 @app.get("/questions")
-def get_question():
-    # !!!change DB to questions when actual DB exists!!!
-    question = mini_db.aggregate([{"$sample": {"size": 1}}]).next()
-    question["_id"] = str(question["_id"])
-    return question
+def get_random_question():
+    return get_question()
 
 
 @app.post("/questions/submit")
 def get_results(submission: Submission):
     user_answer = submission.user_answer
 
-    follow_up_entry = client.DeveloCoop.MiniDBFollowUps.find_one({"_id": ObjectId(submission.question_id)})
-    # get the entry from the correct database (follow up if follow_up_entry is not None)
-    db_entry = follow_up_entry if follow_up_entry else client.DeveloCoop.MiniDB.find_one({"_id": ObjectId(submission.question_id)})
+    db_entry = get_question_by_id(submission.question_id)
     
     tests = db_entry["Question Tests"]
     answer = db_entry["Question Solution"]
 
-    test_str = f"{tests}\n{test_hardcoded_str}"
+    test_str = f"{tests}\n{TEST_STR}"
 
     execution_data = {
         "clientId": jdoodle_client_id,
@@ -257,20 +231,16 @@ def get_results(submission: Submission):
     }
 
     # Make the POST request to execute code
-    response = requests.post("https://api.jdoodle.com/v1/execute", json=execution_data)
+    response = requests.post(JDOODLE_URL, json=execution_data)
 
     # Output the result
     return response.json()
 
 @app.get("/follow-up-questions/{question_name}")
-def get_follow_up_questions(question_name: str):
-    # Find all follow-up questions based on the original question name
-    follow_ups = list(mini_db_followups.find({"Original Question": question_name}))
+def get_follow_ups(question_name: str):
+    follow_ups = get_follow_up_questions(question_name)
     if follow_ups:
-        # Remove the _id field and convert ObjectId to string for each follow-up
         for follow_up in follow_ups:
-            follow_up["_id"] = str(follow_up["_id"])
-            # handle the description for the fix bugs follow up
             if "Fix The Bugs" in follow_up["Question Name"]:
                 follow_up["Question Description"] = create_buggy_follow_up_description(follow_up)
         return follow_ups
