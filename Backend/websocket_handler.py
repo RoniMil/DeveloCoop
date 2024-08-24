@@ -31,7 +31,7 @@ async def handle_websocket(websocket: WebSocket, lobby_id: str, game_logic, get_
                 await handle_chat(lobby, player_id, data)
 
     except WebSocketDisconnect:
-        handle_disconnect(lobby, player_id, game_logic, lobby_id)
+        await handle_disconnect(lobby, player_id, game_logic, lobby_id)
 
 async def handle_reset_lobby(lobby, get_question, get_follow_up_questions):
     lobby.reset_lobby()
@@ -74,9 +74,9 @@ async def handle_next_question_ready(lobby, player_id, data):
 async def handle_chat(lobby, player_id, data):
     await lobby.broadcast(json.dumps({"type": "message", "content": f"Player {player_id}: {data['content']}"}))
 
-def handle_disconnect(lobby, player_id, game_logic, lobby_id):
+async def handle_disconnect(lobby, player_id, game_logic, lobby_id):
     lobby.disconnect(player_id)
-    lobby.broadcast(json.dumps({"type": "player_left", "player_id": player_id}))
-    lobby.broadcast(json.dumps({"type": "player_count", "count": lobby.get_player_count()}))
+    await lobby.broadcast(json.dumps({"type": "player_left", "player_id": player_id}))
+    await lobby.broadcast(json.dumps({"type": "player_count", "count": lobby.get_player_count()}))
     if lobby.get_player_count() == 0:
         game_logic.remove_lobby(lobby_id)

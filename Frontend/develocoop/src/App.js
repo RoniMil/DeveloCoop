@@ -13,6 +13,10 @@ function App() {
   const [inLobby, setInLobby] = useState(false);
   const [showLobbyOptions, setShowLobbyOptions] = useState(false);
   const [showGameOver, setShowGameOver] = useState(false);
+  const [gameOverOptions, setGameOverOptions] = useState({
+    playAgain: () => {},
+    backToMainMenu: () => {}
+  });
 
   // Player state
   const [playerId, setPlayerId] = useState(null);
@@ -47,6 +51,7 @@ function App() {
   const [readyMessages, setReadyMessages] = useState([]);
   const [submitReadyMessages, setSubmitReadyMessages] = useState([]);
   const [nextQuestionReadyMessages, setNextQuestionReadyMessages] = useState([]);
+
 
   const isInitialMount = useRef(true);
 
@@ -241,7 +246,39 @@ function App() {
   const handleSessionEnd = () => {
     setShowGameOver(true);
     if (gameMode === GAME_MODES.ONE_PLAYER) {
-      // TBD
+      setGameOverOptions({
+        playAgain: async () => {
+          setShowGameOver(false);
+          setLoading(true);
+          try {
+            const data = await fetchQuestion();
+            setQuestionData({
+              declaration: data["Question Declaration"],
+              description: data["Question Description"],
+              name: data["Question Name"],
+              id: data["_id"]
+            });
+            setEditorContent(data["Question Declaration"]);
+
+            // Fetch follow-up questions for the new initial question
+            const followUps = await fetchFollowUpQuestions(data["Question Name"]);
+            setFollowUpQuestions(followUps);
+            setSeenQuestions(new Set());
+            setSubmissionResult('');
+            setPassedAllTests(false);
+            setIsSubmitReady(false);
+            setIsNextQuestionReady(false);
+          } catch (error) {
+            console.error('Error fetching the question:', error);
+          } finally {
+            setLoading(false);
+          }
+        },
+        backToMainMenu: () => {
+          backToMainMenu();
+          setShowGameOver(false);
+        }
+      });
     } else {
       sendWebSocketMessage({ type: 'reset_lobby' });
       setTimeout(() => {
@@ -312,7 +349,6 @@ function App() {
     setPassedAllTests(false);
     setFollowUpQuestions([]);
     setSeenQuestions(new Set());
-
   };
 
   const sendChatMessage = useCallback(() => {
@@ -370,11 +406,10 @@ function App() {
           {gameMode === GAME_MODES.TWO_PLAYERS ? (
             <p>Returning to lobby...</p>
           ) : (
-            <p>Thanks for playing!</p>
-            // //  play again button
-            // <button onClick={>Play again</button>
-            // // back to main menu button  
-            // <button onClick={>Back to main menu</button>  
+            <>
+            <button onClick={gameOverOptions.playAgain}>Play again</button>
+            <button onClick={gameOverOptions.backToMainMenu}>Back to main menu</button> 
+            </>
           )}
         </div>
       ) : !gameMode && !inLobby ? (
