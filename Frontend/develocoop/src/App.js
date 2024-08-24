@@ -4,7 +4,7 @@ import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
 import { GAME_MODES } from './gameConfig';
-import { fetchQuestion, submitAnswer, createLobby, joinLobby, findLobby } from './apiService';
+import { fetchQuestion, fetchFollowUpQuestions, submitAnswer, createLobby, joinLobby, findLobby } from './apiService';
 import useWebSocket from './hooks/useWebSocket';
 
 function App() {
@@ -25,6 +25,8 @@ function App() {
     name: '',
     id: null
   });
+  const [followUpQuestions, setFollowUpQuestions] = useState([]);
+  const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [editorContent, setEditorContent] = useState('');
 
   // Lobby state
@@ -212,19 +214,80 @@ function App() {
           id: data["_id"]
         });
         setEditorContent(data["Question Declaration"]);
+
+        // Fetch follow-up questions for the initial question
+        const followUps = await fetchFollowUpQuestions(data["Question Name"]);
+        setFollowUpQuestions(followUps);
+        setSeenQuestions(new Set());
       } catch (error) {
         console.error('Error fetching the question:', error);
       }
     }
   };
 
+  const handleSubmitReady = useCallback(async () => {
+    if (gameMode === GAME_MODES.ONE_PLAYER) {
+      handleSubmit(questionData.id, editorContent, null);
+    } else {
+      sendWebSocketMessage({
+        type: 'submit_ready',
+        submit_ready: !isSubmitReady,
+        editor_content: editorContent
+      });
+    }
+    setIsSubmitReady(!isSubmitReady)
+  }, [gameMode, isSubmitReady, editorContent, sendWebSocketMessage, questionData.id]);
+
   const handleSessionEnd = () => {
     setShowGameOver(true);
-    sendWebSocketMessage({ type: 'reset_lobby' });
-    setTimeout(() => {
-      setShowGameOver(false);
-    }, 5000);
+    if (gameMode === GAME_MODES.ONE_PLAYER) {
+      // TBD
+    } else {
+      sendWebSocketMessage({ type: 'reset_lobby' });
+      setTimeout(() => {
+        setShowGameOver(false);
+      }, 5000);
+    }
   };
+
+
+  const handleNextQuestionReady = useCallback(async () => {
+    if (gameMode === GAME_MODES.ONE_PLAYER) {
+      // Check if there are any unseen follow-up questions
+      const unseenQuestions = followUpQuestions.filter(q => !seenQuestions.has(q._id));
+
+      if (unseenQuestions.length === 0) {
+        // No more unseen questions, end the game
+        handleSessionEnd();
+        return;
+      }
+
+      // Select a random unseen question
+      const randomIndex = Math.floor(Math.random() * unseenQuestions.length);
+      const nextQuestion = unseenQuestions[randomIndex];
+
+      // Update the question data
+      setQuestionData({
+        declaration: nextQuestion["Question Declaration"],
+        description: nextQuestion["Question Description"],
+        name: nextQuestion["Question Name"],
+        id: nextQuestion["_id"]
+      });
+
+      // Update other states
+      setEditorContent(nextQuestion["Question Declaration"]);
+      setSubmissionResult('');
+      setIsSubmitReady(false);
+      setPassedAllTests(false);
+
+      // Mark this question as seen
+      setSeenQuestions(prev => new Set(prev).add(nextQuestion._id));
+
+    } else {
+      sendWebSocketMessage({ type: 'next_question_ready', next_question_ready: !isNextQuestionReady });
+      setIsNextQuestionReady(!isNextQuestionReady);
+    }
+  }, [gameMode, followUpQuestions, seenQuestions, handleSessionEnd, sendWebSocketMessage, isNextQuestionReady]);
 
   const backToMainMenu = () => {
     setGameMode(null);
@@ -247,6 +310,9 @@ function App() {
     setJoinLobbyId('');
     setPlayerCount(1);
     setPassedAllTests(false);
+    setFollowUpQuestions([]);
+    setSeenQuestions(new Set());
+
   };
 
   const sendChatMessage = useCallback(() => {
@@ -261,20 +327,6 @@ function App() {
     setIsReady(!isReady);
   }, [isReady, sendWebSocketMessage]);
 
-  const toggleSubmitReady = useCallback(() => {
-    sendWebSocketMessage({
-      type: 'submit_ready',
-      submit_ready: !isSubmitReady,
-      editor_content: editorContent
-    });
-    setIsSubmitReady(!isSubmitReady);
-  }, [isSubmitReady, editorContent, sendWebSocketMessage]);
-
-  const toggleNextQuestionReady = useCallback(() => {
-    sendWebSocketMessage({ type: 'next_question_ready', next_question_ready: !isNextQuestionReady });
-    setIsNextQuestionReady(!isNextQuestionReady);
-  }, [isNextQuestionReady, sendWebSocketMessage]);
-
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -282,6 +334,7 @@ function App() {
         setEditorContent(questionData.declaration);
       }
     }
+
   }, [questionData.declaration]);
 
   if (showLobbyOptions) {
@@ -314,7 +367,15 @@ function App() {
       {showGameOver ? (
         <div className="game-over-screen">
           <h2>Game Over</h2>
-          <p>Returning to lobby...</p>
+          {gameMode === GAME_MODES.TWO_PLAYERS ? (
+            <p>Returning to lobby...</p>
+          ) : (
+            <p>Thanks for playing!</p>
+            // //  play again button
+            // <button onClick={>Play again</button>
+            // // back to main menu button  
+            // <button onClick={>Back to main menu</button>  
+          )}
         </div>
       ) : !gameMode && !inLobby ? (
         <div className="main-menu">
@@ -353,10 +414,10 @@ function App() {
                 submissionResult={submissionResult}
                 loading={loading}
                 isSubmitReady={isSubmitReady}
-                toggleSubmitReady={toggleSubmitReady}
+                toggleSubmitReady={handleSubmitReady}
                 passedAllTests={passedAllTests}
                 isNextQuestionReady={isNextQuestionReady}
-                toggleNextQuestionReady={toggleNextQuestionReady}
+                toggleNextQuestionReady={handleNextQuestionReady}
                 {...(gameMode === GAME_MODES.TWO_PLAYERS && {
                   submitReadyMessages,
                   nextQuestionReadyMessages,

@@ -4,7 +4,7 @@ import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import CooperativeEditor from './CooperativeEditor';
 
-const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
+const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
     return (
         <div className="main-container">
             <h3>{questionName}</h3>
@@ -65,12 +65,12 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     <pre>{submissionResult}</pre>
                 </div>
             )}
-            <button onClick={toggleSubmitReady} disabled={loading} className="button">
+            <button onClick={handleSubmitReady} disabled={loading} className="button">
                 {isSubmitReady ? 'Waiting...' : 'Submit'}
             </button>
             {loading && <div className="loading-spinner"></div>}
             {passedAllTests && (
-                <button onClick={toggleNextQuestionReady} className="button">
+                <button onClick={handleNextQuestionReady} className="button">
                     {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
                 </button>
             )}

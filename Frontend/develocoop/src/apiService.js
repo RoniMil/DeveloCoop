@@ -8,6 +8,14 @@ export const fetchQuestion = async () => {
     return await response.json();
 };
 
+export const fetchFollowUpQuestions = async (questionName) => {
+    const response = await fetch(`${API_URL}/follow-up-questions/${encodeURIComponent(questionName)}`);
+    if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return await response.json();
+};
+
 export const submitAnswer = async (questionId, editorContent, lobbyId) => {
     const response = await fetch(`${API_URL}/questions/submit`, {
         method: 'POST',
