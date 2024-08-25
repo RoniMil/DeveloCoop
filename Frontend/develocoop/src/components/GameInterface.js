@@ -27,11 +27,30 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                             extensions={[python(), autocompletion()]}
                             onChange={(value) => {
                                 setEditorContent(value);
+                                handleEditorChange(value);
                             }}
                             basicSetup={{
                                 tabSize: 2,
-                                lineNumbers: true
+                                lineNumbers: true,
+                                highlightActiveLineGutter: false,
+                                foldGutter: false,
+                                dropCursor: false,
+                                allowMultipleSelections: false,
+                                indentOnInput: false,
+                                bracketMatching: false,
+                                closeBrackets: false,
+                                autocompletion: false,
+                                rectangularSelection: false,
+                                crosshairCursor: false,
+                                highlightActiveLine: false,
+                                highlightSelectionMatches: false,
+                                closeBracketsKeymap: false,
+                                searchKeymap: false,
+                                foldKeymap: false,
+                                completionKeymap: false,
+                                lintKeymap: false,
                             }}
+                            className="single-player-editor"
                         />
                     </div>
                 )}

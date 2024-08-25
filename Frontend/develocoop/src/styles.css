@@ -60,6 +60,24 @@ button {
     display: block !important;
 }
 
+/* New styles for single-player editor */
+.single-player-editor {
+    height: 100% !important;
+    overflow: auto !important;
+}
+
+.single-player-editor .cm-editor {
+    height: 100%;
+}
+
+.single-player-editor .cm-scroller {
+    overflow: auto !important;
+}
+
+.single-player-editor .cm-gutters {
+    height: 100% !important;
+}
+
 #problem {
     width: 40%;
     height: 100%;
