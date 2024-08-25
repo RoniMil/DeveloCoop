@@ -32,7 +32,8 @@ button {
     overflow: hidden;
 }
 
-.editor-container, .CooperativeEditor {
+.editor-container,
+.CooperativeEditor {
     width: 60%;
     height: 100%;
     min-width: 300px;
@@ -56,7 +57,8 @@ button {
     overflow: auto !important;
 }
 
-.CodeMirror-hscrollbar, .CodeMirror-vscrollbar {
+.CodeMirror-hscrollbar,
+.CodeMirror-vscrollbar {
     display: block !important;
 }
 
@@ -111,30 +113,36 @@ button {
 }
 
 @media (max-width: 1200px) {
-    .editor-container, .CooperativeEditor {
+
+    .editor-container,
+    .CooperativeEditor {
         width: 65%;
     }
-    
+
     #problem {
         width: 35%;
     }
 }
 
 @media (max-width: 768px) {
-    .editor-container, .CooperativeEditor {
+
+    .editor-container,
+    .CooperativeEditor {
         width: 70%;
     }
-    
+
     #problem {
         width: 30%;
     }
 }
 
 @media (max-width: 576px) {
-    .editor-container, .CooperativeEditor {
+
+    .editor-container,
+    .CooperativeEditor {
         width: 75%;
     }
-    
+
     #problem {
         width: 25%;
         white-space: nowrap;
@@ -198,29 +206,6 @@ button {
 .player-info {
     font-size: 18px;
     font-weight: bold;
-}
-
-.ready-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-}
-
-.ready-button:hover {
-    background-color: #45a049;
-}
-
-.ready-button.not-ready {
-    background-color: #f44336;
-}
-
-.ready-button.not-ready:hover {
-    background-color: #da190b;
 }
 
 .chat-container {
@@ -343,10 +328,40 @@ button {
 }
 
 .ready-button {
-    margin-left: auto;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    width: auto;
+    /* Remove fixed width */
 }
 
-/* Responsive design for smaller screens */
+.ready-button:hover {
+    background-color: #45a049;
+}
+
+.ready-button.not-ready {
+    background-color: #f44336;
+}
+
+.ready-button.not-ready:hover {
+    background-color: #da190b;
+
+}
+
+.ready-message {
+    color: black;
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    text-decoration: none;
+}
+
 @media (max-width: 600px) {
 
     .lobby-options,
@@ -364,21 +379,4 @@ button {
         align-items: flex-start;
     }
 
-    .ready-button {
-        margin-left: 0;
-        width: 100%;
-    }
-
-    .ready-message {
-        color: #4CAF50;
-        /* Green color for ready messages */
-        margin-bottom: 10px;
-        border-bottom: 1px solid #e0e0e0;
-        padding-bottom: 5px;
-    }
-
-    .chat-container {
-        display: flex;
-        flex-direction: column;
-    }
 }
