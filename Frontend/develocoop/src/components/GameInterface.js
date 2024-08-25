@@ -3,6 +3,8 @@ import CodeMirror from '@uiw/react-codemirror';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import CooperativeEditor from './CooperativeEditor';
+import '../styles.css';
+import './editor.css'
 
 const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
     return (
@@ -19,16 +21,18 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                         questionId={questionId}
                     />
                 ) : (
-                    <CodeMirror
-                        value={editorContent}
-                        extensions={[python(), autocompletion()]}
-                        onChange={(value) => {
-                            setEditorContent(value);
-                        }}
-                        basicSetup={{
-                            tabSize: 2
-                        }}
-                    />
+                    <div className="editor-container">
+                        <CodeMirror
+                            value={editorContent}
+                            extensions={[python(), autocompletion()]}
+                            onChange={(value) => {
+                                setEditorContent(value);
+                            }}
+                            basicSetup={{
+                                tabSize: 2
+                            }}
+                        />
+                    </div>
                 )}
                 <div id="problem">
                     {questionDescription}
