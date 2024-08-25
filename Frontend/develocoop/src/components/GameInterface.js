@@ -29,7 +29,8 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                                 setEditorContent(value);
                             }}
                             basicSetup={{
-                                tabSize: 2
+                                tabSize: 2,
+                                lineNumbers: true
                             }}
                         />
                     </div>

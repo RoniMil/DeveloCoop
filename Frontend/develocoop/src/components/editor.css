@@ -1,7 +1,21 @@
 .CooperativeEditor .CodeMirror {
-    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     height: 100% !important;
+    width: 100% !important;
     font-size: 14px;
+}
+
+.CooperativeEditor .CodeMirror-scroll {
+    overflow: auto !important;
+}
+
+.CooperativeEditor .CodeMirror-hscrollbar,
+.CooperativeEditor .CodeMirror-vscrollbar {
+    display: block !important;
 }
 
 .remote-caret {
