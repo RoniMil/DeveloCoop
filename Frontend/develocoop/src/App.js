@@ -378,7 +378,7 @@ function App() {
       <div style={{ padding: '20px' }}>
         <img src={frogImage} alt="Frog Coding" className="header-image" />
         <h1>DeveloCoop - Two Players Mode</h1>
-        <button onClick={() => setShowLobbyOptions(false)} className="back-button">Back to Main Menu</button>
+        <button onClick={() => setShowLobbyOptions(false)} className="button back-button">Back to Main Menu</button>
         <div className="lobby-options">
           <button onClick={handleCreateLobby}>Create a new lobby</button>
           <div>

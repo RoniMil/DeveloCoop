@@ -89,12 +89,19 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     <pre>{submissionResult}</pre>
                 </div>
             )}
-            <button onClick={handleSubmitReady} disabled={loading} className="button">
+            <button
+                onClick={handleSubmitReady}
+                disabled={loading}
+                className={`button submit-button ${isSubmitReady ? 'disabled' : ''}`}
+            >
                 {isSubmitReady ? 'Waiting...' : 'Submit'}
             </button>
             {loading && <div className="loading-spinner"></div>}
             {passedAllTests && (
-                <button onClick={handleNextQuestionReady} className="button">
+                <button
+                    onClick={handleNextQuestionReady}
+                    className={`button next-question-button ${isNextQuestionReady ? 'disabled' : ''}`}
+                >
                     {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
                 </button>
             )}
