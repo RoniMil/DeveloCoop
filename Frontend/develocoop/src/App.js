@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
-import './enhanced-styles.css'
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
@@ -407,7 +406,7 @@ function App() {
   return (
     <div className="container">
       <div className="header-container">
-        {!showGameOver && (
+        {!showGameOver && (gameMode || inLobby) && (
           <div className="back-button-container">
             <button className="button back-button" onClick={backToMainMenu}>Back to Main Menu</button>
           </div>

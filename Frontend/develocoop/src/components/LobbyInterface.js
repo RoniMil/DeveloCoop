@@ -1,6 +1,5 @@
 import React from 'react';
 import '../styles.css'
-import '../enhanced-styles.css'
 
 const LobbyInterface = ({ lobbyId, playerId, playerCount, isReady, toggleReady, readyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
     return (

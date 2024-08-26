@@ -4,7 +4,6 @@ import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import CooperativeEditor from './CooperativeEditor';
 import '../styles.css';
-import '../enhanced-styles.css';
 import './editor.css'
 
 const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
