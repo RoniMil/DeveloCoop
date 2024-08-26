@@ -92,7 +92,7 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
             <button
                 onClick={handleSubmitReady}
                 disabled={loading}
-                className={`button submit-button ${isSubmitReady ? 'disabled' : ''}`}
+                className={`button submit-button ${isSubmitReady ? 'waiting' : ''}`}
             >
                 {isSubmitReady ? 'Waiting...' : 'Submit'}
             </button>
@@ -100,7 +100,7 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
             {passedAllTests && (
                 <button
                     onClick={handleNextQuestionReady}
-                    className={`button next-question-button ${isNextQuestionReady ? 'disabled' : ''}`}
+                    className={`button next-question-button ${isNextQuestionReady ? 'waiting' : ''}`}
                 >
                     {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
                 </button>

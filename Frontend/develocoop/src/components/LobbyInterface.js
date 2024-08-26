@@ -8,7 +8,12 @@ const LobbyInterface = ({ lobbyId, playerId, playerCount, isReady, toggleReady, 
                 <p className="lobby-info">Lobby ID: {lobbyId}</p>
                 {playerId && <p className="player-info">You are Player {playerId}</p>}
                 <p className="player-count">{playerCount}/2 players</p>
-                <button className="button ready-button" onClick={toggleReady}>{isReady ? 'Not Ready' : 'Ready'}</button>
+                <button
+                    className={`button ready-button ${isReady ? 'not-ready' : ''}`}
+                    onClick={toggleReady}
+                >
+                    {isReady ? 'Not Ready' : 'Ready'}
+                </button>
             </div>
             <div className="chat-container">
                 {readyMessages.map((msg, index) => (
