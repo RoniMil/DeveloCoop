@@ -415,14 +415,18 @@ function App() {
       {showGameOver ? (
         <div className="game-over-screen">
           <h2>Game Over</h2>
-          {gameMode === GAME_MODES.TWO_PLAYERS ? (
-            <p>Returning to lobby...</p>
-          ) : (
-            <>
-              <button className="button" onClick={gameOverOptions.playAgain}>Play again</button>
-              <button className="button" onClick={gameOverOptions.backToMainMenu}>Back to main menu</button>
-            </>
-          )}
+          <div className="game-over-content">
+            {gameMode === GAME_MODES.TWO_PLAYERS ? (
+              <p>Returning to lobby...</p>
+            ) : (
+              <>
+                <div className="game-over-buttons">
+                  <button className="button" onClick={gameOverOptions.playAgain}>Play again</button>
+                  <button className="button" onClick={gameOverOptions.backToMainMenu}>Back to main menu</button>
+                </div>
+              </>
+            )}
+          </div>
         </div>
       ) : !gameMode && !inLobby ? (
         <div className="main-menu">

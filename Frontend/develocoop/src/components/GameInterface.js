@@ -56,7 +56,6 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     </div>
                 )}
                 <div id="problem">
-                    <h3>{questionName}</h3>
                     <div>{questionDescription}</div>
                 </div>
             </div>
