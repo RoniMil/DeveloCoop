@@ -69,9 +69,6 @@ def get_results(submission: Submission):
 def get_follow_ups(question_name: str):
     follow_ups = get_follow_up_questions(question_name)
     if follow_ups:
-        for follow_up in follow_ups:
-            if "Fix The Bugs" in follow_up["Question Name"]:
-                follow_up["Question Description"] = create_buggy_follow_up_description(follow_up)
         return follow_ups
     else:
         raise HTTPException(status_code=404, detail="No follow-up questions found")

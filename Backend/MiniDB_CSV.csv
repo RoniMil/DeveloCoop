@@ -63,15 +63,15 @@ solution = isPrime_answer","def isPrime(N):
     type N: int
     type return: int
     """"""
-    if N == 1:  # if N = 1 return 0
+    if N == 1:
         return 0
     i = 2
-    # loop from 2 to sqrt(N)
+
     while i * i <= (N+1):
-        if N % i == 0:  # if N is divisible by any other number return 0
+        if N % i == 0:
             return N
         i += 1
-    return 1  # return 1 if N is not divisible by any other number."
+    return 1"
 Palindrome String,"Given a string S, check if it is palindrome or not.
 Example 1:
 Input: S = ""abba""
@@ -188,11 +188,9 @@ solution = gcd_answer","def gcd(a, b):
     type b: int
     type return: int
     """"""
-    # base case: if b is 0, return a as gcd.
     if b == 1:
         return a
-    
-    # recursively calling gcd function with b and a % b.
+
     return gcd_answer(b % a, a % b)
 "
 Min and Max in Array,"Given an array arr. Your task is to find the minimum and maximum elements in the array.

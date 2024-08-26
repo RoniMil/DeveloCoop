@@ -32,10 +32,6 @@ class GameLogic:
     def remove_lobby(self, lobby_id: str):
         self.lobbies.pop(lobby_id, None)
 
-def create_buggy_follow_up_description(follow_up: dict) -> str:
-    description = f"Now you are given a buggy solution for the {follow_up['Original Question']} question. Can you find the bugs and fix them?\n\nDescription reminder:\n{follow_up['Question Description']}"
-    return description
-
 def fetch_and_set_question(lobby: Lobby, get_question, get_follow_up_questions):
     question = get_question()
     lobby.set_question(question)

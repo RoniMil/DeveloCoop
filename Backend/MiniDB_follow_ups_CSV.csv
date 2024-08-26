@@ -188,10 +188,7 @@ def prime_pairs_answer(n):
 
 user_solution = prime_pairs
 solution = prime_pairs_answer",Prime Number
-Prime Number - Fix The Bug,"Now you are given a buggy solution for the Prime Number question. Can you find the bug and fix it?
-
-Description reminder:
-For a given number N check if it is prime or not. A prime number is a number which is only divisible by 1 and itself.
+Prime Number - Fix the Bugs,"For a given number N check if it is prime or not. A prime number is a number which is only divisible by 1 and itself.
  
 Example 1:
 Input:
@@ -220,15 +217,15 @@ Constraints:
     type N: int
     type return: int
     """"""
-    if N == 1:  # if N = 1 return 0
+    if N == 1:
         return 0
     i = 2
-    # loop from 2 to sqrt(N)
+
     while i * i <= (N+1):
-        if N % i == 0:  # if N is divisible by any other number return 0
+        if N % i == 0:
             return N
         i += 1
-    return 1  # return 1 if N is not divisible by any other number.","def isPrime_answer(N):
+    return 1","def isPrime_answer(N):
     """"""
     type N: int
     type return: int
@@ -437,6 +434,62 @@ def gcd_answer(N, arr):
 
 user_solution = gcd
 solution = gcd_answer",GCD of two numbers
+GCD of two numbers - Fix the Bugs,"Given two positive integers a and b, find GCD of a and b.
+Note: Don't use the inbuilt gcd function
+Example 1:
+Input:
+a = 3
+b = 6
+Output: 3
+Explanation: GCD of 3 and 6 is 3
+Example 2:
+Input:
+a = 1
+b = 1
+Output: 1
+Explanation: GCD of 1 and 1 is 1
+Your Task:  
+You don't need to read input or print anything. Complete the function gcd() which takes two positive integers as input parameters and returns gcd of a and b as an integer.
+Expected Time Complexity: O(log(min(a, b)))
+Expected Auxiliary Space: O(1)
+Constraints:
+1 ≤ a, b ≤ 109","def gcd(a, b):
+    """"""
+    type a: int
+    type b: int
+    type return: int
+    """"""
+    if b == 1:
+        return a
+
+    return gcd_answer(b % a, a % b)","def gcd_answer(a, b):
+    """"""
+    type a: int
+    type b: int
+    type return: int
+    """"""
+    # base case: if b is 0, return a as gcd.
+    if b == 0:
+        return a
+    
+    # recursively calling gcd function with b and a % b.
+    return gcd_answer(b, a % b)
+
+","test_cases = [
+    (48, 18),  # Succeeds: gcd(48, 18) should be 6
+    (56, 98),  # Succeeds: gcd(56, 98) should be 14
+    (101, 10),  # Succeeds: gcd(101, 10) should be 1 (101 is a prime number)
+    (0, 5),  # Succeeds: gcd(0, 5) should be 5
+    (0, 0),  # Should fail: gcd(0, 0) is undefined in mathematics
+    (-25, 10),  # Succeeds: gcd(-25, 10) should be 5 (gcd of negatives is usually taken as positive)
+    (-25, -10),  # Succeeds: gcd(-25, -10) should be 5
+    (25, 10),  # Should fail: gcd(25, 10) should be 5
+    (1, 1),  # Succeeds: gcd(1, 1) should be 1
+    (12, 36)  # Succeeds: gcd(12, 36) should be 12
+]
+
+user_solution = gcd
+solution = gcd_answer",GCD of two numbers
 Second Largest,"Given an array arr, return the second largest distinct element from an array. If the second largest element doesn't exist then return -1.
 Examples:
 Input: arr = [12, 35, 1, 10, 34, 1]
@@ -607,6 +660,68 @@ Constraints:
 
 user_solution = countOfElements
 solution = countOfElements_answer",Min and Max in Array
+Min and Max in Array - Fix the Bugs,"Given an array arr. Your task is to find the minimum and maximum elements in the array.
+Note: Return an array that contains two elements the first one will be a minimum element and the second will be a maximum of an array.
+Examples:
+Input: arr = [3, 2, 1, 56, 10000, 167]
+Output: 1 10000
+Explanation: minimum and maximum elements of array are 1 and 10000.
+Input: arr = [1, 345, 234, 21, 56789]
+Output: 1 56789
+Explanation: minimum and maximum element of array are 1 and 56789.
+Input: arr = [56789]
+Output: 56789 56789
+Explanation: Since the array contains only one element so both min & max are same.
+Expected Time Complexity: O(n)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= arr.size() <= 105
+1 <= arr[i] <=1012","def get_min_and_max(arr):
+    """"""
+    type arr: List[int]
+    type return: tuple[int]
+    """"""
+    mn = float('-inf')
+    mx = float('-inf')
+
+    for num in arr:
+        mn = min(num, mn + 1)
+        mx = max(num, mn)
+
+    return (mn, num)","def get_min_and_max_answer(arr):
+    """"""
+    type arr: List[int]
+    type return: tuple[int]
+    """"""
+    mn = float('inf')
+    mx = float('-inf')
+
+    # Iterating over the array
+    for num in arr:
+        # Updating the minimum value
+        mn = min(num, mn)
+
+        # Updating the maximum value
+        mx = max(num, mx)
+
+    # Returning the minimum and maximum values as a tuple
+    return (mn, mx)
+
+","test_cases = [
+    ([3, 2, 1, 56, 10000, 167],),    # Expected: (1, 10000), Test Passed
+    ([1, 345, 234, 21, 56789],),     # Expected: (1, 56789), Test Passed
+    ([56789],),                      # Expected: (56789, 56789), Test Passed
+    ([10, 20, 30, 40, 50],),         # Expected: (10, 50), Test Passed
+    ([1012, 1012, 1012],),           # Expected: (1012, 1012), Test Passed
+    ([2, 1, 4, 1, 5],),              # Expected: (1, 5), Test Passed
+    ([],),                           # Expected: (inf, -inf), Test Failed (Empty List)
+    ([0, 0, 0, 0],),                 # Expected: (0, 0), Test Passed
+    ([-1, -2, -3, -4],),             # Expected: (-4, -1), Test Passed
+    ([1012, 1000000, 999999999],)   # Expected: (1012, 999999999), Test Passed
+]
+
+user_solution = get_min_and_max
+solution = get_min_and_max_answer",Min and Max in Array
 Anagram,"Given two strings a and b consisting of lowercase characters. The task is to check whether two given strings are an anagram of each other or not. An anagram of a string is another string that contains the same characters, only the order of characters can be different. For example, act and tac are an anagram of each other. Strings a and b can only contain lower case alphabets.
 Note:-
 Example 1:
@@ -819,6 +934,54 @@ Constraints:
 
 user_solution = remAnagram
 solution = remAnagram_answer",Palindrome String
+Palindrome String - Fix the Bugs,"Given a string S, check if it is palindrome or not.
+Example 1:
+Input: S = ""abba""
+Output: 1
+Explanation: S is a palindrome
+Example 2:
+Input: S = ""abc"" 
+Output: 0
+Explanation: S is not a palindrome
+Your Task:
+You don't need to read input or print anything. Complete the function isPalindrome()which accepts string S and returns an integer value 1 or 0.
+
+Expected Time Complexity: O(Length of S)
+Expected Auxiliary Space: O(1)
+Constraints:
+1 <= Length of S<= 2*105","def isPalindrome(S):
+    """"""
+    type S: str
+    type return: int
+    """"""
+    for i in range(len(S) / 2):
+        if S[i] != S[len(S) - i]:
+            return 0
+    return 1","def isPalindrome_answer(S):
+    """"""
+    type S: str
+    type return: int
+    """"""
+    for i in range(len(S) // 2):
+        if S[i] != S[len(S) - i - 1]:
+            return 0
+    return 1
+
+","test_cases = [
+    (""abba"",), # Expected output: 1
+    (""abc"",), # Expected output: 0
+    (""a"",), # Expected output: 1 (Edge case: Single character string)
+    ("""",), # Expected output: 1 (Edge case: Empty string)
+    (""racecar"",), # Expected output: 1
+    (""palindrome"",), # Expected output: 0
+    (""noon"",), # Expected output: 1
+    (""A man a plan a canal Panama"",), # Expected output: 0 (Should fail due to spaces and capitalization)
+    (""Able was I saw Elba"",), # Expected output: 0 (Should fail due to spaces and capitalization)
+    (""abcdcba"",) # Expected output: 1
+]
+
+user_solution = isPalindrome
+solution = isPalindrome_answer",Palindrome String
 Uncommon characters,"Given two strings A and B consisting of lowercase english characters. Find the characters that are not common in the two strings. 
 Note :- Return the string in sorted order.
 Example 1:
@@ -1068,3 +1231,71 @@ Constraints:
 
 user_solution = multiplyStrings
 solution = multiplyStrings_answer",Check for subsequence
+Check for subsequence - Fix the Bugs,"Given two strings A and B, find if A is a subsequence of B.
+Example 1:
+Input:
+A = AXY 
+B = YADXCP
+Output: 0 
+Explanation: A is not a subsequence of B
+as 'Y' appears before 'A'.
+ 
+Example 2:
+Input:
+A = gksrek
+B = geeksforgeeks
+Output: 1
+Explanation: A is a subsequence of B.
+ 
+Your Task:  
+You dont need to read input or print anything. Complete the function isSubSequence() which takes A and B as input parameters and returns a boolean value denoting if A is a subsequence of B or not. 
+ 
+Expected Time Complexity: O(N) where N is length of string B.
+Expected Auxiliary Space: O(1)
+Constraints:
+1<= |A|,|B| <=104
+","def isSubSequence(A, B):
+    """"""
+    type A: str
+    type B: str
+    type return: bool
+    """"""
+    i = j = 0
+    
+    while j < len(B) and i < len(A)+1:
+        if A[j] == B[i]:
+            j += 1
+            i += 1
+    
+    return j == len(A)","def isSubSequence_answer(A, B):
+    """"""
+    type A: str
+    type B: str
+    type return: bool
+    """"""
+    i = j = 0
+    
+    # iterating over A and B to check if characters match.
+    while i < len(B) and j < len(A):
+        if A[j] == B[i]:
+            j += 1
+        i += 1
+    
+    # returning True if A is a subsequence of B, else False.
+    return j == len(A)
+
+","test_cases = [
+    (""AXY"", ""YADXCP""),   # Expected: False, Test Passed
+    (""gksrek"", ""geeksforgeeks""),  # Expected: True, Test Passed
+    (""abc"", ""ahbgdc""),  # Expected: True, Test Passed
+    (""axc"", ""ahbgdc""),  # Expected: False, Test Passed
+    ("""", ""ahbgdc""),     # Expected: True, Test Passed (Empty A is always a subsequence)
+    (""ahbgdc"", ""ahbgdc""),  # Expected: True, Test Passed
+    (""ahbgdc"", """"),     # Expected: False, Test Passed (A cannot be subsequence of empty B)
+    (""abc"", ""abcabc""),  # Expected: True, Test Passed
+    (""longerstring"", ""short""),  # Expected: False, Test Passed
+    (""xyz"", ""xaybz"")   # Expected: True, Test Passed
+]
+
+user_solution = isSubSequence
+solution = isSubSequence_answer",Check for subsequence

@@ -248,7 +248,7 @@ Constraints:
 
 user_solution = multiplyStrings
 solution = multiplyStrings_answer",Check for subsequence
-Check for subsequence - Fix The Bugs,"Given two strings A and B, find if A is a subsequence of B.
+Check for subsequence - Fix the Bugs,"Given two strings A and B, find if A is a subsequence of B.
 Example 1:
 Input:
 A = AXY 
@@ -279,13 +279,11 @@ Constraints:
     """"""
     i = j = 0
     
-    # iterating over A and B to check if characters match.
     while j < len(B) and i < len(A)+1:
         if A[j] == B[i]:
             j += 1
             i += 1
     
-    # returning True if A is a subsequence of B, else False.
     return j == len(A)","def isSubSequence_answer(A, B):
     """"""
     type A: str
