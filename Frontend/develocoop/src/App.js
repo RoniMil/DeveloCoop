@@ -387,12 +387,15 @@ function App() {
         <div className="lobby-options">
           <button className="button lobby-options" onClick={handleCreateLobby}>Create a new lobby</button>
           <div>
-            <input
-              type="text"
-              value={joinLobbyId}
-              onChange={(e) => setJoinLobbyId(e.target.value)}
-              placeholder="Enter lobby ID"
-            />
+            <div className="lobby-input-container">
+              <input
+                type="text"
+                value={joinLobbyId}
+                onChange={(e) => setJoinLobbyId(e.target.value)}
+                placeholder=" "
+              />
+              <span className="lobby-input-hint">Enter lobby ID</span>
+            </div>
             <button className="button lobby-options" onClick={handleJoinLobby}>Join lobby</button>
           </div>
           <button className="button lobby-options" onClick={handleFindLobby}>Find a random lobby</button>
