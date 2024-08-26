@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './styles.css';
+import './enhanced-styles.css'
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
@@ -14,8 +15,8 @@ function App() {
   const [showLobbyOptions, setShowLobbyOptions] = useState(false);
   const [showGameOver, setShowGameOver] = useState(false);
   const [gameOverOptions, setGameOverOptions] = useState({
-    playAgain: () => {},
-    backToMainMenu: () => {}
+    playAgain: () => { },
+    backToMainMenu: () => { }
   });
 
   // Player state
@@ -375,12 +376,12 @@ function App() {
 
   if (showLobbyOptions) {
     return (
-      <div style={{ padding: '20px' }}>
+      <div className="container">
         <img src={frogImage} alt="Frog Coding" className="header-image" />
         <h1>DeveloCoop - Two Players Mode</h1>
-        <button onClick={() => setShowLobbyOptions(false)} className="button back-button">Back to Main Menu</button>
+        <button className="button back-button" onClick={() => setShowLobbyOptions(false)} >Back to Main Menu</button>
         <div className="lobby-options">
-          <button onClick={handleCreateLobby}>Create a new lobby</button>
+          <button className="button lobby-options" onClick={handleCreateLobby}>Create a new lobby</button>
           <div>
             <input
               type="text"
@@ -388,16 +389,16 @@ function App() {
               onChange={(e) => setJoinLobbyId(e.target.value)}
               placeholder="Enter lobby ID"
             />
-            <button onClick={handleJoinLobby}>Join lobby</button>
+            <button className="button lobby-options" onClick={handleJoinLobby}>Join lobby</button>
           </div>
-          <button onClick={handleFindLobby}>Find a random lobby</button>
+          <button className="button lobby-options" onClick={handleFindLobby}>Find a random lobby</button>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ padding: '20px' }}>
+    <div className="container">
       <img src={frogImage} alt="Frog Coding" className="header-image" />
       <h1>DeveloCoop</h1>
       {showGameOver ? (
@@ -407,19 +408,19 @@ function App() {
             <p>Returning to lobby...</p>
           ) : (
             <>
-            <button onClick={gameOverOptions.playAgain}>Play again</button>
-            <button onClick={gameOverOptions.backToMainMenu}>Back to main menu</button> 
+              <button className="button" onClick={gameOverOptions.playAgain}>Play again</button>
+              <button className="button" onClick={gameOverOptions.backToMainMenu}>Back to main menu</button>
             </>
           )}
         </div>
       ) : !gameMode && !inLobby ? (
         <div className="main-menu">
-          <button onClick={() => startGame(GAME_MODES.ONE_PLAYER)}>One Player</button>
-          <button onClick={() => startGame(GAME_MODES.TWO_PLAYERS)}>Two Players</button>
+          <button className="button" onClick={() => startGame(GAME_MODES.ONE_PLAYER)}>One Player</button>
+          <button className="button" onClick={() => startGame(GAME_MODES.TWO_PLAYERS)}>Two Players</button>
         </div>
       ) : (
         <>
-          <button onClick={backToMainMenu} className="button back-button">Back to Main Menu</button>
+          <button className="button back-button" onClick={backToMainMenu}>Back to Main Menu</button>
           {inLobby ? (
             <LobbyInterface
               lobbyId={lobbyId}

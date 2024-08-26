@@ -1,4 +1,6 @@
 import React from 'react';
+import '../styles.css'
+import '../enhanced-styles.css'
 
 const LobbyInterface = ({ lobbyId, playerId, playerCount, isReady, toggleReady, readyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
     return (
@@ -7,9 +9,7 @@ const LobbyInterface = ({ lobbyId, playerId, playerCount, isReady, toggleReady, 
                 <p className="lobby-info">Lobby ID: {lobbyId}</p>
                 {playerId && <p className="player-info">You are Player {playerId}</p>}
                 <p className="player-count">{playerCount}/2 players</p>
-                <button onClick={toggleReady} className={`ready-button ${isReady ? 'not-ready' : ''}`}>
-                    {isReady ? 'Not Ready' : 'Ready'}
-                </button>
+                <button className="button ready-button" onClick={toggleReady}>{isReady ? 'Not Ready' : 'Ready'}</button>
             </div>
             <div className="chat-container">
                 {readyMessages.map((msg, index) => (
@@ -27,7 +27,7 @@ const LobbyInterface = ({ lobbyId, playerId, playerCount, isReady, toggleReady, 
                     onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
                     placeholder="Type your message..."
                 />
-                <button onClick={sendChatMessage}>Send</button>
+                <button className="button" onClick={sendChatMessage}>Send</button>
             </div>
         </div>
     );

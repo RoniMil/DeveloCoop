@@ -4,6 +4,7 @@ import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import CooperativeEditor from './CooperativeEditor';
 import '../styles.css';
+import '../enhanced-styles.css';
 import './editor.css'
 
 const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
@@ -55,7 +56,8 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     </div>
                 )}
                 <div id="problem">
-                    {questionDescription}
+                    <h3>{questionName}</h3>
+                    <div>{questionDescription}</div>
                 </div>
             </div>
             {gameMode === 'two-players' && (
@@ -79,7 +81,7 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                             onKeyPress={(e) => e.key === 'Enter' && sendChatMessage()}
                             placeholder="Type your message..."
                         />
-                        <button onClick={sendChatMessage}>Send</button>
+                        <button className="button" onClick={sendChatMessage}>Send</button>
                     </div>
                 </>
             )}
