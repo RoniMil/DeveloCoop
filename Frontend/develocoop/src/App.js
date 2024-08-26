@@ -377,9 +377,13 @@ function App() {
   if (showLobbyOptions) {
     return (
       <div className="container">
-        <img src={frogImage} alt="Frog Coding" className="header-image" />
-        <h1>DeveloCoop - Two Players Mode</h1>
-        <button className="button back-button" onClick={() => setShowLobbyOptions(false)} >Back to Main Menu</button>
+        <div className="header-container">
+          <div className="back-button-container">
+            <button className="button back-button" onClick={() => setShowLobbyOptions(false)} >Back to Main Menu</button>
+          </div>
+          <img src={frogImage} alt="Frog Coding" className="header-image" />
+          <h1>DeveloCoop - Two Players Mode</h1>
+        </div>
         <div className="lobby-options">
           <button className="button lobby-options" onClick={handleCreateLobby}>Create a new lobby</button>
           <div>
@@ -399,8 +403,15 @@ function App() {
 
   return (
     <div className="container">
-      <img src={frogImage} alt="Frog Coding" className="header-image" />
-      <h1>DeveloCoop</h1>
+      <div className="header-container">
+        {!showGameOver && (
+          <div className="back-button-container">
+            <button className="button back-button" onClick={backToMainMenu}>Back to Main Menu</button>
+          </div>
+        )}
+        <img src={frogImage} alt="Frog Coding" className="header-image" />
+        <h1>DeveloCoop</h1>
+      </div>
       {showGameOver ? (
         <div className="game-over-screen">
           <h2>Game Over</h2>
@@ -420,7 +431,6 @@ function App() {
         </div>
       ) : (
         <>
-          <button className="button back-button" onClick={backToMainMenu}>Back to Main Menu</button>
           {inLobby ? (
             <LobbyInterface
               lobbyId={lobbyId}
