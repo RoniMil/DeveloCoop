@@ -27,7 +27,8 @@ function App() {
     declaration: '',
     description: '',
     name: '',
-    id: null
+    id: null,
+    solution: ''
   });
   const [followUpQuestions, setFollowUpQuestions] = useState([]);
   const [seenQuestions, setSeenQuestions] = useState(new Set());
@@ -67,7 +68,7 @@ function App() {
         setPlayerCount(data.count);
         break;
       case 'lobby_reset':
-        setQuestionData({ declaration: '', description: '', name: '', id: null });
+        setQuestionData({ declaration: '', description: '', name: '', id: null, solution: '' });
         setEditorContent('');
         setSubmissionResult('');
         setLoading(false);
@@ -87,7 +88,8 @@ function App() {
           declaration: data.question["Question Declaration"],
           description: data.question["Question Description"],
           name: data.question["Question Name"],
-          id: data.question["_id"]
+          id: data.question["_id"],
+          solution: data.question["Question Solution"]
         });
         setEditorContent(data.question["Question Declaration"]);
         break;
@@ -124,7 +126,8 @@ function App() {
           declaration: data.question["Question Declaration"],
           description: data.question["Question Description"],
           name: data.question["Question Name"],
-          id: data.question["_id"]
+          id: data.question["_id"],
+          solution: data.solution["Question Solution"]
         });
         setEditorContent(data.question["Question Declaration"]);
         setSubmissionResult('');
@@ -216,10 +219,10 @@ function App() {
           declaration: data["Question Declaration"],
           description: data["Question Description"],
           name: data["Question Name"],
-          id: data["_id"]
+          id: data["_id"],
+          solution: data["Question Solution"]
         });
         setEditorContent(data["Question Declaration"]);
-
         // Fetch follow-up questions for the initial question
         const followUps = await fetchFollowUpQuestions(data["Question Name"]);
         setFollowUpQuestions(followUps);
@@ -256,10 +259,10 @@ function App() {
               declaration: data["Question Declaration"],
               description: data["Question Description"],
               name: data["Question Name"],
-              id: data["_id"]
+              id: data["_id"],
+              solution: data["Question Solution"]
             });
             setEditorContent(data["Question Declaration"]);
-
             // Fetch follow-up questions for the new initial question
             const followUps = await fetchFollowUpQuestions(data["Question Name"]);
             setFollowUpQuestions(followUps);
@@ -308,7 +311,8 @@ function App() {
         declaration: nextQuestion["Question Declaration"],
         description: nextQuestion["Question Description"],
         name: nextQuestion["Question Name"],
-        id: nextQuestion["_id"]
+        id: nextQuestion["_id"],
+        solution: nextQuestion["Question Solution"]
       });
 
       // Update other states
@@ -328,7 +332,7 @@ function App() {
 
   const backToMainMenu = () => {
     setGameMode(null);
-    setQuestionData({ declaration: '', description: '', name: '', id: null });
+    setQuestionData({ declaration: '', description: '', name: '', id: null, solution: '' });
     setEditorContent('');
     setSubmissionResult('');
     setLoading(false);
@@ -470,6 +474,7 @@ function App() {
                 passedAllTests={passedAllTests}
                 isNextQuestionReady={isNextQuestionReady}
                 toggleNextQuestionReady={handleNextQuestionReady}
+                questionSolution={questionData.solution}
                 {...(gameMode === GAME_MODES.TWO_PLAYERS && {
                   submitReadyMessages,
                   nextQuestionReadyMessages,

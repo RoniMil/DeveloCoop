@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
@@ -6,7 +6,37 @@ import CooperativeEditor from './CooperativeEditor';
 import '../styles.css';
 import './editor.css'
 
-const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
+const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage, questionSolution }) => {
+    const [showSolution, setShowSolution] = useState(false);
+    const [hasShownSolution, setHasShownSolution] = useState(false);
+    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+
+    useEffect(() => {
+        // Close solution dialog and reset prompt when moving to next question
+        setShowSolution(false);
+        setHasShownSolution(false);
+    }, [questionId]);
+
+    const handleShowSolution = () => {
+        if (!hasShownSolution) {
+            setShowConfirmDialog(true);
+        } else {
+            setShowSolution(true);
+        }
+    };
+
+    const handleConfirmShowSolution = () => {
+        setHasShownSolution(true);
+        setShowSolution(true);
+        setShowConfirmDialog(false);
+    };
+
+    const handleNextQuestion = () => {
+        setShowSolution(false);
+        setHasShownSolution(false);
+        handleNextQuestionReady();
+    };
+
     return (
         <div className="main-container">
             <h3>{questionName}</h3>
@@ -89,21 +119,47 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                     <pre>{submissionResult}</pre>
                 </div>
             )}
-            <button
-                onClick={handleSubmitReady}
-                disabled={loading}
-                className={`button submit-button ${isSubmitReady ? 'waiting' : ''}`}
-            >
-                {isSubmitReady ? 'Waiting...' : 'Submit'}
-            </button>
-            {loading && <div className="loading-spinner"></div>}
-            {passedAllTests && (
+            <div className="button-container">
                 <button
-                    onClick={handleNextQuestionReady}
-                    className={`button next-question-button ${isNextQuestionReady ? 'waiting' : ''}`}
+                    onClick={handleSubmitReady}
+                    disabled={loading}
+                    className={`button submit-button ${isSubmitReady ? 'waiting' : ''}`}
                 >
-                    {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
+                    {isSubmitReady ? 'Waiting...' : 'Submit'}
                 </button>
+                {loading && <div className="loading-spinner"></div>}
+                {passedAllTests && (
+                    <button
+                        onClick={handleNextQuestion}
+                        className={`button next-question-button ${isNextQuestionReady ? 'waiting' : ''}`}
+                    >
+                        {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
+                    </button>
+                )}
+                <button className="button show-solution-button" onClick={handleShowSolution}>
+                    Show Solution
+                </button>
+            </div>
+            {showConfirmDialog && (
+                <div className="dialog-overlay">
+                    <div className="dialog-content">
+                        <h2>Are you sure?</h2>
+                        <p>Viewing the solution may impact your learning experience. Are you sure you want to proceed?</p>
+                        <div className="dialog-buttons">
+                            <button className="button" onClick={() => setShowConfirmDialog(false)}>Cancel</button>
+                            <button className="button" onClick={handleConfirmShowSolution}>Continue</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+            {showSolution && (
+                <div className="dialog-overlay">
+                    <div className="dialog-content">
+                        <h2>Solution</h2>
+                        <pre className="solution-code">{questionSolution}</pre>
+                        <button className="button" onClick={() => setShowSolution(false)}>Close</button>
+                    </div>
+                </div>
             )}
         </div>
     );

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, WebSocket, HTTPException
-from game_logic import GameLogic, Submission, LobbyCreationResponse, JoinLobbyRequest, create_buggy_follow_up_description
+from game_logic import GameLogic, Submission, LobbyCreationResponse, JoinLobbyRequest
 from websocket_handler import handle_websocket
 from database import get_question, get_follow_up_questions, get_question_by_id
 from backend_config import TEST_STR, JDOODLE_URL

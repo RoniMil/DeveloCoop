@@ -481,6 +481,71 @@ button {
     background-color: #5d00ff;
 }
 
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.show-solution-button {
+    background-color: #4a90e2;
+}
+
+.show-solution-button:hover {
+    background-color: #3a7bd5;
+}
+
+.dialog-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.dialog-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    width: 100%;
+}
+
+.dialog-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.solution-container {
+    margin-top: 20px;
+    background-color: #f0f4f8;
+    border: 1px solid #d1e1ff;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.solution-code {
+    background-color: #f8f8f8;
+    border: 1px solid #e8e8e8;
+    border-radius: 4px;
+    padding: 10px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
 .ready-message {
     color: var(--text-color);
     font-weight: bold;
@@ -544,7 +609,7 @@ button {
 @media (max-width: 768px) {
     .content-container {
         flex-direction: row;
-        height: auto; 
+        height: auto;
         max-height: none;
     }
 
@@ -584,6 +649,7 @@ button {
 }
 
 @media (max-width: 600px) {
+
     .lobby-options,
     .lobby-container {
         max-width: 100%;
@@ -616,6 +682,7 @@ button {
 }
 
 @media (max-width: 480px) {
+
     .editor-container,
     .CooperativeEditor {
         width: 75%;
@@ -647,4 +714,3 @@ button {
         flex-direction: column;
     }
 }
-
