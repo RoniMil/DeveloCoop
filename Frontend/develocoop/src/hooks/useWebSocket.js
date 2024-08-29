@@ -28,7 +28,9 @@ const useWebSocket = (lobbyId, handleWebSocketMessage) => {
         };
 
         websocketRef.current.onclose = (event) => {
+            console.log(`WebSocket closed for lobby ${lobbyId}:`, event);
             if (!event.wasClean) {
+                console.warn(`WebSocket closed unexpectedly. Code: ${event.code}, Reason: ${event.reason}`);
                 setTimeout(() => connectToLobby(), 1000);
             }
             console.log(`Disconnected from lobby: ${lobbyId}`, event);
@@ -52,6 +54,7 @@ const useWebSocket = (lobbyId, handleWebSocketMessage) => {
 
     const sendWebSocketMessage = useCallback((message) => {
         if (websocketRef.current && websocketRef.current.readyState === WebSocket.OPEN) {
+            console.log('Sending WebSocket message:', message);
             websocketRef.current.send(JSON.stringify(message));
         } else {
             console.error('WebSocket is not open, cannot send message');

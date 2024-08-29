@@ -34,6 +34,7 @@ function App() {
   const [seenQuestions, setSeenQuestions] = useState(new Set());
   const [editorContent, setEditorContent] = useState('');
 
+
   // Lobby state
   const [lobbyId, setLobbyId] = useState('');
   const [joinLobbyId, setJoinLobbyId] = useState('');
@@ -42,7 +43,9 @@ function App() {
   const [isReady, setIsReady] = useState(false);
   const [isSubmitReady, setIsSubmitReady] = useState(false);
   const [isNextQuestionReady, setIsNextQuestionReady] = useState(false);
+  const [isShowSolutionReady, setIsShowSolutionReady] = useState(false);
   const [passedAllTests, setPassedAllTests] = useState(false);
+  const [wasSolutionRevealed, setWasSolutionRevealed] = useState(false)
 
   // UI state
   const [submissionResult, setSubmissionResult] = useState('');
@@ -52,98 +55,119 @@ function App() {
   const [readyMessages, setReadyMessages] = useState([]);
   const [submitReadyMessages, setSubmitReadyMessages] = useState([]);
   const [nextQuestionReadyMessages, setNextQuestionReadyMessages] = useState([]);
+  const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+  const [showSolution, setShowSolution] = useState(false);
 
 
   const isInitialMount = useRef(true);
 
   const handleWebSocketMessage = useCallback((data) => {
-    switch (data.type) {
-      case 'player_id':
-        setPlayerId(data.id);
-        break;
-      case 'message':
-        setChatMessages(prev => [...prev, data.content]);
-        break;
-      case 'player_count':
-        setPlayerCount(data.count);
-        break;
-      case 'lobby_reset':
-        setQuestionData({ declaration: '', description: '', name: '', id: null, solution: '' });
-        setEditorContent('');
-        setSubmissionResult('');
-        setLoading(false);
-        setReadyMessages([]);
-        setSubmitReadyMessages([]);
-        setNextQuestionReadyMessages([]);
-        setIsReady(false);
-        setIsSubmitReady(false);
-        setIsNextQuestionReady(false);
-        setPassedAllTests(false);
-        setInLobby(true);
-        break;
-      case 'game_start':
-        setInLobby(false);
-        setGameMode('two-players');
-        setQuestionData({
-          declaration: data.question["Question Declaration"],
-          description: data.question["Question Description"],
-          name: data.question["Question Name"],
-          id: data.question["_id"],
-          solution: data.question["Question Solution"]
-        });
-        setEditorContent(data.question["Question Declaration"]);
-        break;
-      case 'player_ready':
-        if (data.ready) {
-          setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
-        } else {
+    console.log("Received WebSocket message:", data);
+    try {
+      switch (data.type) {
+        case 'player_id':
+          setPlayerId(data.id);
+          break;
+        case 'message':
+          setChatMessages(prev => [...prev, data.content]);
+          break;
+        case 'player_count':
+          setPlayerCount(data.count);
+          break;
+        case 'lobby_reset':
+          setQuestionData({ declaration: '', description: '', name: '', id: null, solution: '' });
+          setEditorContent('');
+          setSubmissionResult('');
+          setLoading(false);
+          setReadyMessages([]);
+          setSubmitReadyMessages([]);
+          setNextQuestionReadyMessages([]);
+          setIsReady(false);
+          setIsSubmitReady(false);
+          setIsNextQuestionReady(false);
+          setIsShowSolutionReady(false);
+          setPassedAllTests(false);
+          setWasSolutionRevealed(false);
+          setInLobby(true);
+          break;
+        case 'game_start':
+          setInLobby(false);
+          setGameMode('two-players');
+          setQuestionData({
+            declaration: data.question["Question Declaration"],
+            description: data.question["Question Description"],
+            name: data.question["Question Name"],
+            id: data.question["_id"],
+            solution: data.question["Question Solution"]
+          });
+          setEditorContent(data.question["Question Declaration"]);
+          break;
+        case 'player_ready':
+          if (data.ready) {
+            setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
+          } else {
+            setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
+          }
+          break;
+        case 'player_submit_ready':
+          if (data.submit_ready) {
+            setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
+          } else {
+            setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
+          }
+          break;
+        case 'player_next_question_ready':
+          if (data.next_question_ready) {
+            setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
+          } else {
+            setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
+          }
+          break;
+        case 'submit_code':
+          handleSubmit(data.question_id, data.editor_content, data.lobby_id);
+          break;
+        case 'show_solution':
+          console.log("Handling show_solution message");
+          if (!data.was_revealed) {
+            setWasSolutionRevealed(true);
+          }
+          setShowSolution(true);
+          setIsShowSolutionReady(false);
+          console.log("Updated states after show_solution");
+          break;  
+        case 'reset_submit_ready':
+          setIsSubmitReady(false);
+          setSubmitReadyMessages([]);
+          break;
+        case 'move_to_next_question':
+          setQuestionData({
+            declaration: data.question["Question Declaration"],
+            description: data.question["Question Description"],
+            name: data.question["Question Name"],
+            id: data.question["_id"],
+            solution: data.question["Question Solution"]
+          });
+          setEditorContent(data.question["Question Declaration"]);
+          setSubmissionResult('');
+          setSubmitReadyMessages([]);
+          setNextQuestionReadyMessages([]);
+          setIsSubmitReady(false);
+          setIsNextQuestionReady(false);
+          setIsShowSolutionReady(false);
+          setPassedAllTests(false);
+          setWasSolutionRevealed(false);
+          setShowSolution(false);
+          break;
+        case 'player_left':
           setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
-        }
-        break;
-      case 'player_submit_ready':
-        if (data.submit_ready) {
-          setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
-        } else {
-          setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
-        }
-        break;
-      case 'player_next_question_ready':
-        if (data.next_question_ready) {
-          setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
-        } else {
-          setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
-        }
-        break;
-      case 'submit_code':
-        handleSubmit(data.question_id, data.editor_content, data.lobby_id);
-        break;
-      case 'reset_submit_ready':
-        setIsSubmitReady(false);
-        setSubmitReadyMessages([]);
-        break;
-      case 'move_to_next_question':
-        setQuestionData({
-          declaration: data.question["Question Declaration"],
-          description: data.question["Question Description"],
-          name: data.question["Question Name"],
-          id: data.question["_id"],
-          solution: data.solution["Question Solution"]
-        });
-        setEditorContent(data.question["Question Declaration"]);
-        setSubmissionResult('');
-        setSubmitReadyMessages([]);
-        setNextQuestionReadyMessages([]);
-        setIsSubmitReady(false);
-        setIsNextQuestionReady(false);
-        setPassedAllTests(false);
-        break;
-      case 'player_left':
-        setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
-        setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
-        break;
-      case 'session_end':
-        handleSessionEnd();
-        break;
+          setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
+          break;
+        case 'session_end':
+          handleSessionEnd();
+          break;
+      }
+    } catch (error) {
+      console.error("Error handling WebSocket message:", error);
     }
   }, []);
 
@@ -188,6 +212,7 @@ function App() {
   const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
   }, []);
+
 
   const handleSubmit = async (questionID, submissionContent, lobbyID) => {
     setLoading(true);
@@ -246,6 +271,31 @@ function App() {
     setIsSubmitReady(!isSubmitReady)
   }, [gameMode, isSubmitReady, editorContent, sendWebSocketMessage, questionData.id]);
 
+
+  const handleShowSolutionReady = useCallback(() => {
+    console.log("handleShowSolutionReady called");
+    console.log("Current state:", { gameMode, wasSolutionRevealed, isShowSolutionReady });
+    if (gameMode === GAME_MODES.ONE_PLAYER) {
+      if (!wasSolutionRevealed) {
+        setShowConfirmDialog(true);
+      } else {
+        setShowSolution(true);
+      }
+    } else {
+      console.log("Sending show_solution_ready message");
+      sendWebSocketMessage({
+        type: 'show_solution_ready',
+        show_solution_ready: true,
+      });
+    }
+  }, [gameMode, sendWebSocketMessage]);
+
+  const handleConfirmShowSolution = () => {
+    setWasSolutionRevealed(true);
+    setShowSolution(true);
+    setShowConfirmDialog(false);
+  };
+
   const handleSessionEnd = () => {
     setShowGameOver(true);
     if (gameMode === GAME_MODES.ONE_PLAYER) {
@@ -269,8 +319,12 @@ function App() {
             setSeenQuestions(new Set());
             setSubmissionResult('');
             setPassedAllTests(false);
+            setWasSolutionRevealed(false);
             setIsSubmitReady(false);
             setIsNextQuestionReady(false);
+            setIsShowSolutionReady(false);
+            setShowSolution(false);
+
           } catch (error) {
             console.error('Error fetching the question:', error);
           } finally {
@@ -319,7 +373,10 @@ function App() {
       setEditorContent(nextQuestion["Question Declaration"]);
       setSubmissionResult('');
       setIsSubmitReady(false);
+      setIsShowSolutionReady(false);
       setPassedAllTests(false);
+      setShowSolution(false);
+      setWasSolutionRevealed(false);
 
       // Mark this question as seen
       setSeenQuestions(prev => new Set(prev).add(nextQuestion._id));
@@ -345,12 +402,14 @@ function App() {
     setChatInput('');
     setIsReady(false);
     setIsSubmitReady(false);
+    setIsShowSolutionReady(false);
     setIsNextQuestionReady(false);
     setLobbyId('');
     setShowLobbyOptions(false);
     setJoinLobbyId('');
     setPlayerCount(1);
     setPassedAllTests(false);
+    setWasSolutionRevealed(false);
     setFollowUpQuestions([]);
     setSeenQuestions(new Set());
   };
@@ -475,6 +534,14 @@ function App() {
                 isNextQuestionReady={isNextQuestionReady}
                 toggleNextQuestionReady={handleNextQuestionReady}
                 questionSolution={questionData.solution}
+                isShowSolutionReady={isShowSolutionReady}
+                toggleShowSolutionReady={handleShowSolutionReady}
+                wasSolutionRevealed={wasSolutionRevealed}
+                showConfirmDialog={showConfirmDialog}
+                setShowConfirmDialog={setShowConfirmDialog}
+                showSolution={showSolution}
+                setShowSolution={setShowSolution}
+                handleConfirmShowSolution={handleConfirmShowSolution}
                 {...(gameMode === GAME_MODES.TWO_PLAYERS && {
                   submitReadyMessages,
                   nextQuestionReadyMessages,

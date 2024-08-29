@@ -6,36 +6,50 @@ import CooperativeEditor from './CooperativeEditor';
 import '../styles.css';
 import './editor.css'
 
-const GameInterface = ({ questionName, questionDescription, gameMode, questionDeclaration, handleEditorChange, editorContent, setEditorContent, lobbyId, playerId, questionId, submissionResult, loading, isSubmitReady, toggleSubmitReady: handleSubmitReady, passedAllTests, isNextQuestionReady, toggleNextQuestionReady: handleNextQuestionReady, submitReadyMessages, nextQuestionReadyMessages, chatMessages, chatInput, setChatInput, sendChatMessage, questionSolution }) => {
-    const [showSolution, setShowSolution] = useState(false);
-    const [hasShownSolution, setHasShownSolution] = useState(false);
-    const [showConfirmDialog, setShowConfirmDialog] = useState(false);
+const GameInterface = ({
+    questionName,
+    questionDescription,
+    gameMode,
+    questionDeclaration,
+    handleEditorChange,
+    editorContent,
+    setEditorContent,
+    lobbyId,
+    playerId,
+    questionId,
+    submissionResult,
+    loading,
+    isSubmitReady,
+    toggleSubmitReady: handleSubmitReady,
+    passedAllTests,
+    isNextQuestionReady,
+    toggleNextQuestionReady: handleNextQuestionReady,
+    submitReadyMessages,
+    nextQuestionReadyMessages,
+    chatMessages,
+    chatInput,
+    setChatInput,
+    sendChatMessage,
+    questionSolution,
+    isShowSolutionReady,
+    toggleShowSolutionReady: handleShowSolutionReady,
+    wasSolutionRevealed,
+    showConfirmDialog,
+    setShowConfirmDialog,
+    showSolution,
+    setShowSolution,
+    handleConfirmShowSolution
+}) => {
 
     useEffect(() => {
-        // Close solution dialog and reset prompt when moving to next question
-        setShowSolution(false);
-        setHasShownSolution(false);
-    }, [questionId]);
-
-    const handleShowSolution = () => {
-        if (!hasShownSolution) {
-            setShowConfirmDialog(true);
-        } else {
-            setShowSolution(true);
-        }
-    };
-
-    const handleConfirmShowSolution = () => {
-        setHasShownSolution(true);
-        setShowSolution(true);
-        setShowConfirmDialog(false);
-    };
-
-    const handleNextQuestion = () => {
-        setShowSolution(false);
-        setHasShownSolution(false);
-        handleNextQuestionReady();
-    };
+        console.log("GameInterface props updated:", {
+            isShowSolutionReady,
+            wasSolutionRevealed,
+            showSolution,
+            gameMode,
+            playerId
+        });
+    }, [isShowSolutionReady, wasSolutionRevealed, showSolution, gameMode, playerId]);
 
     return (
         <div className="main-container">
@@ -130,13 +144,25 @@ const GameInterface = ({ questionName, questionDescription, gameMode, questionDe
                 {loading && <div className="loading-spinner"></div>}
                 {passedAllTests && (
                     <button
-                        onClick={handleNextQuestion}
+                        onClick={handleNextQuestionReady}
                         className={`button next-question-button ${isNextQuestionReady ? 'waiting' : ''}`}
                     >
                         {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
                     </button>
                 )}
-                <button className="button show-solution-button" onClick={handleShowSolution}>
+                {/* <button
+                    className={`button show-solution-button ${isShowSolutionReady ? 'waiting' : ''}`}
+                    onClick={() => {
+                        console.log("Show Solution button clicked");
+                        handleShowSolutionReady();
+                    }}
+                >
+                    {isShowSolutionReady ? 'Waiting...' : 'Show Solution'}
+                </button> */}
+                <button
+                    className={`button show-solution-button`}
+                    onClick={handleShowSolutionReady}
+                >
                     Show Solution
                 </button>
             </div>
