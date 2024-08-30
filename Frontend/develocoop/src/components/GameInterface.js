@@ -38,7 +38,8 @@ const GameInterface = ({
     setShowConfirmDialog,
     showSolution,
     setShowSolution,
-    handleConfirmShowSolution
+    handleConfirmShowSolution,
+    showSolutionCount
 }) => {
 
     useEffect(() => {
@@ -50,6 +51,13 @@ const GameInterface = ({
             playerId
         });
     }, [isShowSolutionReady, wasSolutionRevealed, showSolution, gameMode, playerId]);
+
+    const getSolutionButtonText = () => {
+        if (gameMode === 'two-players') {
+            return `Show Solution ${showSolutionCount}/2`;
+        }
+        return 'Show Solution';
+    };
 
     return (
         <div className="main-container">
@@ -150,20 +158,11 @@ const GameInterface = ({
                         {isNextQuestionReady ? 'Waiting...' : 'Next Question'}
                     </button>
                 )}
-                {/* <button
-                    className={`button show-solution-button ${isShowSolutionReady ? 'waiting' : ''}`}
-                    onClick={() => {
-                        console.log("Show Solution button clicked");
-                        handleShowSolutionReady();
-                    }}
-                >
-                    {isShowSolutionReady ? 'Waiting...' : 'Show Solution'}
-                </button> */}
                 <button
                     className={`button show-solution-button`}
                     onClick={handleShowSolutionReady}
                 >
-                    Show Solution
+                    {getSolutionButtonText()}
                 </button>
             </div>
             {showConfirmDialog && (

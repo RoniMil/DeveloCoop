@@ -122,7 +122,6 @@ async def handle_show_solution_ready(lobby, player_id, data):
     logger.info(f"Handling show_solution_ready for player {player_id}")
     is_show_solution_ready = data.get("show_solution_ready", True)
     logger.debug(f"Player {player_id} show_solution_ready: {is_show_solution_ready}")
-
     was_revealed = lobby.get_was_solution_revealed()
 
     if not was_revealed:
@@ -133,7 +132,9 @@ async def handle_show_solution_ready(lobby, player_id, data):
             lobby.set_was_solution_revealed(True)
             try:
                 await lobby.broadcast(
-                    json.dumps({"type": "show_solution", "was_revealed": False})
+                    json.dumps(
+                        {"type": "show_solution", "was_revealed": False, "count": len(lobby.show_solution_ready_players)}
+                    )
                 )
                 logger.info("Show solution broadcast complete")
             except Exception as e:
@@ -142,6 +143,10 @@ async def handle_show_solution_ready(lobby, player_id, data):
                 )
             finally:
                 lobby.reset_show_solution_ready()
+        else:
+            await lobby.broadcast(
+                json.dumps({"type": "update_show_solution_count", "count": len(lobby.show_solution_ready_players)})
+            )
     else:
         # If solution was already revealed, just send it to the requesting player
         try:

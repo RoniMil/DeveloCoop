@@ -21,6 +21,7 @@ function App() {
   // Player state
   const [playerId, setPlayerId] = useState(null);
   const [playerCount, setPlayerCount] = useState(1);
+  const [showSolutionCount, setShowSolutionCount] = useState(0);
 
   // Question state
   const [questionData, setQuestionData] = useState({
@@ -82,6 +83,7 @@ function App() {
           setReadyMessages([]);
           setSubmitReadyMessages([]);
           setNextQuestionReadyMessages([]);
+          setShowSolutionCount(0)
           setIsReady(false);
           setIsSubmitReady(false);
           setIsNextQuestionReady(false);
@@ -127,15 +129,19 @@ function App() {
         case 'submit_code':
           handleSubmit(data.question_id, data.editor_content, data.lobby_id);
           break;
+        case 'update_show_solution_count':
+          setShowSolutionCount(data.count);
+          break;
         case 'show_solution':
           console.log("Handling show_solution message");
           if (!data.was_revealed) {
             setWasSolutionRevealed(true);
+            setShowSolutionCount(data.count || 2);
           }
           setShowSolution(true);
           setIsShowSolutionReady(false);
           console.log("Updated states after show_solution");
-          break;  
+          break;
         case 'reset_submit_ready':
           setIsSubmitReady(false);
           setSubmitReadyMessages([]);
@@ -152,6 +158,7 @@ function App() {
           setSubmissionResult('');
           setSubmitReadyMessages([]);
           setNextQuestionReadyMessages([]);
+          setShowSolutionCount(0)
           setIsSubmitReady(false);
           setIsNextQuestionReady(false);
           setIsShowSolutionReady(false);
@@ -283,13 +290,16 @@ function App() {
         setShowSolution(true);
       }
     } else {
-      console.log("Sending show_solution_ready message");
-      sendWebSocketMessage({
-        type: 'show_solution_ready',
-        show_solution_ready: true,
-      });
+      if (!isShowSolutionReady) {
+        console.log("Sending show_solution_ready message");
+        sendWebSocketMessage({
+          type: 'show_solution_ready',
+          show_solution_ready: true,
+        });
+        setIsShowSolutionReady(true);
+      }
     }
-  }, [gameMode, wasSolutionRevealed, sendWebSocketMessage]);
+  }, [gameMode, isShowSolutionReady, wasSolutionRevealed, sendWebSocketMessage]);
 
   const handleConfirmShowSolution = useCallback(() => {
     setWasSolutionRevealed(true);
@@ -324,6 +334,7 @@ function App() {
             setIsSubmitReady(false);
             setIsNextQuestionReady(false);
             setIsShowSolutionReady(false);
+            setShowSolutionCount(0)
             setShowSolution(false);
 
           } catch (error) {
@@ -375,6 +386,7 @@ function App() {
       setSubmissionResult('');
       setIsSubmitReady(false);
       setIsShowSolutionReady(false);
+      setShowSolutionCount(0)
       setPassedAllTests(false);
       setShowSolution(false);
       setWasSolutionRevealed(false);
@@ -409,6 +421,7 @@ function App() {
     setShowLobbyOptions(false);
     setJoinLobbyId('');
     setPlayerCount(1);
+    setShowSolutionCount(0)
     setPassedAllTests(false);
     setWasSolutionRevealed(false);
     setFollowUpQuestions([]);
@@ -543,6 +556,7 @@ function App() {
                 showSolution={showSolution}
                 setShowSolution={setShowSolution}
                 handleConfirmShowSolution={handleConfirmShowSolution}
+                showSolutionCount={showSolutionCount}
                 {...(gameMode === GAME_MODES.TWO_PLAYERS && {
                   submitReadyMessages,
                   nextQuestionReadyMessages,
