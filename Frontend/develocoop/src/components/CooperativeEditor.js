@@ -15,7 +15,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
   const ydocRef = useRef(null);
   const providerRef = useRef(null);
   const bindingRef = useRef(null);
-  const colorRef = useRef(RandomColor());
+  const colorRef = useRef(RandomColor({ luminosity: 'dark' }));
   const initializedRef = useRef(false);
   const questionIdRef = useRef(null);
 
