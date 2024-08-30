@@ -289,13 +289,13 @@ function App() {
         show_solution_ready: true,
       });
     }
-  }, [gameMode, sendWebSocketMessage]);
+  }, [gameMode, wasSolutionRevealed, sendWebSocketMessage]);
 
-  const handleConfirmShowSolution = () => {
+  const handleConfirmShowSolution = useCallback(() => {
     setWasSolutionRevealed(true);
     setShowSolution(true);
     setShowConfirmDialog(false);
-  };
+  }, []);
 
   const handleSessionEnd = () => {
     setShowGameOver(true);
