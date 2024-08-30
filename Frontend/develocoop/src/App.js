@@ -92,6 +92,7 @@ function App() {
           break;
         case 'game_start':
           setInLobby(false);
+          setShowSolution(false);
           setGameMode('two-players');
           setQuestionData({
             declaration: data.question["Question Declaration"],

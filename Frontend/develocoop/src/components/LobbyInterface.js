@@ -1,7 +1,16 @@
 import React from 'react';
 import '../styles.css'
 
-const LobbyInterface = ({ lobbyId, playerId, playerCount, isReady, toggleReady, readyMessages, chatMessages, chatInput, setChatInput, sendChatMessage }) => {
+const LobbyInterface = ({ lobbyId,
+    playerId,
+    playerCount,
+    isReady,
+    toggleReady,
+    readyMessages,
+    chatMessages,
+    chatInput,
+    setChatInput,
+    sendChatMessage }) => {
     return (
         <div className="lobby-container">
             <div className="lobby-header">
