@@ -18,7 +18,9 @@ body.dark-mode {
     color: var(--text-color);
 }
 
-.dark-mode h1, .dark-mode h2, .dark-mode h3 {
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3 {
     color: var(--primary-color);
 }
 
@@ -62,7 +64,7 @@ body.dark-mode {
 .dark-mode .back-button {
     color: var(--primary-color);
     border: 2px solid var(--primary-color);
-    background-color: var(--background-color);
+    background-color: transparent;
 }
 
 .dark-mode .back-button:hover {
@@ -110,18 +112,16 @@ body.dark-mode {
 
 
 /* Dark mode toggle button styles */
-.dark-mode-toggle {
+.dark-mode .dark-mode-toggle {
     position: fixed;
     top: 20px;
     right: 20px;
-    background-color: transparent;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
     z-index: 1000;
+    background-color: var(--container-background);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
     padding: 10px;
     border-radius: 50%;
-    transition: background-color 0.3s ease;
 }
 
 .dark-mode-toggle:hover {
@@ -137,14 +137,21 @@ body.dark-mode {
     background-color: rgba(0, 0, 0, 0.7);
 }
 
-/* Additional styles to ensure contrast */
-.dark-mode .button {
-    color: var(--background-color);
+.dark-mode .dialog-content {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
 }
+
+/* Additional styles to ensure contrast */
 
 .dark-mode .dialog-content h2,
 .dark-mode .dialog-content p {
     color: var(--text-color);
+}
+
+.dark-mode .solution-dialog {
+    background-color: var(--background-color);
 }
 
 .dark-mode .solution-container {
@@ -155,5 +162,4 @@ body.dark-mode {
 .dark-mode .solution-code {
     background-color: var(--container-background);
     color: var(--text-color);
-    border: 1px solid var(--input-border);
 }

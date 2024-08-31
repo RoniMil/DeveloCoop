@@ -44,6 +44,18 @@ button {
     padding: 20px;
 }
 
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    background-color: white;
+    color: var(--text-color);
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 50%;
+}
+
 .main-container {
     display: flex;
     flex-direction: column;
