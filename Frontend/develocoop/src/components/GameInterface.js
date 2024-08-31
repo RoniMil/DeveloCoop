@@ -1,9 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import CooperativeEditor from './CooperativeEditor';
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
-import CooperativeEditor from './CooperativeEditor';
-import '../styles.css';
+import { materialDark } from '@uiw/codemirror-theme-material'; // Dark theme
+import { eclipse } from '@uiw/codemirror-theme-eclipse'; // Light theme
+import { xcodeLight, xcodeDark } from '@uiw/codemirror-theme-xcode';
+import { vscodeLight, vscodeLightInit } from '@uiw/codemirror-theme-vscode';
+import '../light-styles.css';
+import '../dark-styles.css';
 import './editor.css'
 
 const GameInterface = ({
@@ -39,7 +44,8 @@ const GameInterface = ({
     showSolution,
     setShowSolution,
     handleConfirmShowSolution,
-    showSolutionCount
+    showSolutionCount,
+    darkMode
 }) => {
 
     useEffect(() => {
@@ -71,12 +77,17 @@ const GameInterface = ({
                         isPlayer1={playerId === '1'}
                         userId={`Player ${playerId}`}
                         questionId={questionId}
+                        darkMode={darkMode}
                     />
                 ) : (
                     <div className="editor-container">
                         <CodeMirror
                             value={editorContent}
-                            extensions={[python(), autocompletion()]}
+                            theme={darkMode ? materialDark : xcodeLight}
+                            extensions={[
+                                python(),
+                                autocompletion()
+                            ]}
                             onChange={(value) => {
                                 setEditorContent(value);
                                 handleEditorChange(value);

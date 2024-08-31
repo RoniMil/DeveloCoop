@@ -1,0 +1,159 @@
+/* Dark mode styles */
+body.dark-mode {
+    --primary-color: #4a90e2;
+    --secondary-color: #50e3c2;
+    --background-color: #1e1e1e;
+    --text-color: #f0f0f0;
+    --button-hover-color: #3a7bd5;
+    --error-color: #ff6b6b;
+    --success-color: #51cf66;
+    --button-text-color: #f0f0f0;
+    --input-background: #2c2c2c;
+    --input-border: #444;
+    --container-background: #2c2c2c;
+}
+
+.dark-mode body {
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.dark-mode h1, .dark-mode h2, .dark-mode h3 {
+    color: var(--primary-color);
+}
+
+.dark-mode .content-container,
+.dark-mode .lobby-container,
+.dark-mode .lobby-options {
+    background-color: var(--container-background);
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+}
+
+.dark-mode #problem {
+    background-color: var(--container-background);
+    border-left: 1px solid var(--input-border);
+}
+
+.dark-mode .chat-container {
+    background-color: var(--container-background);
+    border: 1px solid var(--input-border);
+}
+
+.dark-mode .chat-input input,
+.dark-mode .lobby-options input[type="text"] {
+    background-color: var(--input-background);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+}
+
+.dark-mode .lobby-input-hint {
+    color: #888;
+}
+
+.dark-mode .button {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.dark-mode .button:hover {
+    background-color: var(--button-hover-color);
+}
+
+.dark-mode .back-button {
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    background-color: var(--background-color);
+}
+
+.dark-mode .back-button:hover {
+    background-color: var(--primary-color);
+    color: var(--background-color);
+}
+
+.dark-mode .ready-button {
+    background-color: #4CAF50;
+}
+
+.dark-mode .ready-button:hover {
+    background-color: #45a049;
+}
+
+.dark-mode .ready-button.not-ready {
+    background-color: #f44336;
+}
+
+.dark-mode .ready-button.not-ready:hover {
+    background-color: #da190b;
+}
+
+.dark-mode .submit-button,
+.dark-mode .next-question-button,
+.dark-mode .show-solution-button {
+    background-color: #27ae60;
+}
+
+.dark-mode .submit-button:hover,
+.dark-mode .next-question-button:hover,
+.dark-mode .show-solution-button:hover {
+    background-color: #229954;
+}
+
+.dark-mode .submit-button.waiting,
+.dark-mode .next-question-button.waiting,
+.dark-mode .show-solution-button.waiting {
+    background-color: #f1c40f;
+}
+
+.dark-mode .submit-button:disabled {
+    background-color: #95a5a6;
+}
+
+
+/* Dark mode toggle button styles */
+.dark-mode-toggle {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 1000;
+    padding: 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+}
+
+.dark-mode-toggle:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.dark-mode .dark-mode-toggle:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Dialog styles */
+.dark-mode .dialog-overlay {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
+/* Additional styles to ensure contrast */
+.dark-mode .button {
+    color: var(--background-color);
+}
+
+.dark-mode .dialog-content h2,
+.dark-mode .dialog-content p {
+    color: var(--text-color);
+}
+
+.dark-mode .solution-container {
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border);
+}
+
+.dark-mode .solution-code {
+    background-color: var(--container-background);
+    color: var(--text-color);
+    border: 1px solid var(--input-border);
+}

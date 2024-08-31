@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import './styles.css';
+import './light-styles.css';
+import './dark-styles.css';
 import LobbyInterface from './components/LobbyInterface';
 import GameInterface from './components/GameInterface';
 import frogImage from './images/develocoop_logo.png';
@@ -59,6 +60,7 @@ function App() {
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
   const [countdownTimer, setCountdownTimer] = useState(null);
+  const [darkMode, setDarkMode] = useState(false);
 
 
   const isInitialMount = useRef(true);
@@ -468,9 +470,32 @@ function App() {
     return () => clearTimeout(timer);
   }, [countdownTimer, sendWebSocketMessage]);
 
+  // hook to apply the dark mode class to the body
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
+  }, [darkMode]);
+
+  // Function to toggle dark mode
+  const toggleDarkMode = () => {
+    setDarkMode(!darkMode);
+  };
+
+
+
   if (showLobbyOptions) {
     return (
       <div className="container">
+        <button
+          className="dark-mode-toggle"
+          onClick={toggleDarkMode}
+          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
         <div className="header-container">
           <div className="back-button-container">
             <button className="button back-button" onClick={() => setShowLobbyOptions(false)} >Back to Main Menu</button>
@@ -500,6 +525,15 @@ function App() {
 
   return (
     <div className="container">
+      {!showGameOver && (
+        <button
+          className="dark-mode-toggle"
+          onClick={toggleDarkMode}
+          aria-label={darkMode ? "Switch to light mode" : "Switch to dark mode"}
+        >
+          {darkMode ? '☀️' : '🌙'}
+        </button>
+      )}
       <div className="header-container">
         {countdownTimer !== null && (
           <div className="game-over-screen">
@@ -583,6 +617,7 @@ function App() {
                 setShowSolution={setShowSolution}
                 handleConfirmShowSolution={handleConfirmShowSolution}
                 showSolutionCount={showSolutionCount}
+                darkMode={darkMode}
                 {...(gameMode === GAME_MODES.TWO_PLAYERS && {
                   submitReadyMessages,
                   nextQuestionReadyMessages,

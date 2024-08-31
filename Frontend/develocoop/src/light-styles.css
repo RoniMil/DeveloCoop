@@ -119,10 +119,6 @@ button {
     outline: none !important;
 }
 
-.single-player-editor .cm-editor .cm-content {
-    caret-color: auto !important;
-}
-
 .single-player-editor .cm-editor.cm-focused {
     outline: none !important;
 }

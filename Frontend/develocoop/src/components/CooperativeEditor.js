@@ -1,15 +1,20 @@
-import React, { useEffect, useRef, useMemo } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { WebrtcProvider } from 'y-webrtc';
 import { CodemirrorBinding } from 'y-codemirror';
 import * as Y from 'yjs';
 import RandomColor from 'randomcolor';
 import CodeMirror from 'codemirror';
 import './editor.css';
-
 import 'codemirror/lib/codemirror.css';
 import "codemirror/mode/python/python";
+import 'codemirror/theme/material-darker.css'; // Dark theme
+import 'codemirror/theme/eclipse.css'; // Light theme 
+
+
+
 
 const CooperativeEditor = React.memo(function CooperativeEditor(props) {
+  const { roomName, isPlayer1, userId, questionId, onChange, questionDeclaration, darkMode } = props;
   const editorRef = useRef(null);
   const cmInstanceRef = useRef(null);
   const ydocRef = useRef(null);
@@ -19,12 +24,14 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
   const initializedRef = useRef(false);
   const questionIdRef = useRef(null);
 
+  const [theme, setTheme] = useState(darkMode ? 'material-darker' : 'eclipse');
+
   useEffect(() => {
     if (!cmInstanceRef.current && editorRef.current) {
       cmInstanceRef.current = CodeMirror(editorRef.current, {
         value: '',
         mode: 'python',
-        theme: 'default',
+        theme: theme,
         lineNumbers: true,
         indentUnit: 4,
         indentWithTabs: false,
@@ -34,7 +41,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
       });
 
       ydocRef.current = new Y.Doc();
-      providerRef.current = new WebrtcProvider(props.roomName, ydocRef.current);
+      providerRef.current = new WebrtcProvider(roomName, ydocRef.current);
       const ytext = ydocRef.current.getText('codemirror');
       const awareness = providerRef.current.awareness;
 
@@ -43,22 +50,25 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
       });
 
       awareness.setLocalStateField("user", {
-        name: props.userId,
+        name: userId,
         color: colorRef.current,
       });
 
       // Function to initialize content
       const initializeContent = () => {
-        if (ytext.length === 0 && props.questionDeclaration && !initializedRef.current) {
-          ytext.insert(0, props.questionDeclaration);
+        if (ytext.length === 0 && questionDeclaration && !initializedRef.current) {
+          ytext.insert(0, questionDeclaration);
           initializedRef.current = true;
-          questionIdRef.current = props.questionId;
+          questionIdRef.current = questionId;
           providerRef.current.awareness.setLocalStateField('initialized', true);
         }
       };
 
+      // mode change
+      setTheme(darkMode ? 'material-darker' : 'eclipse');
+
       // Initialize content if this is player 1
-      if (props.isPlayer1) {
+      if (isPlayer1) {
         initializeContent();
       }
 
@@ -75,7 +85,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
 
       // Set up observer to update parent component
       const observer = () => {
-        props.onChange(cmInstanceRef.current.getValue());
+        onChange(cmInstanceRef.current.getValue());
       };
       cmInstanceRef.current.on('change', observer);
 
@@ -92,22 +102,22 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
         cmInstanceRef.current = null;
       };
     }
-  }, [props.roomName, props.isPlayer1, props.questionDeclaration, props.onChange, props.questionId]);
+  }, [roomName, isPlayer1, questionDeclaration, onChange, questionId, darkMode, theme]);
 
   // update the editor content when questionDeclaration changes
   useEffect(() => {
-    if (cmInstanceRef.current && props.questionId !== questionIdRef.current) {
+    if (cmInstanceRef.current && questionId !== questionIdRef.current) {
       const ytext = ydocRef.current.getText('codemirror');
 
-      if (props.isPlayer1) {
+      if (isPlayer1) {
         ytext.delete(0, ytext.length);
-        ytext.insert(0, props.questionDeclaration);
-        questionIdRef.current = props.questionId;
+        ytext.insert(0, questionDeclaration);
+        questionIdRef.current = questionId;
       }
 
       initializedRef.current = false;
     }
-  }, [props.questionId, props.questionDeclaration, props.isPlayer1]);
+  }, [questionId, questionDeclaration, isPlayer1]);
 
   return (
     <div className="CooperativeEditor">

@@ -1,5 +1,6 @@
 import React from 'react';
-import '../styles.css'
+import '../light-styles.css'
+import '../dark-styles.css'
 
 const LobbyInterface = ({ lobbyId,
     playerId,
