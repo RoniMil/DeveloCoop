@@ -154,12 +154,10 @@ body.dark-mode {
     background-color: var(--background-color);
 }
 
-.dark-mode .solution-container {
-    background-color: var(--input-background);
-    border: 1px solid var(--input-border);
-}
-
 .dark-mode .solution-code {
-    background-color: var(--container-background);
+    background-color: var(--input-background);
     color: var(--text-color);
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    padding: 15px;
 }
