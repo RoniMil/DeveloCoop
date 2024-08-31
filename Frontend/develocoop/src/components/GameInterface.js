@@ -179,7 +179,7 @@ const GameInterface = ({
             )}
             {showSolution && (
                 <div className="dialog-overlay">
-                    <div className="dialog-content">
+                    <div className="dialog-content solution-dialog">
                         <h2>Solution</h2>
                         <pre className="solution-code">{questionSolution}</pre>
                         <button className="button" onClick={() => setShowSolution(false)}>Close</button>
