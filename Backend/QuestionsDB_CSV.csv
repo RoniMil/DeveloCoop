@@ -89,11 +89,11 @@ Expected Auxiliary Space: O(1)
 Constraints:
 1 <= Length of S<= 2*105
 ","def isPalindrome(S):
- """"""
- type S: str
- type return: int
- """"""
- pass
+    """"""
+    type S: str
+    type return: int
+    """"""
+    pass
 ","def isPalindrome_answer(S):
     """"""
     type S: str

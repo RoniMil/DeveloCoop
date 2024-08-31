@@ -82,7 +82,7 @@ const GameInterface = ({
                                 handleEditorChange(value);
                             }}
                             basicSetup={{
-                                tabSize: 2,
+                                tabSize: 4,
                                 lineNumbers: true,
                                 highlightActiveLineGutter: false,
                                 foldGutter: false,

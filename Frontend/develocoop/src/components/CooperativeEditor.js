@@ -26,7 +26,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
         mode: 'python',
         theme: 'default',
         lineNumbers: true,
-        indentUnit: 2,
+        indentUnit: 4,
         indentWithTabs: false,
         extraKeys: {
           "Ctrl-Space": "autocomplete"

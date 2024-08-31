@@ -108,16 +108,16 @@ Constraints:
     return tot
 
 ","test_cases = [
-    (0,),   # Expected: 0, No primes <= 0
-    (1,),   # Expected: 0, No primes <= 1
-    (2,),   # Expected: 2, 2 is the only prime <= 2
-    (10,),  # Expected: 17, Sum of primes <= 10 (2 + 3 + 5 + 7 = 17)
-    (19,),  # Expected: 77, Sum of primes <= 19 (2 + 3 + 5 + 7 + 11 + 13 + 17 + 19 = 77)
-    (30,),  # Expected: 129, Sum of primes <= 30
-    (50,),  # Expected: 328, Sum of primes <= 50
-    (100,),  # Expected: 1060, Sum of primes <= 100
-    (50000,),  # Expected: Large sum, Sum of primes <= 50000
-    (1000000,),  # Expected: Large sum, Sum of primes <= 1000000 (Stress test)
+    (2,),     # Expected: 2, since 2 is the only prime number <= 2.
+    (3,),     # Expected: 5, since primes <= 3 are 2 and 3 (2 + 3).
+    (4,),     # Expected: 5, since primes <= 4 are 2 and 3.
+    (10,),    # Expected: 17, primes <= 10 are 2, 3, 5, 7.
+    (19,),    # Expected: 77, primes <= 19 are 2, 3, 5, 7, 11, 13, 17, 19.
+    (20,),    # Expected: 77, primes <= 20 same as primes <= 19.
+    (30,),    # Expected: 129, primes <= 30 are 2, 3, 5, 7, 11, 13, 17, 19, 23, 29.
+    (50,),    # Expected: 328, primes <= 50 are numerous including 2, 3, 5, 7, ... , 47.
+    (100,),   # Expected: 1060, many primes including 2, 3, 5, 7, ... , 97.
+    (1000,),  # Expected: A large sum, primes <= 1000.
 ]
 
 user_solution = prime_Sum
@@ -532,18 +532,17 @@ Constraints:
         return second
 
 ","test_cases = [
-    ([12, 35, 1, 10, 34, 1]),  # Expected: 34, Test Passed
-    ([10, 10]),  # Expected: -1, Test Passed
-    ([5, 20, 10, 15]),  # Expected: 15, Test Passed
-    ([7, 7, 7, 7]),  # Expected: -1, Test Passed
-    ([100, 200, 300, 400, 500]),  # Expected: 400, Test Passed
-    ([1]),  # Expected: -1, Test Passed (Single element, no second largest)
-    ([2, 2, 3, 3, 3, 4]),  # Expected: 3, Test Passed
-    ([1, 2]),  # Expected: 1, Test Passed
-    ([0, 0, 0]),  # Expected: -1, Test Passed (All elements are the same)
-    ([])  # Expected: -1, Test Passed (Empty array)
+    ([12, 35, 1, 10, 34, 1],),  # Expected: 34, Test Passed
+    ([10, 10],),  # Expected: -1, Test Passed
+    ([5, 20, 10, 15],),  # Expected: 15, Test Passed
+    ([7, 7, 7, 7],),  # Expected: -1, Test Passed
+    ([100, 200, 300, 400, 500],),  # Expected: 400, Test Passed
+    ([1],),  # Expected: -1, Test Passed (Single element, no second largest)
+    ([2, 2, 3, 3, 3, 4],),  # Expected: 3, Test Passed
+    ([1, 2],),  # Expected: 1, Test Passed
+    ([0, 0, 0],),  # Expected: -1, Test Passed (All elements are the same)
+    ([],)  # Expected: -1, Test Passed (Empty array)
 ]
-
 
 user_solution = print2largest
 solution = print2largest_answer",Min and Max in Array
