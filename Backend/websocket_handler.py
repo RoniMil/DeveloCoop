@@ -99,6 +99,7 @@ async def handle_ready(lobby, player_id, data, get_question, get_follow_up_quest
         json.dumps({"type": "player_ready", "player_id": player_id, "ready": is_ready})
     )
     if lobby.all_players_ready():
+        lobby.set_in_session(True)
         if not lobby.get_question():
             fetch_and_set_question(lobby, get_question, get_follow_up_questions)
         question = lobby.get_question()
@@ -233,7 +234,7 @@ async def handle_chat(lobby, player_id, data):
 
 async def handle_disconnect(lobby, player_id, game_logic, lobby_id):
     lobby.disconnect(player_id)
-    await lobby.broadcast(json.dumps({"type": "player_left", "player_id": player_id}))
+    await lobby.broadcast(json.dumps({"type": "player_left", "player_id": player_id, "in_session": lobby.get_in_session()}))
     await lobby.broadcast(
         json.dumps({"type": "player_count", "count": lobby.get_player_count()})
     )

@@ -18,6 +18,7 @@ class Lobby:
         self.follow_up_questions = None
         self.editor_content = None
         self.was_solution_revealed = False
+        self.in_session = False
         logger.info(f"Created new lobby with ID {lobby_id}")
 
     async def connect(self, websocket: WebSocket):
@@ -55,6 +56,7 @@ class Lobby:
         self.follow_up_questions = None
         self.editor_content = None
         self.was_solution_revealed = False
+        self.in_session = False
 
     def all_players_ready(self):
         return len(self.ready_players) == 2 and len(self.players) == 2
@@ -90,6 +92,9 @@ class Lobby:
 
     def get_editor_content(self):
         return self.editor_content
+    
+    def get_in_session(self):
+        return self.in_session
 
     def get_was_solution_revealed(self):
         logger.debug(f"get_was_solution_revealed: {self.was_solution_revealed}")
@@ -130,6 +135,9 @@ class Lobby:
     def set_editor_content(self, editor_content):
         self.editor_content = editor_content
 
+    def set_in_session(self, in_session):
+        self.in_session = in_session    
+
     def reset_ready(self):
         self.ready_players.clear()
 
@@ -150,6 +158,9 @@ class Lobby:
     def reset_question_state(self):
         self.show_solution_ready_players.clear()
         self.was_solution_revealed = False
+
+    def reset_in_session(self):
+        self.in_session = False    
 
     async def send_to_player(self, player_id: str, message: str):
         if player_id in self.players:

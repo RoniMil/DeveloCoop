@@ -58,6 +58,7 @@ function App() {
   const [nextQuestionReadyMessages, setNextQuestionReadyMessages] = useState([]);
   const [showConfirmDialog, setShowConfirmDialog] = useState(false);
   const [showSolution, setShowSolution] = useState(false);
+  const [countdownTimer, setCountdownTimer] = useState(null);
 
 
   const isInitialMount = useRef(true);
@@ -91,6 +92,7 @@ function App() {
           setPassedAllTests(false);
           setWasSolutionRevealed(false);
           setInLobby(true);
+          setCountdownTimer(null);
           break;
         case 'game_start':
           setInLobby(false);
@@ -169,6 +171,9 @@ function App() {
         case 'player_left':
           setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
           setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
+          if (data.in_session) {
+            setCountdownTimer(5);
+          }
           break;
         case 'session_end':
           handleSessionEnd();
@@ -426,6 +431,7 @@ function App() {
     setWasSolutionRevealed(false);
     setFollowUpQuestions([]);
     setSeenQuestions(new Set());
+    setCountdownTimer(null);
   };
 
   const sendChatMessage = useCallback(() => {
@@ -449,6 +455,18 @@ function App() {
     }
 
   }, [questionData.declaration]);
+
+  useEffect(() => {
+    let timer;
+    if (countdownTimer !== null && countdownTimer > 0) {
+      timer = setTimeout(() => {
+        setCountdownTimer(countdownTimer - 1);
+      }, 1000);
+    } else if (countdownTimer === 0) {
+      sendWebSocketMessage({ type: 'reset_lobby' });
+    }
+    return () => clearTimeout(timer);
+  }, [countdownTimer, sendWebSocketMessage]);
 
   if (showLobbyOptions) {
     return (
@@ -483,6 +501,14 @@ function App() {
   return (
     <div className="container">
       <div className="header-container">
+        {countdownTimer !== null && (
+          <div className="game-over-screen">
+            <h2>Player Disconnected</h2>
+            <div className="game-over-content">
+              <p>Returning to lobby in {countdownTimer} seconds...</p>
+            </div>
+          </div>
+        )}
         {!showGameOver && (gameMode || inLobby) && (
           <div className="back-button-container">
             <button className="button back-button" onClick={backToMainMenu}>Back to Main Menu</button>

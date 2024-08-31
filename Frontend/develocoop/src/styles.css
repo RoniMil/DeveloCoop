@@ -682,6 +682,7 @@ button {
         font-size: 1rem;
         padding: 10px 20px;
     }
+
 }
 
 @media (max-width: 600px) {
@@ -749,4 +750,5 @@ button {
     .game-over-buttons {
         flex-direction: column;
     }
+
 }
