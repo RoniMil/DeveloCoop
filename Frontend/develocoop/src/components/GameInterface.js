@@ -4,9 +4,7 @@ import CodeMirror from '@uiw/react-codemirror';
 import { python } from "@codemirror/lang-python";
 import { autocompletion } from '@codemirror/autocomplete';
 import { materialDark } from '@uiw/codemirror-theme-material'; // Dark theme
-import { eclipse } from '@uiw/codemirror-theme-eclipse'; // Light theme
-import { xcodeLight, xcodeDark } from '@uiw/codemirror-theme-xcode';
-import { vscodeLight, vscodeLightInit } from '@uiw/codemirror-theme-vscode';
+import { xcodeLight, xcodeDark } from '@uiw/codemirror-theme-xcode'; // Light theme
 import '../light-styles.css';
 import '../dark-styles.css';
 import './editor.css'
