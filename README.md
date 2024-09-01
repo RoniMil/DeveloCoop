@@ -1,3 +1,4 @@
+
 # DeveloCoop
 
 DeveloCoop is a collaborative coding platform designed to help developers improve their Python skills through interactive problem-solving sessions. It supports both single-player and two-player modes, allowing users to work on coding challenges individually or cooperatively.
@@ -26,19 +27,25 @@ DeveloCoop is a collaborative coding platform designed to help developers improv
 
 ## Running the Application
 
-1. Start the backend server:
+1. Install craco:
+
+   ```
+   cd Frontend/develocoop
+   npm install @craco/craco --save
+   ```
+2. Start the backend server:
 
    ```
    cd Backend
    python main.py
    ```
-2. Start the frontend development server:
+3. Start the frontend development server:
 
    ```
    cd Frontend/develocoop
    npm start
    ```
-3. Open your web browser and navigate to:
+4. Open your web browser and navigate to:
 
    ```
    http://localhost:3000/
