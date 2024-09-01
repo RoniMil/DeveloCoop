@@ -56,6 +56,7 @@ const GameInterface = ({
         });
     }, [isShowSolutionReady, wasSolutionRevealed, showSolution, gameMode, playerId]);
 
+    // Get the appropriate text for the solution button
     const getSolutionButtonText = () => {
         if (gameMode === 'two-players') {
             return `Show Solution ${showSolutionCount}/2`;
@@ -67,6 +68,7 @@ const GameInterface = ({
         <div className="main-container">
             <h3>{questionName}</h3>
             <div className="content-container">
+                {/* Render either cooperative or single-player editor based on game mode */}
                 {gameMode === 'two-players' ? (
                     <CooperativeEditor
                         questionDeclaration={questionDeclaration}
@@ -190,7 +192,7 @@ const GameInterface = ({
                 <div className="dialog-overlay">
                     <div className="dialog-content solution-dialog">
                         <h2>Solution</h2>
-                            <pre className="solution-code">{questionSolution}</pre>
+                        <pre className="solution-code">{questionSolution}</pre>
                         <button className="button" onClick={() => setShowSolution(false)}>Close</button>
                     </div>
                 </div>

@@ -65,19 +65,24 @@ function App() {
 
   const isInitialMount = useRef(true);
 
+    // WebSocket message handler, handles messages from the server
   const handleWebSocketMessage = useCallback((data) => {
     console.log("Received WebSocket message:", data);
     try {
       switch (data.type) {
+        // Set the player's ID when received from the server
         case 'player_id':
           setPlayerId(data.id);
           break;
+        // Add new chat messages to the chat history  
         case 'message':
           setChatMessages(prev => [...prev, data.content]);
           break;
+        // Update the player count in the lobby  
         case 'player_count':
           setPlayerCount(data.count);
           break;
+        // Reset all game state when the lobby is reset  
         case 'lobby_reset':
           setQuestionData({ declaration: '', description: '', name: '', id: null, solution: '' });
           setEditorContent('');
@@ -96,6 +101,7 @@ function App() {
           setInLobby(true);
           setCountdownTimer(null);
           break;
+        // Initialize the game with the first question  
         case 'game_start':
           setInLobby(false);
           setShowSolution(false);
@@ -109,6 +115,7 @@ function App() {
           });
           setEditorContent(data.question["Question Declaration"]);
           break;
+        // Set player ready messages  
         case 'player_ready':
           if (data.ready) {
             setReadyMessages(prev => [...prev, `Player ${data.player_id} is ready`]);
@@ -116,6 +123,7 @@ function App() {
             setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
           }
           break;
+        // Set player submit ready messages   
         case 'player_submit_ready':
           if (data.submit_ready) {
             setSubmitReadyMessages(prev => [...prev, `Player ${data.player_id} is ready to submit`]);
@@ -123,6 +131,7 @@ function App() {
             setSubmitReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready to submit`));
           }
           break;
+        // Set player next question ready messages   
         case 'player_next_question_ready':
           if (data.next_question_ready) {
             setNextQuestionReadyMessages(prev => [...prev, `Player ${data.player_id} is ready for the next question`]);
@@ -130,12 +139,15 @@ function App() {
             setNextQuestionReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready for the next question`));
           }
           break;
+        // handles submitted code  
         case 'submit_code':
           handleSubmit(data.question_id, data.editor_content, data.lobby_id);
           break;
+        // updates the show solution player count  
         case 'update_show_solution_count':
           setShowSolutionCount(data.count);
           break;
+        // updates show solution states  
         case 'show_solution':
           console.log("Handling show_solution message");
           if (!data.was_revealed) {
@@ -146,10 +158,12 @@ function App() {
           setIsShowSolutionReady(false);
           console.log("Updated states after show_solution");
           break;
+        // reset submission states  
         case 'reset_submit_ready':
           setIsSubmitReady(false);
           setSubmitReadyMessages([]);
           break;
+        // sets next question states
         case 'move_to_next_question':
           setQuestionData({
             declaration: data.question["Question Declaration"],
@@ -170,6 +184,7 @@ function App() {
           setWasSolutionRevealed(false);
           setShowSolution(false);
           break;
+        // updates leaving player messages  
         case 'player_left':
           setReadyMessages(prev => prev.filter(msg => msg !== `Player ${data.player_id} is ready`));
           setChatMessages(prev => [...prev, `Player ${data.player_id} left the lobby`]);
@@ -177,6 +192,7 @@ function App() {
             setCountdownTimer(5);
           }
           break;
+        // handles the session end  
         case 'session_end':
           handleSessionEnd();
           break;
@@ -188,6 +204,9 @@ function App() {
 
   const sendWebSocketMessage = useWebSocket(lobbyId, handleWebSocketMessage);
 
+  // Functions to handle game actions
+
+  // Create a new lobby
   const handleCreateLobby = async () => {
     try {
       const data = await createLobby();
@@ -200,6 +219,7 @@ function App() {
     }
   };
 
+  // Join an existing lobby
   const handleJoinLobby = async () => {
     try {
       await joinLobby(joinLobbyId);
@@ -212,6 +232,7 @@ function App() {
     }
   };
 
+  // Find an available lobby
   const handleFindLobby = async () => {
     try {
       const data = await findLobby();
@@ -224,11 +245,12 @@ function App() {
     }
   };
 
+  // Handle changes in the code editor
   const handleEditorChange = useCallback((content) => {
     setEditorContent(content);
   }, []);
 
-
+  // Submit the current code for evaluation
   const handleSubmit = async (questionID, submissionContent, lobbyID) => {
     setLoading(true);
     try {
@@ -248,6 +270,7 @@ function App() {
     }
   };
 
+  // Start a new game
   const startGame = async (mode) => {
     if (mode === GAME_MODES.TWO_PLAYERS) {
       setShowLobbyOptions(true);
@@ -273,6 +296,7 @@ function App() {
     }
   };
 
+  // Handle player readiness to submit code
   const handleSubmitReady = useCallback(async () => {
     if (gameMode === GAME_MODES.ONE_PLAYER) {
       handleSubmit(questionData.id, editorContent, null);
@@ -286,7 +310,7 @@ function App() {
     setIsSubmitReady(!isSubmitReady)
   }, [gameMode, isSubmitReady, editorContent, sendWebSocketMessage, questionData.id]);
 
-
+  // Handle player readiness to show solution
   const handleShowSolutionReady = useCallback(() => {
     console.log("handleShowSolutionReady called");
     console.log("Current state:", { gameMode, wasSolutionRevealed, isShowSolutionReady });
@@ -308,12 +332,14 @@ function App() {
     }
   }, [gameMode, isShowSolutionReady, wasSolutionRevealed, sendWebSocketMessage]);
 
+  // Confirm showing the solution
   const handleConfirmShowSolution = useCallback(() => {
     setWasSolutionRevealed(true);
     setShowSolution(true);
     setShowConfirmDialog(false);
   }, []);
 
+  // Handle the end of a game session
   const handleSessionEnd = () => {
     setShowGameOver(true);
     if (gameMode === GAME_MODES.ONE_PLAYER) {
@@ -363,7 +389,7 @@ function App() {
     }
   };
 
-
+  // Handle player readiness for the next question
   const handleNextQuestionReady = useCallback(async () => {
     if (gameMode === GAME_MODES.ONE_PLAYER) {
       // Check if there are any unseen follow-up questions
@@ -407,6 +433,7 @@ function App() {
     }
   }, [gameMode, followUpQuestions, seenQuestions, handleSessionEnd, sendWebSocketMessage, isNextQuestionReady]);
 
+  // Return to the main menu
   const backToMainMenu = () => {
     setGameMode(null);
     setQuestionData({ declaration: '', description: '', name: '', id: null, solution: '' });
@@ -436,6 +463,7 @@ function App() {
     setCountdownTimer(null);
   };
 
+  // Send a chat message
   const sendChatMessage = useCallback(() => {
     if (chatInput.trim()) {
       sendWebSocketMessage({ type: 'chat', content: chatInput });
@@ -443,11 +471,13 @@ function App() {
     }
   }, [chatInput, sendWebSocketMessage]);
 
+  // Toggle player readiness in the lobby
   const toggleReady = useCallback(() => {
     sendWebSocketMessage({ type: 'ready', ready: !isReady });
     setIsReady(!isReady);
   }, [isReady, sendWebSocketMessage]);
 
+  // Effect hooks for various game logic
   useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
@@ -485,7 +515,7 @@ function App() {
   };
 
 
-
+  // render logic
   if (showLobbyOptions) {
     return (
       <div className="container">

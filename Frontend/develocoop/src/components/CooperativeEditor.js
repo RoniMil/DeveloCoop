@@ -15,6 +15,8 @@ import 'codemirror/theme/eclipse.css'; // Light theme
 
 const CooperativeEditor = React.memo(function CooperativeEditor(props) {
   const { roomName, isPlayer1, userId, questionId, onChange, questionDeclaration, darkMode } = props;
+
+  // Refs for managing editor state and connections
   const editorRef = useRef(null);
   const cmInstanceRef = useRef(null);
   const ydocRef = useRef(null);
@@ -24,9 +26,11 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
   const initializedRef = useRef(false);
   const questionIdRef = useRef(null);
 
+  // State for managing editor theme
   const [theme, setTheme] = useState(darkMode ? 'material-darker' : 'eclipse');
 
   useEffect(() => {
+    // Initialize CodeMirror instance and set up collaborative editing
     if (!cmInstanceRef.current && editorRef.current) {
       cmInstanceRef.current = CodeMirror(editorRef.current, {
         value: '',
@@ -40,6 +44,7 @@ const CooperativeEditor = React.memo(function CooperativeEditor(props) {
         }
       });
 
+      // Set up collaborative editing with Y.js and y-webrtc
       ydocRef.current = new Y.Doc();
       providerRef.current = new WebrtcProvider(roomName, ydocRef.current);
       const ytext = ydocRef.current.getText('codemirror');
