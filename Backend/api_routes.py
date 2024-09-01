@@ -20,6 +20,7 @@ async def create_lobby():
     lobby_id = game_logic.create_lobby()
     return LobbyCreationResponse(lobby_id=lobby_id)
 
+# join lobby given an id
 @router.post("/join_lobby")
 async def join_lobby(request: JoinLobbyRequest):
     lobby = game_logic.get_lobby(request.lobby_id)
@@ -29,6 +30,7 @@ async def join_lobby(request: JoinLobbyRequest):
         raise HTTPException(status_code=400, detail="Lobby is full")
     return {"message": "Lobby joined successfully"}
 
+# find random lobby to join if one exists
 @router.get("/find_lobby")
 async def find_lobby():
     available_lobbies = [lobby_id for lobby_id, lobby in game_logic.lobbies.items() if lobby.get_player_count() == 1]
@@ -48,12 +50,9 @@ def get_random_question():
 def get_results(submission: Submission):
     user_answer = submission.user_answer
     db_entry = get_question_by_id(submission.question_id)
-    
     tests = db_entry["Question Tests"]
     answer = db_entry["Question Solution"]
-
     test_str = f"{tests}\n{TEST_STR}"
-
     execution_data = {
         "clientId": jdoodle_client_id,
         "clientSecret": jdoodle_client_secret,
@@ -61,7 +60,6 @@ def get_results(submission: Submission):
         "language": "python3",
         "versionIndex": "0",
     }
-
     response = requests.post(JDOODLE_URL, json=execution_data)
     return response.json()
 

@@ -2,7 +2,6 @@ import json
 from fastapi import WebSocket, WebSocketDisconnect
 import random
 from game_logic import fetch_and_set_question
-
 import logging
 
 logger = logging.getLogger(__name__)
@@ -10,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 # manages and handles incoming websocket connections, clients communication, client messages to the server
 
-
+# handles websocket messages from the clients
 async def handle_websocket(
     websocket: WebSocket,
     lobby_id: str,
@@ -19,20 +18,13 @@ async def handle_websocket(
     get_follow_up_questions,
 ):
     lobby = game_logic.get_lobby(lobby_id)
-
     logger.info(f"New WebSocket connection for lobby {lobby_id}")
-
     if not lobby:
-
         logger.warning(f"Lobby {lobby_id} not found, closing connection")
-
         await websocket.close(code=4000)
         return
-
     player_id = await lobby.connect(websocket)
-
     logger.info(f"Player {player_id} connected to lobby {lobby_id}")
-
     try:
         await websocket.send_json({"type": "player_id", "id": player_id})
         await lobby.broadcast(
@@ -43,13 +35,10 @@ async def handle_websocket(
         await lobby.broadcast(
             json.dumps({"type": "player_count", "count": lobby.get_player_count()})
         )
-
         while True:
             try:
                 data = await websocket.receive_json()
-
                 logger.debug(f"Received message from player {player_id}: {data}")
-
                 if data["type"] == "reset_lobby":
                     await handle_reset_lobby(
                         lobby, get_question, get_follow_up_questions
@@ -72,32 +61,29 @@ async def handle_websocket(
                 break
 
     except WebSocketDisconnect:
-
         logger.info(
             f"WebSocket disconnected for player {player_id} in lobby {lobby_id}"
         )
-
     finally:
-
         logger.info(
             f"Cleaning up connection for player {player_id} in lobby {lobby_id}"
         )
-
         await handle_disconnect(lobby, player_id, game_logic, lobby_id)
 
-
+# reset lobby handler
 async def handle_reset_lobby(lobby, get_question, get_follow_up_questions):
     lobby.reset_lobby()
     fetch_and_set_question(lobby, get_question, get_follow_up_questions)
     await lobby.broadcast(json.dumps({"type": "lobby_reset"}))
 
-
+# handles the ready state set of a player within a lobby
 async def handle_ready(lobby, player_id, data, get_question, get_follow_up_questions):
     is_ready = data.get("ready", True)
     lobby.set_ready(player_id, is_ready)
     await lobby.broadcast(
         json.dumps({"type": "player_ready", "player_id": player_id, "ready": is_ready})
     )
+    # handles starting the game if all players in lobby are ready
     if lobby.all_players_ready():
         lobby.set_in_session(True)
         if not lobby.get_question():
@@ -118,16 +104,18 @@ async def handle_ready(lobby, player_id, data, get_question, get_follow_up_quest
             )
         )
 
-
+# handles the show solution ready state set of a player within a lobby
 async def handle_show_solution_ready(lobby, player_id, data):
     logger.info(f"Handling show_solution_ready for player {player_id}")
     is_show_solution_ready = data.get("show_solution_ready", True)
     logger.debug(f"Player {player_id} show_solution_ready: {is_show_solution_ready}")
     was_revealed = lobby.get_was_solution_revealed()
-
+    # the case where this is the first time solution is revealed for this question
     if not was_revealed:
         lobby.set_show_solution_ready(player_id, is_show_solution_ready)
         logger.debug(f"All players ready: {lobby.all_players_show_solution_ready()}")
+        # handle two players agreeing on revealing the solution - reveal the solution and allow both of them to see the solution
+        # from now on, each player can see the solution independent of the other player
         if lobby.all_players_show_solution_ready():
             logger.info("All players are show_solution_ready, broadcasting solution")
             lobby.set_was_solution_revealed(True)
@@ -160,7 +148,7 @@ async def handle_show_solution_ready(lobby, player_id, data):
                 f"Error sending solution to player {player_id}: {str(e)}", exc_info=True
             )
 
-
+# handles the submit ready state set of a player within a lobby
 async def handle_submit_ready(lobby, player_id, data):
     is_submit_ready = data.get("submit_ready", True)
     lobby.set_submit_ready(player_id, is_submit_ready)
@@ -173,6 +161,7 @@ async def handle_submit_ready(lobby, player_id, data):
             }
         )
     )
+    # handles sending the submission to be checked if all players in lobby are ready
     if lobby.all_players_submit_ready():
         lobby.set_editor_content(data.get("editor_content", ""))
         await lobby.broadcast(
@@ -188,7 +177,7 @@ async def handle_submit_ready(lobby, player_id, data):
         await lobby.broadcast(json.dumps({"type": "reset_submit_ready"}))
         lobby.reset_submit_ready()
 
-
+# handles the next question ready state set of a player within a lobby
 async def handle_next_question_ready(lobby, player_id, data):
     is_next_question_ready = data.get("next_question_ready", True)
     lobby.set_next_question_ready(player_id, is_next_question_ready)
@@ -201,6 +190,7 @@ async def handle_next_question_ready(lobby, player_id, data):
             }
         )
     )
+    # handles moving on to the next question if all players in lobby are ready
     if lobby.all_players_next_question_ready():
         follow_up_questions = lobby.get_follow_up_questions()
         if not follow_up_questions:
@@ -223,7 +213,7 @@ async def handle_next_question_ready(lobby, player_id, data):
             )
         lobby.reset_next_question_ready()
 
-
+# player chat messages transfer handler
 async def handle_chat(lobby, player_id, data):
     await lobby.broadcast(
         json.dumps(
@@ -231,12 +221,13 @@ async def handle_chat(lobby, player_id, data):
         )
     )
 
-
+# player disconnection handler 
 async def handle_disconnect(lobby, player_id, game_logic, lobby_id):
     lobby.disconnect(player_id)
     await lobby.broadcast(json.dumps({"type": "player_left", "player_id": player_id, "in_session": lobby.get_in_session()}))
     await lobby.broadcast(
         json.dumps({"type": "player_count", "count": lobby.get_player_count()})
     )
+    # close the lobby if all player left the lobby
     if lobby.get_player_count() == 0:
         game_logic.remove_lobby(lobby_id)

@@ -21,6 +21,7 @@ class Lobby:
         self.in_session = False
         logger.info(f"Created new lobby with ID {lobby_id}")
 
+    # Accept a new WebSocket connection and assign a player ID
     async def connect(self, websocket: WebSocket):
         await websocket.accept()
         if self.is_player_one_taken:
@@ -31,13 +32,15 @@ class Lobby:
         self.players[player_id] = websocket
         logger.info(f"Player {player_id} connected to lobby {self.lobby_id}")
         return player_id
-
+    
+    # Remove a player from the lobby
     def disconnect(self, player_id: str):
         self.players.pop(player_id, None)
         self.ready_players.discard(player_id)
         if player_id == "1":
             self.is_player_one_taken = False
 
+    # Send a message to all players in the lobby
     async def broadcast(self, message: str):
         logger.debug(f"Broadcasting message to lobby {self.lobby_id}: {message}")
         for player_id, websocket in self.players.items():
@@ -47,6 +50,7 @@ class Lobby:
             except Exception as e:
                 logger.error(f"Error sending message to player {player_id}: {str(e)}", exc_info=True)
 
+    # reset lobby to beginning state
     def reset_lobby(self):
         self.ready_players.clear()
         self.submit_ready_players.clear()
@@ -58,6 +62,7 @@ class Lobby:
         self.was_solution_revealed = False
         self.in_session = False
 
+    # checking if players are ready
     def all_players_ready(self):
         return len(self.ready_players) == 2 and len(self.players) == 2
 
@@ -72,14 +77,9 @@ class Lobby:
         logger.debug(f"all_players_show_solution_ready: {result}")
         return result
 
+    # getters
     def get_player_count(self):
         return len(self.players)
-
-    def get_player_id(self, websocket: WebSocket):
-        for player_id, ws in self.players.items():
-            if ws == websocket:
-                return player_id
-        return None
 
     def get_question(self):
         return self.question
@@ -100,6 +100,7 @@ class Lobby:
         logger.debug(f"get_was_solution_revealed: {self.was_solution_revealed}")
         return self.was_solution_revealed
 
+    # setters
     def set_ready(self, player_id: str, is_ready: bool):
         if is_ready:
             self.ready_players.add(player_id)
@@ -138,9 +139,6 @@ class Lobby:
     def set_in_session(self, in_session):
         self.in_session = in_session    
 
-    def reset_ready(self):
-        self.ready_players.clear()
-
     def reset_submit_ready(self):
         self.submit_ready_players.clear()
 
@@ -159,9 +157,7 @@ class Lobby:
         self.show_solution_ready_players.clear()
         self.was_solution_revealed = False
 
-    def reset_in_session(self):
-        self.in_session = False    
-
+    # Send a message to a specific player
     async def send_to_player(self, player_id: str, message: str):
         if player_id in self.players:
             await self.players[player_id].send_text(message)

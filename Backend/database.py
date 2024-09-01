@@ -20,17 +20,18 @@ questions_db = client.DeveloCoop.QuestionsDB
 followups_db = client.DeveloCoop.FollowUpsDB
 
 
+# helper function for creating the description for buggy type follow up questions
 def create_buggy_follow_up_description(follow_up: dict) -> str:
     description = f"Now you are given a buggy solution for the {follow_up['Original Question']} question. Can you find the bugs and fix them?\n\nDescription reminder:\n{follow_up['Question Description']}"
     return description
 
-
+# get a random question from db
 def get_question():
     question = questions_db.aggregate([{"$sample": {"size": 1}}]).next()
     question["_id"] = str(question["_id"])
     return question
 
-
+# get the followups of a given question from db
 def get_follow_up_questions(question_name):
     follow_ups = list(followups_db.find({"Original Question": question_name}))
     for follow_up in follow_ups:
@@ -41,7 +42,7 @@ def get_follow_up_questions(question_name):
             )
     return follow_ups
 
-
+# get a question from the db (questions or followups) given its id
 def get_question_by_id(question_id):
     return questions_db.find_one(
         {"_id": ObjectId(question_id)}
