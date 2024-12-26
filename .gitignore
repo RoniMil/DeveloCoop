@@ -1,8 +1,13 @@
 not_for_submission/
+testing/
 __pycache__/
 *.py[cod]
 *$py.class
 .vscode/
+
+# Exclude scraped files
+*.xlsx
+*.csv
 
 # Environments
 .env
